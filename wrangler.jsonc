@@ -1,0 +1,23 @@
+{
+  // Cloudflare Workers (Static Assets) 배포 설정.
+  //
+  // 이 프로젝트에는 빌드 단계가 없다 — site/ 안의 파일이 그대로 사이트다.
+  // Worker 스크립트도 없다. 정적 파일만 서빙하므로 main 항목이 없는 것이 정상이다.
+  //
+  // ⚠ directory 를 "./site" 가 아닌 "." 으로 바꾸지 말 것.
+  //    저장소 루트를 올리면 docs/기획서.md 와 CLAUDE.md 가 같이 공개되어 색인된다.
+  "name": "prelaps",
+  "compatibility_date": "2026-08-15",
+
+  "assets": {
+    "directory": "./site",
+
+    // 배포 URL 에 확장자가 없다 — /content/terms.html 을 /content/terms 로 서빙한다.
+    // canonical·og:url·sitemap.xml 이 확장자 없는 주소를 쓰므로 이 값이 중요하다.
+    // 내부 링크는 file:// 더블클릭 원칙 때문에 .html 을 유지한다 (형태가 다른 것은 의도).
+    "html_handling": "auto-trailing-slash",
+
+    // 404.html 을 두지 않았다. Cloudflare 기본 화면을 쓴다.
+    "not_found_handling": "none"
+  }
+}
