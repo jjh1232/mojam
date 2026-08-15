@@ -106,6 +106,42 @@ for (const rel of list) {
   }
 }
 
+// ── 구조화 데이터 ─────────────────────────────────────────────
+// FAQPage 의 문항이 화면 문구와 한 글자라도 다르면 구글이 통째로 무시한다.
+// 규칙으로만 적어뒀더니 3언어 15문항 중 13문항이 어긋난 채로 있었다.
+for (const rel of list) {
+  const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');
+  const blocks = [...src.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+
+  const faq = [];
+  for (const [, raw] of blocks) {
+    let json;
+    try { json = JSON.parse(raw); }
+    catch (e) { bad(rel, 'JSON-LD 파싱 실패 — ' + e.message); continue; }
+    (function walk(o) {
+      if (!o || typeof o !== 'object') return;
+      if (o['@type'] === 'FAQPage' && Array.isArray(o.mainEntity))
+        for (const q of o.mainEntity) faq.push({ q: q.name, a: q.acceptedAnswer && q.acceptedAnswer.text });
+      for (const v of Object.values(o)) walk(v);
+    })(json);
+  }
+  if (!faq.length) continue;
+
+  // 화면의 FAQ 는 <h2> 뒤에 오는 <p class="note"><b>질문</b><br>답변</p> 들이다.
+  const strip = t => t.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  const h2s = [...src.matchAll(/<h2[^>]*>[\s\S]*?<\/h2>/g)];
+  const last = h2s.length ? src.slice(h2s[h2s.length - 1].index) : src;
+  const seen = [...last.matchAll(/<p class="note"><b>([\s\S]*?)<\/b><br>([\s\S]*?)<\/p>/g)]
+    .map(m => ({ q: strip(m[1]), a: strip(m[2]) }));
+
+  if (faq.length !== seen.length)
+    bad(rel, 'FAQPage ' + faq.length + '문항인데 화면은 ' + seen.length + '문항');
+  else for (let i = 0; i < faq.length; i++) {
+    if (faq[i].q !== seen[i].q) bad(rel, 'FAQ 질문 ' + (i + 1) + ' 이 화면과 다르다 — LD "' + faq[i].q + '" / 화면 "' + seen[i].q + '"');
+    else if (faq[i].a !== seen[i].a) bad(rel, 'FAQ 답변 ' + (i + 1) + ' ("' + faq[i].q + '") 이 화면과 다르다');
+  }
+}
+
 // ── 사이트맵이 페이지 목록과 일치하는가 ────────────────────────
 const sm = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
 const inMap = new Set([...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]));
