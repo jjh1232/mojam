@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSV Garbled in Excel – Why It Happens and How to Fix It</title>
+<meta name="description" content="Why Excel shows CSV text as ë³´ê³ ì„œ or Ã©tÃ©, and how to fix it. In most cases the file is fine and Excel is reading it wrong. Downloading the file with a BOM solves it.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Prelaps">
+<meta property="og:title" content="CSV Garbled in Excel – Why It Happens and How to Fix It">
+<meta property="og:description" content="Why Excel garbles CSV text, and how to fix it. Usually the file is fine and Excel is the problem.">
+<link rel="canonical" href="https://mojibake.prelaps.com/en/excel-csv">
+<link rel="alternate" hreflang="ko" href="https://mojibake.prelaps.com/excel-csv">
+<link rel="alternate" hreflang="en" href="https://mojibake.prelaps.com/en/excel-csv">
+<link rel="alternate" hreflang="ja" href="https://mojibake.prelaps.com/ja/excel-csv">
+<link rel="alternate" hreflang="x-default" href="https://mojibake.prelaps.com/en/excel-csv">
+<meta property="og:url" content="https://mojibake.prelaps.com/en/excel-csv">
+<meta property="og:image" content="https://mojibake.prelaps.com/og-image.png">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar">
+  <a class="brand" href="index.html">
+    <span class="tag">PRELAPS</span>
+    <span class="bname">Mojibake Recovery</span>
+  </a>
+  <nav class="langsw" aria-label="Language">
+    <a href="../excel-csv.html" hreflang="ko">한국어</a>
+    <span aria-current="page">English</span>
+    <a href="../ja/excel-csv.html" hreflang="ja">日本語</a>
+  </nav>
+</div>
+
+<main class="sheet">
+<h1>CSV Garbled in Excel</h1>
+<p class="note">You open a CSV in Excel and the text comes out as <code>Ã©tÃ©</code>, <code>ë³´ê³ ì„œ</code>, or <code>æ–‡å­—</code>. If the same file looks perfectly fine in Notepad or a code editor and only breaks in Excel, <b>the file is not the problem. Excel is.</b></p>
+
+<h2>Why only Excel breaks it</h2>
+<p class="note">Computers store characters as numbers, and there are many different tables mapping between the two. The modern standard is UTF-8, but Windows has long used regional tables — CP1252 in Western Europe, CP949 in Korea, CP932 in Japan. The same numbers read through a different table come out as different characters.</p>
+<p class="note">The trouble is that <b>a CSV file has no place to record which table it used.</b> It is just characters, one after another. So every program has to guess, and while most editors now assume UTF-8, <b>Excel falls back to the local Windows code page whenever the file carries no marker.</b> Text saved as UTF-8 gets read through a regional table, and you get nonsense.</p>
+<p class="note">This is why CSVs exported from websites, databases, and Python scripts break so reliably. Those tools almost always write UTF-8 — and almost never add the marker.</p>
+
+<h2>Three bytes fix it</h2>
+<p class="note">A BOM (Byte Order Mark) is a <b>three-byte marker</b> at the very start of the file. It is invisible and changes nothing about the content, but with it in place Excel recognises the file as UTF-8 and reads it correctly.</p>
+<p class="note">Which means fixing a garbled CSV is usually <b>not about changing the text at all — it is about adding the marker.</b> The content was intact the whole time.</p>
+
+<h2>Fixing it with this tool</h2>
+<p class="note">Open <a href="index.html">Mojibake Recovery</a>, switch to the <b>File</b> tab, and upload the CSV. It identifies the encoding and shows you candidates. Pick the one where the text reads correctly and press <b>Download as UTF-8</b>.</p>
+<p class="note"><b>Check that "Add a BOM if you will open this in Excel" is ticked.</b> It is on by default for <code>.csv</code>, <code>.tsv</code>, and <code>.txt</code>. A file downloaded with that option on opens cleanly in Excel with no further steps.</p>
+<p class="note">Your file is never uploaded anywhere. Everything runs inside your browser, so internal reports and files with personal data are safe to use here.</p>
+
+<h2>When the file itself uses a legacy encoding</h2>
+<p class="note">The reverse happens too. A CSV written by an older program may genuinely be stored in a regional encoding, and it breaks the moment something expects UTF-8 — modern Python, Google Sheets, Numbers on macOS.</p>
+<p class="note">The same route fixes it. Upload the file and the correct legacy encoding comes up as the top candidate; download it as UTF-8 and every modern tool can read it. <b>Either way, uploading the file is the first move</b> — the tool works out which direction you are in.</p>
+
+<h2>Saving files that will not break again</h2>
+<p class="note">When exporting from Excel to share with others, choose <b>Save As → CSV UTF-8 (Comma delimited)</b>, not plain <b>CSV (Comma delimited)</b>. The plain option writes the local code page, which breaks for anyone on macOS or Linux.</p>
+<p class="note">If you generate the file yourself, save as UTF-8 with the BOM option enabled. In Python that is <code>encoding='utf-8-sig'</code>.</p>
+
+<h2>If none of this helps</h2>
+<p class="note">If the <b>characters look right but every row lands in a single column</b>, that is a delimiter problem, not an encoding one. Use Data → Text to Columns and set the comma as the separator.</p>
+<p class="note">If none of the candidates show readable text, the file may have been written after the text was already garbled. In that case see the <a href="index.html">"When recovery fails" section</a> on the tool page, which lists the symptoms and what each one means.</p>
+</main>
+
+<footer>
+  <p>Nothing you enter is sent to a server. All processing happens inside your browser and disappears when you close the tab.</p>
+  <nav class="fnav">
+    <a href="content/about.html">About</a>
+    <a href="content/privacy.html">Privacy Policy</a>
+    <a href="content/terms.html">Terms</a>
+    <a href="content/contact.html">Contact</a>
+  </nav>
+  <p class="cr">© 2026 Prelaps</p>
+</footer>
+
+</div>
+</body>
+</html>

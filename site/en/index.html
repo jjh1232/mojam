@@ -210,7 +210,7 @@
 <h2>Files are more reliable than pasting</h2>
 <p class="note">Text you paste may already have lost something. This kind of garbling contains invisible control characters, and passing through a messenger or a web form silently removes them. Once those bytes are gone there is no way back.</p>
 <p class="note">The <b>File</b> tab reads the original bytes directly, so the problem never arises, and one whole guessing step disappears. If you have the file, the file is always the better route. Upload a text file — txt, csv, srt, json, log — and it will be identified and handed back as UTF-8.</p>
-<p class="note"><b>If Excel garbles your CSV</b>, Excel is usually the problem rather than the file. It reads unmarked UTF-8 files using the local Windows code page. That is why the download adds a three-byte marker called a BOM — with it, Excel recognises UTF-8.</p>
+<p class="note"><b>If Excel garbles your CSV</b>, Excel is usually the problem rather than the file. It reads unmarked UTF-8 files using the local Windows code page. That is why the download adds a three-byte marker called a BOM — with it, Excel recognises UTF-8. There is a fuller write-up in <a href="excel-csv.html">CSV garbled in Excel</a>, including how to save files that will not break again.</p>
 <p class="note"><b>If the names inside a zip archive are garbled</b>, upload the zip itself. The ZIP format has a flag saying how filenames were written, and older compression tools leave it blank, which makes other computers read the names wrongly. This tool fixes the names and repackages the archive. <b>It never decompresses and recompresses, so the file contents are untouched.</b></p>
 
 <h2>How it works</h2>
