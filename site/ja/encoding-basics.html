@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shift_JIS と UTF-8 の違い – なぜ文字化けするのか</title>
+<meta name="description" content="Shift_JIS・EUC-JP と UTF-8 が何が違うのか、なぜ日本語だけよく化けるのかを説明します。文字コードを知らない状態で読めるように書きました。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Prelaps">
+<meta property="og:title" content="Shift_JIS と UTF-8 の違い – なぜ文字化けするのか">
+<meta property="og:description" content="Shift_JIS・EUC-JP と UTF-8 の違いと、なぜ日本語がよく化けるのか。予備知識なしで読めます。">
+<link rel="canonical" href="https://mojibake.prelaps.com/ja/encoding-basics">
+<link rel="alternate" hreflang="ko" href="https://mojibake.prelaps.com/encoding-basics">
+<link rel="alternate" hreflang="en" href="https://mojibake.prelaps.com/en/encoding-basics">
+<link rel="alternate" hreflang="ja" href="https://mojibake.prelaps.com/ja/encoding-basics">
+<link rel="alternate" hreflang="x-default" href="https://mojibake.prelaps.com/en/encoding-basics">
+<meta property="og:url" content="https://mojibake.prelaps.com/ja/encoding-basics">
+<meta property="og:image" content="https://mojibake.prelaps.com/og-image.png">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar">
+  <a class="brand" href="index.html">
+    <span class="tag">PRELAPS</span>
+    <span class="bname">文字化け直し</span>
+  </a>
+  <nav class="langsw" aria-label="Language">
+    <a href="../encoding-basics.html" hreflang="ko">한국어</a>
+    <a href="../en/encoding-basics.html" hreflang="en">English</a>
+    <span aria-current="page">日本語</span>
+  </nav>
+</div>
+
+<main class="sheet">
+<h1>Shift_JIS と UTF-8 の違い</h1>
+<p class="note">文字化けの原因をひとことにすると <b>この二つを取り違えたこと</b>です。文字コードをご存じなくても読めるように書きました。</p>
+
+<h2>コンピュータは文字ではなく数字を保存する</h2>
+<p class="note">コンピュータの中に文字はありません。数字だけです。ですから <code>あ</code> という文字を保存するとき、<b>「あ＝何番」</b>という対応表を見てその番号を書き込みます。読むときは同じ表で番号を文字に戻します。</p>
+<p class="note">問題は <b>その表がひとつではない</b>ことです。保存に使った表と読むときの表が違えば、同じ番号が別の文字になります。文字化けとはそれだけのことです。情報が消えたのではなく、<b>番号を違う本で引いた</b>だけです。</p>
+
+<h2>Shift_JIS・EUC-JP — 日本で使われてきた表</h2>
+<p class="note">Web が広まる前は、地域ごとに自前の表を作っていました。日本では Shift_JIS（Windows の拡張版は CP932）と EUC-JP、韓国では EUC-KR、中国では GBK、西欧では Latin-1 や CP1252 です。</p>
+<p class="note">どの表もその地域の文字しか持っていません。英数字は1バイト、漢字やかなは2バイトで、ファイルが小さく済むという利点がありました。保存容量が高価だった時代には重要なことでした。</p>
+<p class="note">代わりに <b>日本語とロシア語を同じ文書に混ぜられません。</b>表に相手の文字の番号がそもそも無いからです。さらに厄介なのは、<b>ファイルの中に「どの表で書いたか」を記す欄が無い</b>ことです。プログラムは推測するしかなく、しばしば外します。</p>
+
+<h2>UTF-8 — 世界共通の表</h2>
+<p class="note">「地域ごとに表が違うのが問題なら、ひとつにまとめよう」として生まれたのが Unicode で、それをファイルに書く方式のうち最も広く使われているのが UTF-8 です。今の Web の98%以上が UTF-8 です。</p>
+<p class="note">ラテン文字・ギリシャ文字・キリル文字・アラビア文字・ハングル・かな・漢字・絵文字がすべて入っています。ひとつの文書に混ぜても構いません。英数字は1バイトで従来と同じ番号のまま、漢字やかなは <b>3バイト</b>になるので Shift_JIS よりファイルは少し大きくなります。今は保存容量が安いので気にする話ではありません。</p>
+
+<h2>だから日本語はよく化ける</h2>
+<p class="note">英語圏の人はこの問題にあまり遭いません。<b>A〜Z はどの表でも同じ番号</b>だからです。表を間違えても英語は正常に出ます。</p>
+<p class="note">日本語はそうはいきません。Shift_JIS での <code>あ</code> の番号と UTF-8 での番号は違い、バイト数（2 対 3）まで違います。だから表を間違えた瞬間に <b>文字数までずれて</b>読めなくなります。</p>
+<p class="note">典型的な二つの形があります。</p>
+<p class="note"><code>ã“ã‚“ã«ã¡ã¯</code> — UTF-8 で保存したものを西欧の表で読んだ場合。3バイトなので文字数が大きく増えます。<br><code>ï½ºï¾ï¾†ï½¿ï½º</code> — Shift_JIS の半角カナが別の表で読まれた場合。</p>
+<p class="note">どちらでも <b>元の番号はファイルにそのまま残っています。</b>表を選び直せば原文が戻ります — <a href="index.html">文字化け直し</a>がやっているのはそれです。</p>
+
+<h2>今は何を使えばいいか</h2>
+<p class="note"><b>迷わず UTF-8 です。</b>新しく作るファイル・Web ページ・データベースはすべて UTF-8 にしてください。Shift_JIS が要るのは古いファイルを読むときだけです。</p>
+<p class="note">古いファイルが残っているなら UTF-8 に変換しておくほうが安全です。今のツールはたいてい UTF-8 を前提にするので、開くたびに化ける危険があります。<a href="index.html">ファイルタブ</a>にアップロードすれば判定して UTF-8 に変換します。</p>
+<p class="note">ひとつ厄介な例外が <b>Excel</b> です。目印のない UTF-8 ファイルを今もローカルのコードページで読んでしまいます。その話は <a href="excel-csv.html">Excel で CSV が文字化けするとき</a> に別途まとめました。</p>
+</main>
+
+<footer>
+  <p>入力した内容はサーバーに送信されません。処理はすべてブラウザの中だけで行われ、タブを閉じれば消えます。</p>
+  <nav class="fnav">
+    <a href="content/about.html">このサイトについて</a>
+    <a href="content/privacy.html">プライバシーポリシー</a>
+    <a href="content/terms.html">利用規約</a>
+    <a href="content/contact.html">お問い合わせ</a>
+  </nav>
+  <p class="cr">© 2026 Prelaps</p>
+</footer>
+
+</div>
+</body>
+</html>

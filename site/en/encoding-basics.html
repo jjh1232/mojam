@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UTF-8 vs Legacy Encodings – Why Text Turns Into Gibberish</title>
+<meta name="description" content="What UTF-8, Latin-1, CP1252 and the old regional encodings actually are, and why mixing them turns text into Ã©tÃ© or ì•ˆë…•. Written for people who have never thought about encodings.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Prelaps">
+<meta property="og:title" content="UTF-8 vs Legacy Encodings – Why Text Turns Into Gibberish">
+<meta property="og:description" content="What UTF-8 and the old regional encodings are, and why mixing them garbles text. No prior knowledge needed.">
+<link rel="canonical" href="https://mojibake.prelaps.com/en/encoding-basics">
+<link rel="alternate" hreflang="ko" href="https://mojibake.prelaps.com/encoding-basics">
+<link rel="alternate" hreflang="en" href="https://mojibake.prelaps.com/en/encoding-basics">
+<link rel="alternate" hreflang="ja" href="https://mojibake.prelaps.com/ja/encoding-basics">
+<link rel="alternate" hreflang="x-default" href="https://mojibake.prelaps.com/en/encoding-basics">
+<meta property="og:url" content="https://mojibake.prelaps.com/en/encoding-basics">
+<meta property="og:image" content="https://mojibake.prelaps.com/og-image.png">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar">
+  <a class="brand" href="index.html">
+    <span class="tag">PRELAPS</span>
+    <span class="bname">Mojibake Recovery</span>
+  </a>
+  <nav class="langsw" aria-label="Language">
+    <a href="../encoding-basics.html" hreflang="ko">한국어</a>
+    <span aria-current="page">English</span>
+    <a href="../ja/encoding-basics.html" hreflang="ja">日本語</a>
+  </nav>
+</div>
+
+<main class="sheet">
+<h1>UTF-8 vs the Old Encodings</h1>
+<p class="note">Nearly every case of garbled text comes down to <b>one of these being confused for another</b>. This page assumes you have never thought about encodings before.</p>
+
+<h2>Computers store numbers, not letters</h2>
+<p class="note">There are no letters inside a computer. Only numbers. So to store the letter <code>é</code>, the machine consults a table that says <b>"é is number so-and-so"</b> and writes that number down. To read it back, it consults the same table in reverse.</p>
+<p class="note">The whole problem is that <b>there is more than one table.</b> Write with one table, read with another, and the same numbers come back as different characters. That is all mojibake is. Nothing was lost — the numbers were simply looked up in the wrong book.</p>
+
+<h2>The old tables were regional</h2>
+<p class="note">Before the web, each region built its own table. Western Europe had Latin-1 and its Windows cousin CP1252. Russia had KOI8-R and CP1251. Korea had EUC-KR, Japan Shift_JIS, China GBK.</p>
+<p class="note">Each one held the local alphabet and not much else. That kept files small, which mattered when storage was expensive. The cost was that <b>you could not put Russian and Japanese in the same document</b> — neither table had numbers for the other's characters.</p>
+<p class="note">Worse, the single-byte tables all covered the same numeric range. A file written in CP1251 and a file written in Latin-1 look identical to a program: just bytes from 0 to 255. Nothing in the file says which table was meant. <b>The program has to guess, and it often guesses wrong.</b></p>
+
+<h2>UTF-8 — one table for everything</h2>
+<p class="note">Unicode was the agreement to stop having regional tables and give every character in every writing system its own number. UTF-8 is the most common way of writing those numbers into a file, and it now covers more than 98% of the web.</p>
+<p class="note">It holds Latin, Greek, Cyrillic, Arabic, Hebrew, Hangul, kana, Han characters, and emoji. You can mix them freely in one document. English letters take one byte each and keep the same numbers they always had, which is why UTF-8 slid into existing systems so easily. Accented Latin takes two bytes, most Asian characters three.</p>
+
+<h2>Why English speakers see this less</h2>
+<p class="note">Plain English is the one thing that survives almost any mismatch, because <b>A–Z have the same numbers in every table.</b> Pick the wrong table and the English still reads fine.</p>
+<p class="note">Everything else breaks. <code>é</code> has one number in Latin-1 and a different two-byte sequence in UTF-8, so the moment the tables disagree the text falls apart — and because the byte counts differ, the character count changes too.</p>
+<p class="note">The two classic shapes look like this.</p>
+<p class="note"><code>Ã©tÃ©</code> — French written as UTF-8, read as CP1252. Each two-byte character split into two Western letters.<br><code>ì•ˆë…•í•˜ì„¸ìš”</code> — Korean written as UTF-8, read as CP1252. Three bytes each, so the text swells further.</p>
+<p class="note">In both cases <b>the original numbers are still sitting in the file.</b> Choose the right table and the text comes straight back — which is exactly what <a href="index.html">Mojibake Recovery</a> does.</p>
+
+<h2>What to use now</h2>
+<p class="note"><b>UTF-8, without thinking about it.</b> New files, web pages, databases, APIs — all UTF-8. The old encodings are only needed for reading files that already exist.</p>
+<p class="note">If you still have legacy files around, converting them is worth doing. Modern tools assume UTF-8 by default, so those files are one careless open away from being garbled. Upload them on the <a href="index.html">File tab</a> and the encoding is identified and converted for you.</p>
+<p class="note">One stubborn exception is <b>Excel</b>, which still reads unmarked UTF-8 files using the local Windows code page. That case has its own page: <a href="excel-csv.html">CSV garbled in Excel</a>.</p>
+</main>
+
+<footer>
+  <p>Nothing you enter is sent to a server. All processing happens inside your browser and disappears when you close the tab.</p>
+  <nav class="fnav">
+    <a href="content/about.html">About</a>
+    <a href="content/privacy.html">Privacy Policy</a>
+    <a href="content/terms.html">Terms</a>
+    <a href="content/contact.html">Contact</a>
+  </nav>
+  <p class="cr">© 2026 Prelaps</p>
+</footer>
+
+</div>
+</body>
+</html>

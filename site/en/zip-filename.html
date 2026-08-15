@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Garbled Filenames Inside a ZIP – How to Fix Them</title>
+<meta name="description" content="Why filenames inside a zip archive come out as ¿ù°£º¸°í¼­.xlsx or ãƒ¬ãƒãƒ¼ãƒˆ.pdf, and how to fix them. The names are repaired without decompressing anything.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Prelaps">
+<meta property="og:title" content="Garbled Filenames Inside a ZIP">
+<meta property="og:description" content="Why zip filenames come out garbled, and how to fix them without decompressing the archive.">
+<link rel="canonical" href="https://mojibake.prelaps.com/en/zip-filename">
+<link rel="alternate" hreflang="ko" href="https://mojibake.prelaps.com/zip-filename">
+<link rel="alternate" hreflang="en" href="https://mojibake.prelaps.com/en/zip-filename">
+<link rel="alternate" hreflang="ja" href="https://mojibake.prelaps.com/ja/zip-filename">
+<link rel="alternate" hreflang="x-default" href="https://mojibake.prelaps.com/en/zip-filename">
+<meta property="og:url" content="https://mojibake.prelaps.com/en/zip-filename">
+<meta property="og:image" content="https://mojibake.prelaps.com/og-image.png">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar">
+  <a class="brand" href="index.html">
+    <span class="tag">PRELAPS</span>
+    <span class="bname">Mojibake Recovery</span>
+  </a>
+  <nav class="langsw" aria-label="Language">
+    <a href="../zip-filename.html" hreflang="ko">한국어</a>
+    <span aria-current="page">English</span>
+    <a href="../ja/zip-filename.html" hreflang="ja">日本語</a>
+  </nav>
+</div>
+
+<main class="sheet">
+<h1>Garbled Filenames Inside a ZIP</h1>
+<p class="note">You extract an archive and the files come out named <code>¿ù°£º¸°í¼­.xlsx</code> or <code>ãƒ¬ãƒãƒ¼ãƒˆ.pdf</code>. If <b>the file contents are fine and only the names are wrong</b>, this is recoverable.</p>
+
+<h2>Why only the names break</h2>
+<p class="note">The ZIP format has <b>a flag that records how filenames were written</b> — bit 11 of the general purpose field. When it is set, the names are UTF-8 and any tool anywhere reads them correctly.</p>
+<p class="note">The trouble is that <b>older compression tools leave that flag blank.</b> The names then get written using whatever code page the machine happened to use — CP949 on a Korean Windows, CP932 on a Japanese one, CP1252 in Western Europe. On the machine that created the archive everything looks fine, because it reads back with the same code page.</p>
+<p class="note">Open that same archive on <b>macOS, Linux, or a Windows set to another region</b> and a different table gets used. So the names only break for the person receiving the file. <b>Nothing was created wrongly — a marker was simply never written</b>, which is why this shows up constantly in files shared by email or chat.</p>
+
+<h2>The contents are untouched</h2>
+<p class="note">The important thing is that <b>names and contents are stored separately.</b> The compressed data itself has nothing to do with text encoding. However mangled the names look, <b>the files inside open perfectly.</b></p>
+<p class="note">You could rename everything by hand, but that stops being realistic past a few dozen files — and you have no way of knowing what the original names actually were.</p>
+
+<h2>Fixing it with this tool</h2>
+<p class="note">Upload the zip itself on the <b>File</b> tab of <a href="index.html">Mojibake Recovery</a>. There is no need to extract it first.</p>
+<p class="note">The names inside are identified and shown as an <b>old name → new name</b> list. If it looks right, download the rebuilt archive. Entries that were already proper UTF-8 are dimmed so you can tell them apart.</p>
+<p class="note"><b>The compressed data is never touched.</b> The tool copies each data block verbatim and only rewrites the name in the header. Nothing is decompressed and recompressed, so <b>there is no way for file contents to be damaged</b>, and the whole thing finishes instantly.</p>
+<p class="note">Your archive is never uploaded anywhere. Everything runs inside your browser, so internal documents are safe to use here.</p>
+
+<h2>One name alone is not enough to go on</h2>
+<p class="note">The tool joins <b>all the filenames together and identifies them as one block of text</b>. A single name is too short for the statistics to mean anything. An archive containing just <code>a.txt</code> may not be identifiable, but real archives usually hold several files, so this rarely matters in practice.</p>
+
+<h2>What cannot be fixed</h2>
+<p class="note">These three are detected and <b>refused with the reason shown</b> rather than silently producing something wrong.</p>
+<p class="note"><b>Encrypted archives</b> — access to the name records is restricted too.<br><b>ZIP64 archives</b> — the extended format used for archives above 4GB.<br><b>Split archives</b> — anything divided into <code>.z01</code>, <code>.part1</code> and so on.</p>
+<p class="note"><b>RAR and 7z are not supported</b>, only zip. For those formats you can extract and repack as zip, but be aware that already-garbled names get baked in during that step. Where possible, <b>ask whoever created the archive to repack it with UTF-8 names</b> instead.</p>
+
+<h2>Creating archives that will not break</h2>
+<p class="note">Most compression tools have a <b>"store filenames as UTF-8"</b> option. Turn it on for anything you are sending to other people. Modern Windows Explorer and macOS both write UTF-8 by default now, but older tools and older versions do not.</p>
+<p class="note">The safest option of all is to <b>keep filenames to plain letters and digits</b>. A–Z carry the same numbers in every encoding table, so they cannot break in the first place. Why that is true is explained in <a href="encoding-basics.html">UTF-8 vs the old encodings</a>.</p>
+</main>
+
+<footer>
+  <p>Nothing you enter is sent to a server. All processing happens inside your browser and disappears when you close the tab.</p>
+  <nav class="fnav">
+    <a href="content/about.html">About</a>
+    <a href="content/privacy.html">Privacy Policy</a>
+    <a href="content/terms.html">Terms</a>
+    <a href="content/contact.html">Contact</a>
+  </nav>
+  <p class="cr">© 2026 Prelaps</p>
+</footer>
+
+</div>
+</body>
+</html>

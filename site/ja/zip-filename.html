@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>zip の中のファイル名が文字化けするとき – 直し方</title>
+<meta name="description" content="zip を解凍するとファイル名が ãƒ¬ãƒãƒ¼ãƒˆ.pdf のように化ける理由と直し方。解凍せずに名前だけ直して詰め直します。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Prelaps">
+<meta property="og:title" content="zip の中のファイル名が文字化けするとき">
+<meta property="og:description" content="zip のファイル名が化ける理由と直し方。解凍せずに名前だけ直して詰め直します。">
+<link rel="canonical" href="https://mojibake.prelaps.com/ja/zip-filename">
+<link rel="alternate" hreflang="ko" href="https://mojibake.prelaps.com/zip-filename">
+<link rel="alternate" hreflang="en" href="https://mojibake.prelaps.com/en/zip-filename">
+<link rel="alternate" hreflang="ja" href="https://mojibake.prelaps.com/ja/zip-filename">
+<link rel="alternate" hreflang="x-default" href="https://mojibake.prelaps.com/en/zip-filename">
+<meta property="og:url" content="https://mojibake.prelaps.com/ja/zip-filename">
+<meta property="og:image" content="https://mojibake.prelaps.com/og-image.png">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar">
+  <a class="brand" href="index.html">
+    <span class="tag">PRELAPS</span>
+    <span class="bname">文字化け直し</span>
+  </a>
+  <nav class="langsw" aria-label="Language">
+    <a href="../zip-filename.html" hreflang="ko">한국어</a>
+    <a href="../en/zip-filename.html" hreflang="en">English</a>
+    <span aria-current="page">日本語</span>
+  </nav>
+</div>
+
+<main class="sheet">
+<h1>zip の中のファイル名が文字化けするとき</h1>
+<p class="note">zip を解凍したら中のファイル名が <code>ãƒ¬ãƒãƒ¼ãƒˆ.pdf</code> や <code>ï½ºï¾ï¾†</code> のようになってしまう場合です。<b>中身は正常で名前だけ化けている</b>なら元に戻せます。</p>
+
+<h2>なぜ名前だけ化けるのか</h2>
+<p class="note">ZIP 形式には <b>ファイル名をどの方式で書いたかを示す欄</b>があります。規格上は汎用フラグの bit 11 と呼ばれ、ここが立っていれば「名前は UTF-8 だ」という意味になり、どの環境でも正しく読めます。</p>
+<p class="note">問題は <b>古い圧縮ソフトがこの欄を空のまま保存する</b>ことです。すると名前はその PC のコードページ（日本語 Windows なら CP932、韓国語なら CP949）で書かれます。作った人の PC では正常に見えます — 同じ表で読み戻すからです。</p>
+<p class="note">ところがその zip を <b>macOS・Linux・他の言語設定の Windows</b> で開くと別の表で読まれます。だから受け取った側でだけ化けます。<b>作り方が間違っていたのではなく目印が付いていないだけ</b>なので、メールやチャットでやり取りするときに特によく起こります。</p>
+
+<h2>中身は無事です</h2>
+<p class="note">大事なのは <b>名前と中身が別々に保存されている</b>ことです。圧縮されたデータ自体は文字コードとまったく関係がありません。名前がどれだけ崩れて見えても、<b>開けば中身は正常</b>です。</p>
+<p class="note">手作業で付け直すこともできますが、数十個ともなると現実的ではありませんし、そもそも元の名前が何だったのか分かりません。</p>
+
+<h2>このツールで直す</h2>
+<p class="note"><a href="index.html">文字化け直し</a>の<b>ファイル</b>タブに zip をそのままアップロードしてください。先に解凍する必要はありません。</p>
+<p class="note">中の名前を判定して <b>元の名前 → 新しい名前</b>の一覧を表示します。問題なければ詰め直した zip をダウンロードしてください。すでに UTF-8 で正しく書かれていた項目は薄く表示されて区別できます。</p>
+<p class="note"><b>圧縮データには一切触れません。</b>データブロックをそのまま複製し、ヘッダの名前だけを書き直します。展開して再圧縮するわけではないので <b>中身が壊れる余地がなく</b>、処理も一瞬で終わります。</p>
+<p class="note">ファイルはサーバーに送信されません。ブラウザの中だけで処理されるので、社内資料でもそのままお使いいただけます。</p>
+
+<h2>名前ひとつでは判定できない</h2>
+<p class="note">このツールは中の <b>ファイル名をすべて繋げてひとかたまりとして</b>判定します。名前ひとつでは短すぎて統計が成り立たないためです。<code>a.txt</code> 一つだけの zip は判定が難しいこともありますが、実際の zip には複数入っているのが普通なので問題になりません。</p>
+
+<h2>直せない場合</h2>
+<p class="note">次の三つは検出して <b>理由を表示したうえで断ります</b>。黙って誤った結果を出すことはしません。</p>
+<p class="note"><b>パスワード付き zip</b> — 名前の情報にもアクセス制限がかかります。<br><b>ZIP64 形式</b> — 4GB を超える大きな書庫に使われる拡張形式です。<br><b>分割圧縮</b> — <code>.z01</code> のように複数に分かれているもの。</p>
+<p class="note"><b>rar・7z には対応していません。</b>zip のみです。他の形式なら解凍して zip で詰め直せば使えますが、その過程ですでに化けた名前が固定されてしまうことがあります。可能であれば <b>作成した人に UTF-8 で圧縮し直してもらう</b>ほうが確実です。</p>
+
+<h2>二度と化けないように圧縮するには</h2>
+<p class="note">多くの圧縮ソフトに <b>「ファイル名を UTF-8 で保存」</b>というオプションがあります。人に渡すファイルなら有効にしてください。今の Windows エクスプローラーと macOS は既定で UTF-8 を使いますが、古いソフトやバージョンではそうではありません。</p>
+<p class="note">いちばん確実なのは <b>ファイル名を英数字だけにする</b>ことです。A〜Z はどの表でも同じ番号なので、そもそも化けようがありません。その理由は <a href="encoding-basics.html">Shift_JIS と UTF-8 の違い</a> にまとめています。</p>
+</main>
+
+<footer>
+  <p>入力した内容はサーバーに送信されません。処理はすべてブラウザの中だけで行われ、タブを閉じれば消えます。</p>
+  <nav class="fnav">
+    <a href="content/about.html">このサイトについて</a>
+    <a href="content/privacy.html">プライバシーポリシー</a>
+    <a href="content/terms.html">利用規約</a>
+    <a href="content/contact.html">お問い合わせ</a>
+  </nav>
+  <p class="cr">© 2026 Prelaps</p>
+</footer>
+
+</div>
+</body>
+</html>

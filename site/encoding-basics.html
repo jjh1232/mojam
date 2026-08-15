@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EUC-KR 과 UTF-8 의 차이 – 한글은 왜 깨지나</title>
+<meta name="description" content="EUC-KR(CP949)과 UTF-8 이 뭐가 다른지, 왜 한글만 유독 잘 깨지는지 설명합니다. 인코딩이 뭔지 모르는 상태에서 읽어도 되도록 썼습니다.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Prelaps">
+<meta property="og:title" content="EUC-KR 과 UTF-8 의 차이 – 한글은 왜 깨지나">
+<meta property="og:description" content="EUC-KR 과 UTF-8 이 뭐가 다른지, 왜 한글만 유독 잘 깨지는지. 인코딩을 몰라도 읽을 수 있게 썼습니다.">
+<link rel="canonical" href="https://mojibake.prelaps.com/encoding-basics">
+<link rel="alternate" hreflang="ko" href="https://mojibake.prelaps.com/encoding-basics">
+<link rel="alternate" hreflang="en" href="https://mojibake.prelaps.com/en/encoding-basics">
+<link rel="alternate" hreflang="ja" href="https://mojibake.prelaps.com/ja/encoding-basics">
+<link rel="alternate" hreflang="x-default" href="https://mojibake.prelaps.com/en/encoding-basics">
+<meta property="og:url" content="https://mojibake.prelaps.com/encoding-basics">
+<meta property="og:image" content="https://mojibake.prelaps.com/og-image.png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar">
+  <a class="brand" href="index.html">
+    <span class="tag">PRELAPS</span>
+    <span class="bname">깨진 글자 복구기</span>
+  </a>
+  <nav class="langsw" aria-label="Language">
+    <span aria-current="page">한국어</span>
+    <a href="en/encoding-basics.html" hreflang="en">English</a>
+    <a href="ja/encoding-basics.html" hreflang="ja">日本語</a>
+  </nav>
+</div>
+
+<main class="sheet">
+<h1>EUC-KR 과 UTF-8 은 뭐가 다른가</h1>
+<p class="note">한글이 깨지는 원인을 한 줄로 줄이면 <b>이 둘을 헷갈린 것</b>입니다. 인코딩이 뭔지 모르셔도 읽을 수 있게 썼습니다.</p>
+
+<h2>컴퓨터는 글자를 숫자로 저장한다</h2>
+<p class="note">컴퓨터에는 글자가 없습니다. 숫자만 있습니다. 그래서 <code>가</code> 라는 글자를 저장할 때 <b>"가 = 몇 번"</b> 이라는 약속표를 놓고 그 번호를 적습니다. 읽을 때는 같은 표를 보고 번호를 글자로 되돌립니다.</p>
+<p class="note">문제는 <b>그 표가 하나가 아니라는 것</b>입니다. 저장할 때 쓴 표와 읽을 때 쓴 표가 다르면 같은 번호가 다른 글자로 나옵니다. 그게 글자 깨짐의 전부입니다. 정보가 사라진 게 아니라 <b>번호를 엉뚱한 표에서 찾은 것</b>뿐입니다.</p>
+
+<h2>EUC-KR — 한국이 오래 쓰던 표</h2>
+<p class="note">1990년대 한국에서 만든 표입니다. 윈도우가 쓰는 확장판을 CP949 또는 통합 완성형이라고 부르는데, 실무에서는 셋을 거의 같은 말로 씁니다.</p>
+<p class="note">특징은 <b>한글과 영어만 들어 있다</b>는 것입니다. 영어는 한 글자에 1바이트, 한글은 2바이트를 씁니다. 그래서 파일 크기가 작다는 장점이 있었습니다 — 저장 공간이 비싸던 시절에는 중요한 이야기였습니다.</p>
+<p class="note">대신 <b>일본어·중국어·러시아어를 한 문서에 같이 못 씁니다.</b> 표에 그 글자들의 번호가 아예 없기 때문입니다. 나라마다 자기 표를 따로 만들어 쓰던 시대라 어쩔 수 없었습니다.</p>
+
+<h2>UTF-8 — 전 세계가 함께 쓰는 표</h2>
+<p class="note">"나라마다 표가 다른 게 문제니 하나로 합치자" 해서 나온 것이 유니코드이고, 그걸 파일에 적는 방식 중 가장 널리 쓰이는 것이 UTF-8 입니다. 지금 웹의 98% 이상이 UTF-8 입니다.</p>
+<p class="note">여기에는 <b>한글·한자·가나·키릴·아랍어·이모지가 전부 들어 있습니다.</b> 한 문서에 여러 언어를 섞어도 됩니다. 대신 한글 한 글자가 <b>3바이트</b>라 EUC-KR 보다 파일이 조금 커집니다. 요즘은 저장 공간이 싸서 신경 쓸 일이 아닙니다.</p>
+
+<h2>그래서 한글이 잘 깨진다</h2>
+<p class="note">영어권 사람들은 이 문제를 훨씬 덜 겪습니다. 영어 알파벳은 <b>어느 표에서든 번호가 같기 때문</b>입니다. 표를 잘못 골라도 영어는 멀쩡히 나옵니다.</p>
+<p class="note">한글은 그렇지 않습니다. EUC-KR 에서 <code>안</code> 이 갖는 번호와 UTF-8 에서 갖는 번호가 다르고, 바이트 수(2 vs 3)까지 다릅니다. 그래서 표를 잘못 고르는 순간 <b>글자 수까지 어긋나면서</b> 알아볼 수 없게 됩니다.</p>
+<p class="note">전형적인 두 가지 모습이 있습니다.</p>
+<p class="note"><code>¾È³çÇÏ¼¼¿ä</code> — EUC-KR 로 저장한 것을 서유럽 표로 읽었을 때. 한글 2바이트가 서유럽 글자 2개로 쪼개진 모습입니다.<br><code>ì•ˆë…•í•˜ì„¸ìš”</code> — UTF-8 로 저장한 것을 서유럽 표로 읽었을 때. 3바이트라 글자가 더 많이 늘어납니다.</p>
+<p class="note">어느 쪽이든 <b>원래 번호는 그대로 파일에 남아 있습니다.</b> 표만 다시 고르면 원문이 그대로 돌아옵니다 — <a href="index.html">깨진 글자 복구기</a>가 하는 일이 그겁니다.</p>
+
+<h2>지금은 뭘 쓰면 되나</h2>
+<p class="note"><b>고민 없이 UTF-8 입니다.</b> 새로 만드는 파일·웹페이지·데이터베이스는 전부 UTF-8 로 두세요. EUC-KR 은 옛날 파일을 읽을 때만 필요합니다.</p>
+<p class="note">EUC-KR 파일이 남아 있다면 UTF-8 로 바꿔두는 편이 낫습니다. 요즘 도구들은 대부분 UTF-8 을 기본으로 가정해서, EUC-KR 파일은 열 때마다 깨질 위험이 있습니다. <a href="index.html">파일 탭</a>에 올리면 판별해서 UTF-8 로 바꿔줍니다.</p>
+<p class="note">한 가지 예외가 <b>엑셀</b>입니다. 엑셀은 UTF-8 파일에 표시가 없으면 여전히 한국어 코드페이지로 읽어버립니다. 그 얘기는 <a href="excel-csv.html">엑셀에서 CSV 한글이 깨질 때</a>에 따로 정리했습니다.</p>
+</main>
+
+<footer>
+  <p>입력한 내용은 서버로 전송되지 않습니다. 모든 처리는 브라우저 안에서만 이뤄지고, 창을 닫으면 사라집니다.</p>
+  <nav class="fnav">
+    <a href="content/about.html">사이트 소개</a>
+    <a href="content/privacy.html">개인정보처리방침</a>
+    <a href="content/terms.html">이용약관</a>
+    <a href="content/contact.html">문의</a>
+  </nav>
+  <p class="cr">© 2026 Prelaps</p>
+</footer>
+
+</div>
+</body>
+</html>
