@@ -6,8 +6,14 @@
   //
   // ⚠ directory 를 "./site" 가 아닌 "." 으로 바꾸지 말 것.
   //    저장소 루트를 올리면 docs/기획서.md 와 CLAUDE.md 가 같이 공개되어 색인된다.
-  "name": "prelaps",
+  "name": "mojibake",
   "compatibility_date": "2026-08-15",
+
+  // prelaps.com 은 우산 브랜드다 — 게임·유틸이 각자 서브도메인을 갖고 이 도구는 mojibake 다.
+  // 루트(prelaps.com)는 나중에 만들 랜딩이 따로 가져가므로 여기서 건드리지 않는다.
+  "routes": [
+    { "pattern": "mojibake.prelaps.com", "custom_domain": true }
+  ],
 
   "assets": {
     "directory": "./site",

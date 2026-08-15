@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..', 'site');
-const ORIGIN = 'https://prelaps.com';
+const ORIGIN = 'https://mojibake.prelaps.com';
 const LANGS = ['ko', 'en', 'ja'];
 const XDEFAULT = 'en';
 

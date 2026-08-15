@@ -1,6 +1,8 @@
 # Prelaps
 
-**깨진 글자 복구기** (`prelaps.com`). 브라우저 안에서만 도는 도구다.
+**깨진 글자 복구기** (`mojibake.prelaps.com`). 브라우저 안에서만 도는 도구다.
+
+`prelaps.com` 은 우산 브랜드다 — 게임·유틸리티가 각자 서브도메인을 갖고, 이 저장소는 그중 `mojibake` 하나다.
 
 인코딩 불일치로 깨진 텍스트를 복구한다. 입력은 두 가지 — **붙여넣기**와 **파일**. 파일은 txt·csv·srt·json 같은 텍스트 파일의 인코딩을 판별해 UTF-8 로 바꿔 내려주고, ZIP 은 안쪽 한글 파일명을 고쳐 다시 묶어준다. 원본 바이트를 그대로 읽기 때문에 **파일 쪽이 붙여넣기보다 정확하다.**
 
@@ -120,17 +122,18 @@ npm run bench:browser  # 두 모드 다 (Chrome/Edge headless) ← 실사용 기
 
 ## 배포
 
-**`site/` 폴더가 그대로 배포된다.** Cloudflare Pages 설정은 세 칸뿐이다.
+**`site/` 폴더가 그대로 배포된다.** 설정은 `wrangler.jsonc` 한 파일에 있다 (Cloudflare Workers + Static Assets).
 
-| 항목 | 값 |
-|---|---|
-| 프레임워크 프리셋 | `None` |
-| 빌드 명령 | **비움** |
-| 빌드 출력 디렉터리 | `site` |
+```jsonc
+"assets": { "directory": "./site", "html_handling": "auto-trailing-slash" }
+"routes":  [{ "pattern": "mojibake.prelaps.com", "custom_domain": true }]
+```
 
-빌드 명령에 뭔가를 적으면 그 순간 "원본과 산출물 두 벌" 이 생긴다. 비워두는 것이 이 프로젝트의 전제다.
+**빌드 명령이 없는 것이 정상이다** — 변환 단계가 없으므로 뭔가를 적으면 그 순간 "원본과 산출물 두 벌" 이 생긴다.
 
-`test/` · `docs/` · `CLAUDE.md` 는 `site/` 밖에 있어 자동으로 빠진다 — 저장소 루트를 배포하면 기획서가 색인된다.
+로컬에서 `npx wrangler deploy` 를 쓰려면 **Node 22 이상**이 필요하다. GitHub 연동(Workers Builds)으로 배포하면 로컬 Node 버전과 무관하다.
+
+`test/` · `docs/` · `CLAUDE.md` 는 `site/` 밖에 있어 자동으로 빠진다 — `assets.directory` 를 `"."` 로 바꾸면 기획서가 색인된다.
 
 **수정 흐름**
 

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://prelaps.com/sitemap.xml
+Sitemap: https://mojibake.prelaps.com/sitemap.xml
