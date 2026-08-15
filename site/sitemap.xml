@@ -3,22 +3,19 @@
      내부 링크는 file:// 더블클릭 원칙 때문에 .html 을 유지하므로 여기와 형태가 다르다.
      hreflang 은 각 페이지 <head> 에 넣었으므로 사이트맵에는 중복해 적지 않는다. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://prelaps.com/</loc><priority>0.8</priority></url>
-  <url><loc>https://prelaps.com/mojibake</loc><priority>1.0</priority></url>
+  <url><loc>https://prelaps.com/</loc><priority>1.0</priority></url>
   <url><loc>https://prelaps.com/content/about</loc><priority>0.3</priority></url>
   <url><loc>https://prelaps.com/content/privacy</loc><priority>0.3</priority></url>
   <url><loc>https://prelaps.com/content/terms</loc><priority>0.3</priority></url>
   <url><loc>https://prelaps.com/content/contact</loc><priority>0.3</priority></url>
 
-  <url><loc>https://prelaps.com/en/</loc><priority>0.8</priority></url>
-  <url><loc>https://prelaps.com/en/mojibake</loc><priority>1.0</priority></url>
+  <url><loc>https://prelaps.com/en/</loc><priority>1.0</priority></url>
   <url><loc>https://prelaps.com/en/content/about</loc><priority>0.3</priority></url>
   <url><loc>https://prelaps.com/en/content/privacy</loc><priority>0.3</priority></url>
   <url><loc>https://prelaps.com/en/content/terms</loc><priority>0.3</priority></url>
   <url><loc>https://prelaps.com/en/content/contact</loc><priority>0.3</priority></url>
 
-  <url><loc>https://prelaps.com/ja/</loc><priority>0.8</priority></url>
-  <url><loc>https://prelaps.com/ja/mojibake</loc><priority>1.0</priority></url>
+  <url><loc>https://prelaps.com/ja/</loc><priority>1.0</priority></url>
   <url><loc>https://prelaps.com/ja/content/about</loc><priority>0.3</priority></url>
   <url><loc>https://prelaps.com/ja/content/privacy</loc><priority>0.3</priority></url>
   <url><loc>https://prelaps.com/ja/content/terms</loc><priority>0.3</priority></url>

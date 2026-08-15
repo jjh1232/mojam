@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Prelaps – Text tools that run inside your browser</title>
-<meta name="description" content="A small collection of text tools, starting with mojibake recovery. No install, no account, and nothing you enter is sent to a server.">
+<title>Fix Mojibake – Recover Garbled Text and Filenames</title>
+<meta name="description" content="Turn garbled text like ì•ˆë…• back into the original characters. Works on pasted text, files and zip filenames. Runs in your browser; nothing is uploaded.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Prelaps">
-<meta property="og:title" content="Prelaps – Text tools that run inside your browser">
-<meta property="og:description" content="A small collection of text tools, starting with mojibake recovery. Nothing you enter is sent to a server.">
+<meta property="og:title" content="Fix Mojibake – Recover Garbled Text and Filenames">
+<meta property="og:description" content="Turn garbled text back into the original characters. Runs entirely in your browser; nothing is uploaded.">
 <link rel="canonical" href="https://prelaps.com/en/">
 <link rel="alternate" hreflang="ko" href="https://prelaps.com/">
 <link rel="alternate" hreflang="en" href="https://prelaps.com/en/">
@@ -21,14 +21,81 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../styles.css">
+<!--
+  hreflang 은 아직 넣지 않는다. 구글이 절대 URL 을 요구하는데 도메인이 미정이라,
+  잘못된 URL 을 박아두면 색인이 엉킨다. canonical · sitemap · og:image 와 같은 시점에 넣는다
+  (기획서 3.1 · 8장). 그때 ko ↔ en 상호 링크 + x-default 를 양쪽 <head> 에 같이 넣을 것.
+-->
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
- "@type": "WebSite",
- "name": "Prelaps",
- "url": "https://prelaps.com/en/",
- "description": "Text tools that run entirely inside your browser.",
- "inLanguage": "en"
+ "@type": "WebApplication",
+ "name": "Mojibake Recovery",
+ "description": "Recovers text whose encoding was misread, turning garbled characters back into the original. Works on pasted text and uploaded files, entirely inside the browser.",
+ "applicationCategory": "UtilitiesApplication",
+ "operatingSystem": "All",
+ "browserRequirements": "A modern browser with JavaScript enabled",
+ "inLanguage": "en",
+ "isAccessibleForFree": true,
+ "offers": {
+  "@type": "Offer",
+  "price": "0",
+  "priceCurrency": "USD"
+ },
+ "featureList": [
+  "Paste garbled text and recover it",
+  "Detect the encoding of txt, csv, srt and json files and convert them to UTF-8",
+  "Repair garbled filenames inside zip archives",
+  "Three ranked candidates with a script label on each"
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "Where does my text get sent?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Nowhere. Pasted text and uploaded files are processed entirely inside your browser, and this site has no server that receives text. Everything disappears when you close the tab and nothing is stored on your device."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "How accurate is it?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Across 148 cases in 12 languages, the top candidate is correct 84.5% of the time, and the correct answer is among the three candidates 96.6% of the time. If the top one looks off, check the second and third."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "My CSV is garbled in Excel.",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Upload it on the File tab and download it with \"Add a BOM if you will open this in Excel\" left on. Excel reads an unmarked UTF-8 file using the local code page, and those three bytes are what stop it."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "The filenames inside my zip are garbled.",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Upload the zip file itself on the File tab and it will be repackaged with corrected names. It is never decompressed and recompressed, so the contents are not touched."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Does it work on PDFs?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "No. Text copied from a PDF is usually garbled because the character information inside the PDF is incomplete, not because of an encoding mismatch — the original is not in the file, so no tool can bring it back."
+   }
+  }
+ ]
 }
 </script>
 </head>
@@ -38,7 +105,7 @@
 <div class="topbar">
   <a class="brand" href="index.html" aria-current="page">
     <span class="tag">PRELAPS</span>
-    <h1>Text tools</h1>
+    <h1>Mojibake Recovery</h1>
   </a>
   <nav class="langsw" aria-label="Language">
     <a href="../index.html" hreflang="ko">한국어</a>
@@ -48,28 +115,114 @@
 </div>
 
 <header>
-  <p>Small tools for the places where text goes wrong. No install, no account, and nothing you enter is sent to a server.</p>
+  <p>Turns garbled text back into the characters it started as. Detects encodings from around the world automatically, including Korean, Japanese and Chinese.</p>
 </header>
 
 <main class="sheet">
+<div class="card">
+  <div class="tabrow">
+    <div class="tabs" role="tablist" aria-label="Input method">
+      <button class="tab" id="tab-text" role="tab" aria-selected="true" aria-controls="pane-text">Paste text</button>
+      <button class="tab" id="tab-file" role="tab" aria-selected="false" aria-controls="pane-file" tabindex="-1">File</button>
+    </div>
+    <button type="button" id="clear" hidden></button>
+  </div>
 
-<h2>Tools</h2>
-<div class="tools">
-  <a class="tool" href="mojibake.html">
-    <b>Mojibake Recovery</b>
-    <span>Turns text like <code>Ã¤Ã¶Ã¼</code> or <code>ì•ˆë…•í•˜ì„¸ìš”</code> back into the characters it started as. Works on pasted text and on uploaded files, converts the encoding of txt·csv·srt files, and repairs garbled filenames inside zip archives. Covers twelve languages, including the Korean, Japanese and Chinese encodings that most repair tools leave alone.</span>
-  </a>
+  <div id="pane-text" role="tabpanel" aria-labelledby="tab-text">
+    <textarea id="in" spellcheck="false" placeholder="e.g. ì•ˆë…•í•˜ì„¸ìš”"></textarea>
+    <div class="actions">
+      <button class="go" id="go">Recover</button>
+      <span class="meta" id="meta"></span>
+    </div>
+  </div>
+
+  <div id="pane-file" role="tabpanel" aria-labelledby="tab-file" hidden>
+    <label class="drop" id="drop">
+      <input type="file" id="file" hidden>
+      <b>Drop a file here, or click to choose one</b>
+      <span>txt · csv · srt · json · log · zip &nbsp;/&nbsp; up to 20MB</span>
+    </label>
+    <div class="actions">
+      <label class="opt"><input type="checkbox" id="bom" checked> Add a BOM if you will open this in Excel</label>
+      <span class="meta" id="fmeta"></span>
+    </div>
+    <p class="hint">Files are more reliable than pasting. Invisible control characters vanish while text is being pasted, whereas a file is read byte for byte exactly as it was stored.</p>
+  </div>
+
+  <div class="msg" id="msg"></div>
 </div>
 
-<h2>What this site commits to</h2>
-<p class="note"><b>Nothing you enter reaches a server.</b> Pasted text and uploaded files are processed entirely inside your browser. There is no server here that accepts text, so this is not a promise to refrain from sending it — there is nowhere to send it. Close the tab and it is gone, with nothing left on your device either.</p>
-<p class="note"><b>No install, no account.</b> Open the page and it works. Nothing to download, nobody to sign up with. Since no work is stored, there is nothing for an account to hold.</p>
-<p class="note"><b>Free, with no limits</b> on how often you use it or how much text you pass through it.</p>
+<div id="lines"></div>
+<div id="out"></div>
+<div id="part"></div>
+<div id="flines"></div>
+<div id="fout"></div>
 
-<h2>Why it all runs in the browser</h2>
-<p class="note">When text breaks, what people bring along is usually <b>material they never meant to show anyone</b> — an old work file, a forwarded email, a half-finished post. Uploading that to an unfamiliar server to get it fixed creates a second problem on top of the first.</p>
-<p class="note">Fortunately this kind of work does not need a server. Reversing an encoding is arithmetic a modern browser handles easily; a 20MB file finishes in milliseconds. Running locally is not a performance sacrifice made for privacy — the server simply was never needed.</p>
-<p class="note">You can check for yourself: open the network tab in your browser and use the tool. After the page and its fonts load, no further requests go out.</p>
+<h2>It did not work</h2>
+<p class="note">Recovery fails for a small number of reasons, and about half of them are cases where <b>the information was already gone before this tool ever saw it</b> — nothing can bring those back. Find the symptom you are looking at below.</p>
+
+<div class="cases">
+
+<div class="case">
+  <b>There are <code>?</code> or <code>�</code> characters in it</b>
+  <p>Those positions were not turned into a different character — they were <b>thrown away.</b> No information is left, so no tool can restore them. The only way back is to fetch the text again from the original file or screen.</p>
+</div>
+
+<div class="case">
+  <b>It came through a messenger or a terminal</b>
+  <p>This kind of garbling carries <b>invisible characters</b>, and programs in between silently strip them. The text can look unchanged on screen and still be different by the time you paste it. Copy directly from the screen that holds the original, or use the <b>File tab</b> — files never suffer this damage.</p>
+</div>
+
+<div class="case">
+  <b>There are only a few characters</b>
+  <p>The tool judges how natural a result looks as a combination of characters, and <b>under about ten characters there is not enough to judge from.</b> Paste more text from the same source; longer input is more accurate.</p>
+</div>
+
+<div class="case">
+  <b>You pasted several lines at once</b>
+  <p>If the lines are broken in different ways they cannot be reversed together. Recovery assumes <b>one single answer</b> to "how was this misread" and rewinds it, so multiple answers cannot hold at once. The tool splits by line automatically, but if that still fails, try one line at a time.</p>
+</div>
+
+<div class="case">
+  <b>The top result is in the wrong language</b>
+  <p>Between <b>single-byte encodings</b> such as Russian, Greek and Hebrew there is almost no signal to tell which one is right. Check the second and third candidates — each one is labelled with the script it was read as.</p>
+</div>
+
+<div class="case">
+  <b>The text was copied out of a PDF</b>
+  <p>Nothing is misencoded here — <b>the character information inside the PDF is incomplete.</b> The original is not in the file, so this is out of scope. You would need to find the source document.</p>
+</div>
+
+<div class="case">
+  <b>The result is full of <code>?</code></b>
+  <p>The characters died when the text was saved. Western European encodings have five empty slots, and <b>about 16% of Korean syllables</b> disappear the instant they land there. Those parts are unrecoverable; only the rest can be salvaged.</p>
+</div>
+
+</div>
+
+<p class="note"><b>So the one reliable fix is to fetch the text again from the original.</b> Almost every case above is "information was shaved off while the text was moved". If you still have the original file, do not paste it — <b>upload it on the File tab.</b> Files are read byte for byte, so the damage that happens during pasting never occurs.</p>
+
+<h2>What mojibake is</h2>
+<p class="note">When text turns into something unreadable like <code>¾È³çÇÏ¼¼¿ä</code> or <code>Ã¬â€¢Ë†</code>, English speakers call it <b>mojibake</b>, borrowed from Japanese 文字化け. Korean speakers have their own name for it — <b>뷁어</b> or <b>뷁체</b>, after the odd syllables that keep showing up in the wreckage.</p>
+<p class="note">There is only one cause: <b>the text was stored one way and read another.</b> Computers store characters as numbers, and there are many different tables mapping between the two. Read a file written with an older regional table (EUC-KR, Shift_JIS, GBK) using today's table (UTF-8), or the other way round, and the same numbers come out as different characters.</p>
+<p class="note">Which means <b>nothing was lost — it was just read wrong</b>, and reversing the reading brings the original characters straight back. That is what this tool does. It shows up most often in old forum posts, CSV files written by legacy programs, and filenames inside zip archives.</p>
+
+<h2>Files are more reliable than pasting</h2>
+<p class="note">Text you paste may already have lost something. This kind of garbling contains invisible control characters, and passing through a messenger or a web form silently removes them. Once those bytes are gone there is no way back.</p>
+<p class="note">The <b>File</b> tab reads the original bytes directly, so the problem never arises, and one whole guessing step disappears. If you have the file, the file is always the better route. Upload a text file — txt, csv, srt, json, log — and it will be identified and handed back as UTF-8.</p>
+<p class="note"><b>If Excel garbles your CSV</b>, Excel is usually the problem rather than the file. It reads unmarked UTF-8 files using the local Windows code page. That is why the download adds a three-byte marker called a BOM — with it, Excel recognises UTF-8.</p>
+<p class="note"><b>If the names inside a zip archive are garbled</b>, upload the zip itself. The ZIP format has a flag saying how filenames were written, and older compression tools leave it blank, which makes other computers read the names wrongly. This tool fixes the names and repackages the archive. <b>It never decompresses and recompresses, so the file contents are untouched.</b></p>
+
+<h2>How it works</h2>
+<p class="note">Garbling has a single cause: data stored with method A was read with method B. So recovery walks the same two steps backwards — the garbled characters are pushed back through <em>the encoding that misread them</em> to restore the original bytes, then read again with <em>the real one</em>. This tool tries every combination of the two and picks the most natural-looking result.</p>
+<p class="note">There is no way to guarantee the right answer, so up to three candidates are shown. If the top one looks off, check the second and third.</p>
+
+<h2>Common questions</h2>
+<p class="note"><b>Where does my text get sent?</b><br>Nowhere. Pasted text and uploaded files are processed entirely inside your browser, and this site has no server that receives text. Everything disappears when you close the tab and nothing is stored on your device.</p>
+<p class="note"><b>How accurate is it?</b><br>Across 148 cases in 12 languages, the top candidate is correct 84.5% of the time, and the correct answer is among the three candidates 96.6% of the time. If the top one looks off, check the second and third.</p>
+<p class="note"><b>My CSV is garbled in Excel.</b><br>Upload it on the File tab and download it with "Add a BOM if you will open this in Excel" left on. Excel reads an unmarked UTF-8 file using the local code page, and those three bytes are what stop it.</p>
+<p class="note"><b>The filenames inside my zip are garbled.</b><br>Upload the zip file itself on the File tab and it will be repackaged with corrected names. It is never decompressed and recompressed, so the contents are not touched.</p>
+<p class="note"><b>Does it work on PDFs?</b><br>No. Text copied from a PDF is usually garbled because the character information inside the PDF is incomplete, not because of an encoding mismatch — the original is not in the file, so no tool can bring it back.</p>
 
 </main>
 
@@ -85,5 +238,9 @@
 </footer>
 
 </div>
+
+<script src="../engine.js"></script>
+<script src="../i18n.en.js"></script>
+<script src="../ui.js"></script>
 </body>
 </html>

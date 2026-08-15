@@ -1,6 +1,6 @@
 # Prelaps
 
-브라우저 안에서만 도는 텍스트 도구 모음 (`prelaps.com`). 첫 번째 도구가 **깨진 글자 복구기**(`/mojibake`)다.
+**깨진 글자 복구기** (`prelaps.com`). 브라우저 안에서만 도는 도구다.
 
 인코딩 불일치로 깨진 텍스트를 복구한다. 입력은 두 가지 — **붙여넣기**와 **파일**. 파일은 txt·csv·srt·json 같은 텍스트 파일의 인코딩을 판별해 UTF-8 로 바꿔 내려주고, ZIP 은 안쪽 한글 파일명을 고쳐 다시 묶어준다. 원본 바이트를 그대로 읽기 때문에 **파일 쪽이 붙여넣기보다 정확하다.**
 
@@ -15,7 +15,7 @@ npm install          # iconv-lite (테스트용 devDependency)
 npm test             # 링크 전수 검사 + Node·브라우저 벤치마크 (붙여넣기·파일 두 모드)
 ```
 
-도구를 보려면 `site/mojibake.html` 을 브라우저로 **더블클릭**하면 된다. 빌드 과정 없음, 서버 불필요.
+도구를 보려면 `site/index.html` 을 브라우저로 **더블클릭**하면 된다. 빌드 과정 없음, 서버 불필요.
 
 ```bash
 npm run serve        # 필요하면 로컬 서버로 (http://localhost:3000)
@@ -30,16 +30,15 @@ npm run serve        # 필요하면 로컬 서버로 (http://localhost:3000)
 ```
 prelaps/
 ├─ site/              ★ 이 폴더가 그대로 배포된다
-│  ├─ index.html         한국어 허브 (도구 목록).  <script> 없음
-│  ├─ mojibake.html      한국어 도구
-│  ├─ en/  ja/           영어·일본어. 각각 index.html + mojibake.html + content/
+│  ├─ index.html         한국어 도구.  루트가 곧 도구다
+│  ├─ en/  ja/           영어·일본어. 각각 index.html + content/
 │  ├─ content/           법적 페이지 4개 (about·privacy·terms·contact)
 │  │
 │  ├─ engine.js          ★ 복구 엔진. 언어 중립이라 3언어가 공유한다
 │  ├─ ui.js              ★ 화면 코드. 글자를 직접 안 쓰고 I18N 에서 꺼낸다
 │  ├─ i18n.ko.js         ★ 언어별 화면 문자열 — 새 언어는 이 파일 하나가 번역 대상
 │  ├─ i18n.en.js  i18n.ja.js
-│  ├─ styles.css         18장이 공유하는 유일한 스타일 파일
+│  ├─ styles.css         15장이 공유하는 유일한 스타일 파일
 │  │
 │  ├─ robots.txt  sitemap.xml
 │  ├─ _headers           보안 응답 헤더. Cloudflare Pages·Netlify 가 읽는다
@@ -52,7 +51,7 @@ prelaps/
 └─ package.json
 ```
 
-**페이지는 18장이다** — 허브 3 + 도구 3 + 법적 4×3.
+**페이지는 15장이다** — 도구 3 + 법적 4×3.
 
 **페이지는 `engine.js` → `i18n.<언어>.js` → `ui.js` 순서로 부른다.** `ui.js` 가 `I18N` 을 읽으므로 순서를 바꾸면 안 된다.
 
@@ -65,28 +64,27 @@ prelaps/
 | 복구 로직 · 정확도 | `site/engine.js` (3언어 공유) |
 | 화면 동작 | `site/ui.js` (3언어 공유, 사람이 읽는 글자를 넣지 말 것) |
 | 버튼·라벨·안내 문구 | `site/i18n.<언어>.js` |
-| 본문 글 · FAQ | `site/mojibake.html` · `site/en/mojibake.html` · `site/ja/mojibake.html` |
-| 도구 목록 | `site/index.html` (+ `en/` · `ja/`) |
+| 본문 글 · FAQ | `site/index.html` · `site/en/index.html` · `site/ja/index.html` |
 | 색 · 글꼴 · 여백 | `site/styles.css` |
 | 약관 · 개인정보 · 소개 · 문의 | `site/content/*.html` (+ `en/` · `ja/`) — 도메인 전체 공용 |
 
-⚠ **푸터는 18개 파일에 들어 있고 내용은 6종이다** (번역 3 × 경로 깊이 2). 고칠 때는 6종을 먼저 정하고 뿌릴 것 — 18번 따로 쓰면 그중 하나가 어긋난다. 빌드를 없앤 대가는 이것 하나다.
+⚠ **푸터는 15개 파일에 들어 있고 내용은 6종이다** (번역 3 × 경로 깊이 2). 고칠 때는 6종을 먼저 정하고 뿌릴 것 — 18번 따로 쓰면 그중 하나가 어긋난다. 빌드를 없앤 대가는 이것 하나다.
 
 ```bash
-cd site && grep -lc fnav *.html en/*.html ja/*.html content/*.html en/content/*.html ja/content/*.html
+cd site && grep -lc fnav index.html en/index.html ja/index.html content/*.html en/content/*.html ja/content/*.html
 ```
 
 ---
 
 ## 검사
 
-**링크는 눈으로 보지 말 것.** 18장 × 상대 경로라 깨져도 화면에 표시가 없고, 영어 페이지 푸터가 한국어 약관을 가리켜도 브라우저는 멀쩡히 연다.
+**링크는 눈으로 보지 말 것.** 15장 × 상대 경로라 깨져도 화면에 표시가 없고, 영어 페이지 푸터가 한국어 약관을 가리켜도 브라우저는 멀쩡히 연다.
 
 ```bash
 npm run check:links    # 2초. 페이지만 고쳤으면 이것만 돌려도 된다
 ```
 
-무엇을 보는지 — 상대 링크가 실제 파일을 가리키는가 / `<html lang>` 이 폴더와 맞는가 / `canonical`·`og:url` 이 그 파일의 URL 인가 / `hreflang` 4줄과 `.langsw` 가 **같은 페이지의 다른 언어**인가 / 푸터가 자기 언어 `content/` 인가 / `sitemap.xml` 이 페이지 목록과 정확히 일치하는가.
+무엇을 보는지 — 상대 링크가 실제 파일을 가리키는가 / `<html lang>` 이 폴더와 맞는가 / `canonical`·`og:url` 이 그 파일의 URL 인가 / `hreflang` 4줄과 `.langsw` 가 **같은 페이지의 다른 언어**인가 / 푸터가 자기 언어 `content/` 인가 / `sitemap.xml` 이 페이지 목록과 정확히 일치하는가 / **`FAQPage` 구조화 데이터가 화면 문구와 글자 단위로 같은가**.
 
 **엔진을 고쳤으면 반드시 `npm test`.** 하한 미달이면 커밋 금지.
 
@@ -142,7 +140,7 @@ site/ 안의 파일을 고친다  →  npm run check:links  →  commit  →  pu
 
 엔진(`site/engine.js`)을 건드렸으면 `check:links` 대신 `npm test` 를 돌린다.
 
-**배포 직후 확인할 것** — 개발자도구 Network 탭에서 `X-Content-Type-Options: nosniff` 가 붙었는지(`_headers` 가 먹었는지 화면상 표시가 없다), `/mojibake.html` 이 `/mojibake` 로 301 되는지(`canonical`·`sitemap` 이 확장자 없는 주소를 쓴다).
+**배포 직후 확인할 것** — 개발자도구 Network 탭에서 `X-Content-Type-Options: nosniff` 가 붙었는지(`_headers` 가 먹었는지 화면상 표시가 없다), `/content/terms.html` 이 `/content/terms` 로 301 되는지(`canonical`·`sitemap` 이 확장자 없는 주소를 쓴다).
 
 ---
 

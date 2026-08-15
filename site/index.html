@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Prelaps – 브라우저 안에서만 도는 텍스트 도구</title>
-<meta name="description" content="깨진 글자 복구를 비롯한 작은 텍스트 도구를 모아둔 곳입니다. 설치도 가입도 없고, 입력한 내용은 서버로 전송되지 않습니다.">
+<title>한글 깨짐 복구 – 깨진 글자 인코딩 자동 판별</title>
+<meta name="description" content="한글 인코딩이 깨져 ì•ˆë…• · ¾È³çÇÏ¼¼¿ä 처럼 보일 때 원래 글자로 되돌립니다. 붙여넣기와 파일 업로드 모두 지원 — csv·txt·srt 인코딩 변환, 압축 파일 안 한글 파일명 복구. 설치 없이 브라우저에서만 처리되고 입력은 서버로 전송되지 않습니다.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Prelaps">
-<meta property="og:title" content="Prelaps – 브라우저 안에서만 도는 텍스트 도구">
-<meta property="og:description" content="깨진 글자 복구를 비롯한 작은 텍스트 도구를 모아둔 곳입니다. 입력한 내용은 서버로 전송되지 않습니다.">
+<meta property="og:title" content="한글 깨짐 복구 – 깨진 글자 인코딩 자동 판별">
+<meta property="og:description" content="한글 인코딩이 깨져 알아볼 수 없을 때 원래 글자로 되돌립니다. 설치 없이 브라우저에서만 처리됩니다.">
 <link rel="canonical" href="https://prelaps.com/">
 <link rel="alternate" hreflang="ko" href="https://prelaps.com/">
 <link rel="alternate" hreflang="en" href="https://prelaps.com/en/">
@@ -24,11 +24,74 @@
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
- "@type": "WebSite",
- "name": "Prelaps",
- "url": "https://prelaps.com/",
- "description": "브라우저 안에서만 처리되는 텍스트 도구 모음.",
- "inLanguage": "ko"
+ "@type": "WebApplication",
+ "name": "깨진 글자 복구기",
+ "alternateName": "한글 깨짐 복구기",
+ "description": "한글 인코딩이 깨져 알아볼 수 없게 된 글자를 원래대로 되돌리는 도구. 붙여넣기와 파일 업로드를 지원하며 모든 처리가 브라우저 안에서 이뤄진다.",
+ "applicationCategory": "UtilitiesApplication",
+ "operatingSystem": "All",
+ "browserRequirements": "JavaScript 를 지원하는 최신 브라우저",
+ "inLanguage": "ko",
+ "isAccessibleForFree": true,
+ "offers": {
+  "@type": "Offer",
+  "price": "0",
+  "priceCurrency": "KRW"
+ },
+ "featureList": [
+  "깨진 글자를 붙여넣어 복구",
+  "txt·csv·srt·json 파일의 인코딩 판별과 UTF-8 변환",
+  "압축 파일(zip) 안의 한글 파일명 복구",
+  "후보 3개와 언어 표시"
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "입력한 글자가 어디로 전송되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "전송되지 않습니다. 붙여넣은 글자와 올린 파일은 전부 브라우저 안에서만 처리되고, 이 사이트에는 텍스트를 받는 서버가 없습니다. 창을 닫으면 사라지며 기기에도 남지 않습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "얼마나 정확한가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "12개 언어 148건 기준으로 1순위 정답률 84.5%, 후보 3개 안에 정답이 있는 비율 96.6%입니다. 1순위가 어색하면 2·3순위를 확인해 보세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "엑셀에서 연 CSV가 깨집니다.",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "파일 탭에 올린 뒤 \"엑셀에서 열 파일이면 BOM 붙이기\"를 켠 채로 받으세요. 엑셀은 표시가 없는 UTF-8 파일을 한국어 윈도우 방식으로 읽어버리는데, BOM 세 바이트가 그걸 막아줍니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "압축 파일 안의 한글 이름이 깨졌습니다.",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "zip 파일을 그대로 파일 탭에 올리면 이름만 고쳐 다시 묶어줍니다. 압축을 풀었다 다시 하지 않으므로 파일 내용은 손상되지 않습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "PDF도 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "안 됩니다. PDF에서 복사한 글자가 깨지는 것은 인코딩이 어긋난 게 아니라 PDF 안에 글자 정보가 제대로 안 들어 있는 경우라, 원본 정보가 파일에 없어서 어떤 도구로도 되살릴 수 없습니다."
+   }
+  }
+ ]
 }
 </script>
 </head>
@@ -38,7 +101,7 @@
 <div class="topbar">
   <a class="brand" href="index.html" aria-current="page">
     <span class="tag">PRELAPS</span>
-    <h1>텍스트 도구 모음</h1>
+    <h1>깨진 글자 복구기</h1>
   </a>
   <nav class="langsw" aria-label="Language">
     <span aria-current="page">한국어</span>
@@ -48,28 +111,114 @@
 </div>
 
 <header>
-  <p>글자를 다루다 막히는 지점을 하나씩 푸는 작은 도구들입니다. 설치도 가입도 없고, 입력한 내용은 서버로 전송되지 않습니다.</p>
+  <p>한글 인코딩이 깨져 알아볼 수 없을 때 원래대로 되돌립니다. 일본어·중국어를 포함한 전 세계 인코딩을 자동으로 찾습니다.</p>
 </header>
 
 <main class="sheet">
+<div class="card">
+  <div class="tabrow">
+    <div class="tabs" role="tablist" aria-label="입력 방식">
+      <button class="tab" id="tab-text" role="tab" aria-selected="true" aria-controls="pane-text">붙여넣기</button>
+      <button class="tab" id="tab-file" role="tab" aria-selected="false" aria-controls="pane-file" tabindex="-1">파일</button>
+    </div>
+    <button type="button" id="clear" hidden></button>
+  </div>
 
-<h2>도구</h2>
-<div class="tools">
-  <a class="tool" href="mojibake.html">
-    <b>깨진 글자 복구기</b>
-    <span><code>¾È³çÇÏ¼¼¿ä</code> 나 <code>ì•ˆë…•í•˜ì„¸ìš”</code> 처럼 알아볼 수 없게 변한 글자를 원래대로 되돌립니다. 붙여넣기와 파일 업로드를 모두 지원하고, txt·csv·srt 의 인코딩 변환과 압축 파일 안의 한글 파일명 복구까지 한 자리에서 처리합니다. 한국어뿐 아니라 일본어·중국어·러시아어를 포함한 12개 언어를 다룹니다.</span>
-  </a>
+  <div id="pane-text" role="tabpanel" aria-labelledby="tab-text">
+    <textarea id="in" spellcheck="false" placeholder="예: ì•ˆë…•í•˜ì„¸ìš”"></textarea>
+    <div class="actions">
+      <button class="go" id="go">복구하기</button>
+      <span class="meta" id="meta"></span>
+    </div>
+  </div>
+
+  <div id="pane-file" role="tabpanel" aria-labelledby="tab-file" hidden>
+    <label class="drop" id="drop">
+      <input type="file" id="file" hidden>
+      <b>파일을 끌어다 놓거나 눌러서 고르세요</b>
+      <span>txt · csv · srt · json · log · zip &nbsp;/&nbsp; 최대 20MB</span>
+    </label>
+    <div class="actions">
+      <label class="opt"><input type="checkbox" id="bom" checked> 엑셀에서 열 파일이면 BOM 붙이기</label>
+      <span class="meta" id="fmeta"></span>
+    </div>
+    <p class="hint">붙여넣기보다 파일이 정확합니다. 붙여넣는 과정에서 눈에 안 보이는 제어문자가 사라지는데, 파일은 원본 바이트를 그대로 읽기 때문입니다.</p>
+  </div>
+
+  <div class="msg" id="msg"></div>
 </div>
 
-<h2>이 사이트가 지키는 것</h2>
-<p class="note"><b>입력한 내용이 서버로 가지 않습니다.</b> 붙여넣은 글자와 올린 파일은 전부 브라우저 안에서만 처리됩니다. 이 사이트에는 애초에 텍스트를 받는 서버가 없어서, 보내지 않기로 한 것이 아니라 보낼 곳이 없습니다. 창을 닫으면 사라지며 기기에도 남지 않습니다.</p>
-<p class="note"><b>설치도 가입도 없습니다.</b> 주소를 열면 바로 쓸 수 있고, 계정을 만들 필요도 무언가를 내려받을 필요도 없습니다. 작업 내역을 저장하지 않으므로 로그인이라는 개념 자체가 없습니다.</p>
-<p class="note"><b>전부 무료입니다.</b> 사용 횟수나 글자 수 제한도 없습니다.</p>
+<div id="lines"></div>
+<div id="out"></div>
+<div id="part"></div>
+<div id="flines"></div>
+<div id="fout"></div>
 
-<h2>왜 브라우저 안에서만 처리하나</h2>
-<p class="note">글자가 깨졌을 때 사람들이 가져오는 것은 대체로 <b>남에게 보여줄 생각이 없던 자료</b>입니다. 오래된 업무 파일, 받은 메일, 게시판에 쓰다 만 글 같은 것들입니다. 그런 내용을 고치겠다고 모르는 서버에 올리는 것은 그 자체로 문제를 하나 더 만드는 일입니다.</p>
-<p class="note">다행히 이런 작업은 서버가 필요하지 않습니다. 인코딩을 되돌리는 계산은 요즘 브라우저가 충분히 감당하고, 20MB 파일도 몇 밀리초 안에 끝납니다. 그래서 서버를 두지 않는 쪽을 골랐습니다 — 성능을 포기하고 얻은 것이 아니라, 어차피 필요 없어서 두지 않은 것입니다.</p>
-<p class="note">확인하고 싶다면 브라우저 개발자도구의 네트워크 탭을 열어둔 채 도구를 써보세요. 페이지와 글꼴을 받은 뒤로는 아무 요청도 나가지 않습니다.</p>
+<h2>복구가 안 되나요</h2>
+<p class="note">복구가 실패하는 이유는 대부분 정해져 있습니다. 그중 절반은 <b>이 도구가 받기 전에 이미 정보가 사라진</b> 경우라 어떤 방법으로도 되살릴 수 없습니다. 아래에서 지금 화면에 보이는 증상을 찾아보세요.</p>
+
+<div class="cases">
+
+<div class="case">
+  <b><code>?</code> 나 <code>�</code> 가 섞여 있다</b>
+  <p>그 자리의 글자가 다른 문자로 바뀐 게 아니라 <b>아예 버려졌습니다.</b> 정보가 남아 있지 않으므로 어떤 도구로도 되살릴 수 없습니다. 원본 파일이나 원본 화면에서 다시 가져오는 수밖에 없습니다.</p>
+</div>
+
+<div class="case">
+  <b>메신저·터미널을 거쳐서 가져왔다</b>
+  <p>이 유형의 깨짐에는 <b>눈에 보이지 않는 문자</b>가 섞여 있는데, 중간 프로그램이 그걸 조용히 지웁니다. 화면상으로는 멀쩡해 보여도 붙여넣는 순간 이미 다른 글자가 된 상태입니다. 원본이 있는 화면에서 직접 복사하거나, <b>파일 탭</b>을 쓰세요 — 파일은 이 손상이 아예 생기지 않습니다.</p>
+</div>
+
+<div class="case">
+  <b>글자가 몇 개 안 된다</b>
+  <p>이 도구는 결과가 얼마나 자연스러운 글자 조합인지로 판단하는데, <b>10글자 미만이면 판단할 근거가 부족합니다.</b> 같은 출처의 문장을 더 붙여넣어 보세요. 길수록 정확해집니다.</p>
+</div>
+
+<div class="case">
+  <b>여러 줄을 한꺼번에 넣었다</b>
+  <p>줄마다 깨진 방식이 다르면 한 번에 되돌릴 수 없습니다. 복구는 "어떻게 잘못 읽혔는지" <b>하나를 가정하고 되감는 것</b>이라, 가정이 여러 개면 성립하지 않습니다. 도구가 알아서 줄 단위로 나눠 처리하지만 그래도 안 되면 한 줄씩 넣어보세요.</p>
+</div>
+
+<div class="case">
+  <b>1순위가 엉뚱한 언어로 나온다</b>
+  <p>러시아어·그리스어·히브리어처럼 <b>한 글자가 1바이트인 인코딩끼리는</b> 어느 쪽이 맞는지 가려낼 단서가 원리적으로 거의 없습니다. 2·3순위를 확인해 보세요 — 후보마다 어떤 언어로 읽혔는지 옆에 표시됩니다.</p>
+</div>
+
+<div class="case">
+  <b>PDF 에서 복사한 글자다</b>
+  <p>인코딩이 어긋난 게 아니라 <b>PDF 안에 글자 정보가 제대로 안 들어 있는</b> 경우입니다. 원본 정보가 파일에 없어서 복구 대상이 아닙니다. 원본 문서를 구하는 수밖에 없습니다.</p>
+</div>
+
+<div class="case">
+  <b>복구 결과에 <code>?</code> 가 많다</b>
+  <p>저장하는 단계에서 이미 글자가 죽었습니다. 서유럽 인코딩에는 빈 자리가 다섯 개 있는데, <b>한글의 약 16%</b>가 거기 떨어지면 그 순간 사라집니다. 그 부분은 되살릴 수 없고 나머지만 건질 수 있습니다.</p>
+</div>
+
+</div>
+
+<p class="note"><b>그래서 가장 확실한 방법은 하나입니다 — 원본에서 다시 가져오는 것.</b> 위 경우 대부분이 "옮기는 과정에서 정보가 깎였다" 이기 때문입니다. 원본 파일이 있다면 붙여넣지 말고 <b>파일 탭에 그대로 올리세요.</b> 파일은 원래 바이트를 그대로 읽어서, 붙여넣기에서 생기는 손상이 처음부터 없습니다.</p>
+
+<h2>뷁어·뷁체가 뭔가요 — 한글 깨짐의 다른 이름</h2>
+<p class="note">한글이 <code>¾È³çÇÏ¼¼¿ä</code> 나 <code>ì•ˆë…•í•˜ì„¸ìš”</code> 처럼 알아볼 수 없게 변한 것을 한국에서는 흔히 <b>뷁어</b> 또는 <b>뷁체</b>라고 부릅니다. <code>뷁</code> 같은 실제로 잘 안 쓰는 글자가 자주 튀어나와서 붙은 이름입니다. 영어권에서는 일본어에서 온 <b>모지바케(mojibake)</b>라고 합니다.</p>
+<p class="note">원인은 하나입니다. <b>글자를 저장한 방식과 읽는 방식이 다른 것.</b> 컴퓨터는 글자를 숫자로 바꿔 저장하는데, 그 대응표가 여러 가지입니다. 한국에서 오래 쓰던 표(EUC-KR)로 저장한 파일을 요즘 표(UTF-8)로 읽거나 그 반대면, 같은 숫자를 다른 글자로 해석해 엉뚱한 문자가 나옵니다.</p>
+<p class="note">그래서 <b>정보가 사라진 게 아니라 잘못 읽힌 것뿐</b>이고, 읽는 방식을 되돌리면 원래 글자가 그대로 나옵니다. 이 도구가 하는 일이 그겁니다. 오래된 게시판 글, 옛날 프로그램이 만든 CSV, 압축 파일 안의 한글 파일명에서 특히 자주 생깁니다.</p>
+
+<h2>붙여넣기보다 파일이 정확합니다</h2>
+<p class="note">붙여넣기로 받은 글자는 이미 한 번 손실을 겪은 뒤일 수 있습니다. 이 유형의 깨짐에는 눈에 보이지 않는 제어문자가 섞여 있는데, 메신저나 웹 입력창을 거치면 그 문자가 조용히 사라집니다. 그러면 바이트가 없어진 것이라 되돌릴 방법이 없습니다.</p>
+<p class="note"><b>파일</b> 탭은 원본 바이트를 그대로 읽기 때문에 이 문제가 아예 생기지 않습니다. 되돌리는 단계도 필요 없어서, 파일이 있다면 항상 파일 쪽이 낫습니다. txt·csv·srt·json·log 같은 텍스트 파일을 올리면 인코딩을 판별해 UTF-8 로 바꿔 내려줍니다.</p>
+<p class="note"><b>엑셀에서 CSV 가 깨진다면</b> 파일 자체보다 엑셀이 문제인 경우가 많습니다. 엑셀은 표시가 없는 UTF-8 파일을 한국어 윈도우 코드페이지로 읽어버립니다. 그래서 내려받을 때 BOM 이라는 세 바이트 표시를 앞에 붙여줍니다 — 그러면 엑셀이 UTF-8 로 인식합니다.</p>
+<p class="note"><b>압축 파일 안의 한글 이름이 깨졌다면</b> zip 파일을 그대로 올려보세요. ZIP 형식에는 파일명을 어떤 방식으로 적었는지 표시하는 자리가 있는데, 옛날 압축 프로그램은 이걸 비워둔 채 저장합니다. 그러면 다른 컴퓨터에서 이름을 엉뚱하게 읽습니다. 이 도구는 이름만 고쳐 다시 묶어줍니다. <b>압축을 풀었다 다시 하지 않으므로 파일 내용은 손상되지 않습니다.</b></p>
+
+<h2>어떻게 동작하나요</h2>
+<p class="note">글자가 깨지는 원인은 하나입니다. A 방식으로 저장한 데이터를 B 방식으로 읽은 것. 그래서 복구도 거꾸로 두 단계를 밟습니다 — 깨진 글자를 <em>잘못 읽은 방식</em>으로 되돌려 원래 바이트를 복원한 뒤, <em>진짜 방식</em>으로 다시 읽습니다. 이 도구는 두 방식의 조합을 전부 시도해보고 가장 자연스러운 결과를 골라냅니다.</p>
+<p class="note">정답을 100% 보장할 수는 없어서 후보를 최대 3개까지 보여드립니다. 1순위가 어색하면 2·3순위를 확인해 보세요.</p>
+
+<h2>자주 묻는 것</h2>
+<p class="note"><b>입력한 글자가 어디로 전송되나요?</b><br>전송되지 않습니다. 붙여넣은 글자와 올린 파일은 전부 브라우저 안에서만 처리되고, 이 사이트에는 텍스트를 받는 서버가 없습니다. 창을 닫으면 사라지며 기기에도 남지 않습니다.</p>
+<p class="note"><b>얼마나 정확한가요?</b><br>12개 언어 148건 기준으로 1순위 정답률 84.5%, 후보 3개 안에 정답이 있는 비율 96.6%입니다. 1순위가 어색하면 2·3순위를 확인해 보세요.</p>
+<p class="note"><b>엑셀에서 연 CSV가 깨집니다.</b><br>파일 탭에 올린 뒤 "엑셀에서 열 파일이면 BOM 붙이기"를 켠 채로 받으세요. 엑셀은 표시가 없는 UTF-8 파일을 한국어 윈도우 방식으로 읽어버리는데, BOM 세 바이트가 그걸 막아줍니다.</p>
+<p class="note"><b>압축 파일 안의 한글 이름이 깨졌습니다.</b><br>zip 파일을 그대로 파일 탭에 올리면 이름만 고쳐 다시 묶어줍니다. 압축을 풀었다 다시 하지 않으므로 파일 내용은 손상되지 않습니다.</p>
+<p class="note"><b>PDF도 되나요?</b><br>안 됩니다. PDF에서 복사한 글자가 깨지는 것은 인코딩이 어긋난 게 아니라 PDF 안에 글자 정보가 제대로 안 들어 있는 경우라, 원본 정보가 파일에 없어서 어떤 도구로도 되살릴 수 없습니다.</p>
 
 </main>
 
@@ -85,5 +234,9 @@
 </footer>
 
 </div>
+
+<script src="engine.js"></script>
+<script src="i18n.ko.js"></script>
+<script src="ui.js"></script>
 </body>
 </html>
