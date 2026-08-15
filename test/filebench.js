@@ -8,7 +8,7 @@
 // cases.js 의 buildFile() 참고.
 
 const iconv = require('iconv-lite');
-const E = require('../engine.js');
+const E = require('../site/engine.js');
 const { buildFile, reportFile } = require('./cases.js');
 
 const THRESHOLD = 74;  // 1순위 정답률 하한 (%) — 목표치가 아니라 회귀 감지선

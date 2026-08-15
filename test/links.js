@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.join(__dirname, '..');
+const ROOT = path.join(__dirname, '..', 'site');
 const ORIGIN = 'https://prelaps.com';
 const LANGS = ['ko', 'en', 'ja'];
 const XDEFAULT = 'en';
@@ -22,8 +22,9 @@ let fails = 0;
 const bad = (file, msg) => { fails++; console.log('  ✗ ' + file + ' — ' + msg); };
 
 // ── 페이지 수집 ───────────────────────────────────────────────
-// test/·docs/·samples/·node_modules/ 는 배포 대상이 아니라 제외한다.
-const SKIP = new Set(['node_modules', 'test', 'docs', 'samples', '.git']);
+// ROOT 가 site/ 라 test/·docs/ 는 애초에 안 걸린다. 이 목록은 site/ 안에
+// 실수로 들어올 수 있는 것들만 남겨둔 방어선이다.
+const SKIP = new Set(['node_modules', '.git']);
 function pages(dir = ROOT, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     if (SKIP.has(e.name)) continue;

@@ -9,7 +9,7 @@
     "bench:node": "node test/benchmark.js",
     "bench:file": "node test/filebench.js",
     "bench:browser": "node test/browser.js",
-    "serve": "npx --yes serve ."
+    "serve": "npx --yes serve site"
   },
   "devDependencies": {
     "iconv-lite": "^0.6.3"

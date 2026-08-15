@@ -8,7 +8,7 @@
 //
 // 채점 배점이나 인코딩 후보를 건드린 뒤 반드시 둘 다 실행할 것.
 
-const E = require('../engine.js');
+const E = require('../site/engine.js');
 const { build, report, buildParagraphs, buildMixed,
         buildWrapped, cleanTexts, WRAPPERS, buildNbspLost } = require('./cases.js');
 

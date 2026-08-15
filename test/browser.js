@@ -39,7 +39,7 @@ if (!browser) {
 // 엔진 원본은 engine.js 다. 예전엔 index.html 에서 <script> 블록을 긁어냈는데,
 // 다국어로 가면서 엔진이 별도 파일로 빠졌다 — 이제 그 파일을 그대로 읽어 쓴다.
 // 브라우저에서는 전역 MojiEngine 으로 붙으므로 아래 벤치 코드가 그 이름으로 접근한다.
-const js = fs.readFileSync(path.join(__dirname, '..', 'engine.js'), 'utf-8');
+const js = fs.readFileSync(path.join(__dirname, '..', 'site', 'engine.js'), 'utf-8');
 
 const cases = build();
 const fileCases = buildFile();
