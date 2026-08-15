@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>사이트 소개 – Prelaps</title>
+<meta name="description" content="Prelaps 가 무엇을 하는 곳인지, 어떻게 만들어졌는지 설명합니다.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Prelaps">
+<meta property="og:title" content="사이트 소개">
+<meta property="og:description" content="Prelaps 가 무엇을 하는 곳인지, 어떻게 만들어졌는지 설명합니다.">
+<link rel="canonical" href="https://prelaps.com/content/about">
+<link rel="alternate" hreflang="ko" href="https://prelaps.com/content/about">
+<link rel="alternate" hreflang="en" href="https://prelaps.com/en/content/about">
+<link rel="alternate" hreflang="ja" href="https://prelaps.com/ja/content/about">
+<link rel="alternate" hreflang="x-default" href="https://prelaps.com/en/content/about">
+<meta property="og:url" content="https://prelaps.com/content/about">
+<meta property="og:image" content="https://prelaps.com/og-image.png">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="tag">PRELAPS</span>
+    <span class="bname">텍스트 도구 모음</span>
+  </a>
+  <nav class="langsw" aria-label="Language">
+    <span aria-current="page">한국어</span>
+    <a href="../en/content/about.html" hreflang="en">English</a>
+    <a href="../ja/content/about.html" hreflang="ja">日本語</a>
+  </nav>
+</div>
+
+<main class="sheet">
+<h1>사이트 소개</h1>
+<p class="note"><b>Prelaps</b>(prelaps.com)는 글자를 다루다 막히는 지점을 하나씩 푸는 작은 도구들을 모아둔 곳입니다. 모든 도구가 브라우저 안에서만 돌고, 입력한 내용을 서버로 보내지 않습니다. 아래는 첫 번째 도구인 <a href="../mojibake.html">깨진 글자 복구기</a>에 대한 설명입니다.</p>
+<h2>무엇을 하는 도구인가</h2>
+<p class="note"><code>¾È³çÇÏ¼¼¿ä</code>, <code>ì•ˆë…•í•˜ì„¸ìš”</code> 처럼 알아볼 수 없게 깨진 글자를 원래대로 되돌립니다. 한글뿐 아니라 일본어·중국어·러시아어를 비롯한 12개 언어를 다룹니다.</p>
+<p class="note">글자가 깨지는 원인은 하나입니다. <b>A 방식으로 저장한 데이터를 B 방식으로 읽은 것.</b> 그래서 복구도 거꾸로 두 단계를 밟습니다 — 깨진 글자를 잘못 읽은 방식으로 되돌려 원래 바이트를 복원한 뒤, 진짜 방식으로 다시 읽습니다. 어느 조합이 맞는지 모르므로 220가지를 전부 시도해보고 가장 자연스러운 결과를 골라냅니다.</p>
+
+<h2>왜 만들었나</h2>
+<p class="note">이런 깨짐을 고치는 표준 라이브러리로 <a href="https://github.com/rspeer/python-ftfy" rel="nofollow noopener" target="_blank">ftfy</a>가 있습니다. 영어권 웹에서 흔한 <code>â€™</code> 계열을 정조준한 도구이고, 그 영역에선 거의 완벽합니다.</p>
+<p class="note"><b>그런데 한글·일본어·중국어 인코딩이 얽힌 깨짐은 대상 밖입니다.</b> 같은 벤치마크로 재보면 이렇습니다.</p>
+<div class="ex">
+<table>
+<thead><tr><th>깨짐 구간</th><th>건수</th><th>ftfy 6.3.1</th><th>이 도구</th></tr></thead>
+<tbody>
+<tr><td>CJK 인코딩으로 오독</td><td>20</td><td>0.0%</td><td>100%</td></tr>
+<tr><td>CJK 원문이 깨진 경우</td><td>51</td><td>0.0%</td><td>66.7%</td></tr>
+<tr><td>키릴 인코딩으로 오독</td><td>39</td><td>15.4%</td><td>97.4%</td></tr>
+<tr><td>UTF-8 → 서구권 오독 (ftfy 주력)</td><td>31</td><td>96.8%</td><td>100%</td></tr>
+</tbody>
+</table>
+</div>
+<p class="note">ftfy의 주력 구간에서 이 도구가 낫다고 주장할 근거는 없습니다. 31건에서 100% 대 96.8%는 사실상 같은 값이고, ftfy 쪽이 더 정교한 부분도 많습니다. <b>다른 것은 CJK 구간입니다</b> — 한국에서 흔히 "뷁체"라 부르는 그 깨짐이 71건 중 0건 처리됩니다. 그 자리를 메우려고 만들었습니다.</p>
+
+<h2>얼마나 정확한가</h2>
+<p class="note">12개 언어, 25가지 깨짐 조합을 전수로 맞춰 만든 <b>148건</b>으로 측정합니다. 이론상 복구가 불가능한 조합(저장 단계에서 이미 바이트가 사라진 경우)은 제외한 숫자입니다.</p>
+<div class="ex">
+<table>
+<thead><tr><th>항목</th><th>붙여넣기</th><th>파일</th></tr></thead>
+<tbody>
+<tr><td>1순위 정답률</td><td>84.5%</td><td>75.3%</td></tr>
+<tr><td>후보 3개 안에 정답</td><td>96.6%</td><td>88.3%</td></tr>
+<tr><td>평균 처리 시간</td><td>2.3ms</td><td>0.3ms</td></tr>
+</tbody>
+</table>
+</div>
+<p class="note">이 숫자는 실제 브라우저에서 잰 값입니다. 두 모드는 재는 대상이 달라 직접 비교할 수 없습니다 — 파일 쪽은 서로 구분이 원리적으로 불가능한 단일바이트 인코딩 12종을 같은 비중으로 재기 때문에 전체 숫자가 낮게 나옵니다. 한국어·중국어 파일만 보면 100%입니다.</p>
+<p class="note">1순위가 틀린 경우에도 <b>대부분 2·3순위에 정답이 있습니다.</b> 후보를 세 개까지 보여주는 것은 그래서입니다.</p>
+
+<h2>입력이 서버로 가지 않습니다</h2>
+<p class="note">붙여넣은 글자와 올린 파일은 전부 브라우저 안에서만 처리됩니다. 이 사이트에는 텍스트를 받는 서버가 없습니다. 회사 문서나 개인 기록처럼 밖으로 내보내기 곤란한 내용도 그대로 쓰실 수 있습니다. 자세한 내용은 <a href="privacy.html">개인정보처리방침</a>에 적어두었습니다.</p>
+
+<h2>만든 방식</h2>
+<p class="note">외부 라이브러리 없이 브라우저에 이미 들어 있는 기능만으로 만들었습니다. 압축 파일 안의 한글 파일명을 고칠 때도 압축을 풀었다 다시 하지 않고 이름만 바꿔 씁니다 — 파일 내용이 손상될 여지를 없애기 위해서입니다.</p>
+<p class="note">엔진을 고칠 때마다 148건 벤치마크를 다시 돌려 다른 언어가 조용히 나빠지지 않았는지 확인합니다. 정확도를 올렸다고 적으려면 그 전에 숫자로 보여야 한다는 원칙으로 만들고 있습니다.</p>
+
+<h2>운영</h2>
+<p class="note"><!-- TODO: 운영자 표기를 정해 주세요 (본명 / 닉네임 / 상호) -->개인이 운영하는 무료 도구입니다. 오류 제보나 개선 제안은 <a href="contact.html">문의 페이지</a>로 보내주시면 확인하겠습니다.</p>
+
+</main>
+
+<footer>
+  <p>입력한 내용은 서버로 전송되지 않습니다. 모든 처리는 브라우저 안에서만 이뤄지고, 창을 닫으면 사라집니다.</p>
+  <nav class="fnav">
+    <a href="../index.html">도구</a>
+    <a href="about.html">사이트 소개</a>
+    <a href="privacy.html">개인정보처리방침</a>
+    <a href="terms.html">이용약관</a>
+    <a href="contact.html">문의</a>
+  </nav>
+  <p class="cr">© 2026 Prelaps</p>
+</footer>
+
+</div>
+</body>
+</html>

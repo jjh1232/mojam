@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>文字化け直し – 化けた文字とファイル名を元に戻す</title>
+<meta name="description" content="ã‚ãªãŸ や 繧上◆縺 のように化けた文字を元の文字に戻します。貼り付けとファイルの両方に対応 — csv・txt・srt の文字コード変換、zip の中の化けたファイル名の修復。すべてブラウザ内で処理し、入力はサーバーに送信されません。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Prelaps">
+<meta property="og:title" content="文字化け直し – 化けた文字とファイル名を元に戻す">
+<meta property="og:description" content="化けた文字を元の文字に戻します。すべてブラウザ内で処理し、入力はサーバーに送信されません。">
+<link rel="canonical" href="https://prelaps.com/ja/mojibake">
+<link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake">
+<link rel="alternate" hreflang="en" href="https://prelaps.com/en/mojibake">
+<link rel="alternate" hreflang="ja" href="https://prelaps.com/ja/mojibake">
+<link rel="alternate" hreflang="x-default" href="https://prelaps.com/en/mojibake">
+<meta property="og:url" content="https://prelaps.com/ja/mojibake">
+<meta property="og:image" content="https://prelaps.com/og-image.png">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<!--
+  hreflang 은 아직 넣지 않는다. 구글이 절대 URL 을 요구하는데 도메인이 미정이라,
+  잘못된 URL 을 박아두면 색인이 엉킨다. canonical · sitemap · og:image 와 같은 시점에 넣는다
+  (기획서 3.1 · 8장). 그때 ko ↔ en ↔ ja 상호 링크 + x-default 를 세 <head> 에 같이 넣을 것.
+-->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebApplication",
+ "name": "文字化け直し",
+ "description": "文字コードを読み違えて化けたテキストを、元の文字に戻すツール。貼り付けとファイルの両方に対応し、処理はすべてブラウザ内で行われる。",
+ "applicationCategory": "UtilitiesApplication",
+ "operatingSystem": "All",
+ "browserRequirements": "JavaScript が有効な最新のブラウザ",
+ "inLanguage": "ja",
+ "isAccessibleForFree": true,
+ "offers": {
+  "@type": "Offer",
+  "price": "0",
+  "priceCurrency": "JPY"
+ },
+ "featureList": [
+  "化けた文字を貼り付けて復元",
+  "txt・csv・srt・json の文字コードを判定して UTF-8 に変換",
+  "zip の中の化けたファイル名を修復",
+  "文字体系のラベル付きで候補を3件表示"
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "入力した文字はどこへ送られますか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "どこにも送られません。貼り付けたテキストもアップロードしたファイルも、すべてブラウザの中だけで処理されます。このサイトにはテキストを受け取るサーバーがありません。タブを閉じれば消え、端末にも残りません。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "復元の精度はどれくらいですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "12言語148件のテストで、第1候補が正解する割合は84.5%、候補3件の中に正解が含まれる割合は96.6%です。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Excel で開いた CSV が化けます。",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ファイルタブにアップロードし、BOM を付けるオプションを有効にしたままダウンロードしてください。Excel は目印のない UTF-8 ファイルをローカルのコードページで読んでしまいますが、BOM の3バイトがそれを防ぎます。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "zip の中のファイル名が化けています。",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "zip ファイルをそのままファイルタブにアップロードすると、名前だけ直して詰め直します。展開して再圧縮することはないので、ファイルの中身は損なわれません。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "PDF からコピーした文字も直せますか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "直せません。PDF からコピーした文字が化けるのは、文字コードの不一致ではなく PDF の中に文字の情報が正しく入っていないためです。元の情報がファイルにないので、どんなツールでも復元できません。"
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar">
+  <a class="brand" href="index.html">
+    <span class="tag">PRELAPS</span>
+    <h1>文字化け直し</h1>
+  </a>
+  <nav class="langsw" aria-label="Language">
+    <a href="../mojibake.html" hreflang="ko">한국어</a>
+    <a href="../en/mojibake.html" hreflang="en">English</a>
+    <span aria-current="page">日本語</span>
+  </nav>
+</div>
+
+<header>
+  <p>読めなくなった文字を元どおりに戻します。韓国語・中国語を含む世界中の文字コードを自動で見つけます。</p>
+</header>
+
+<main class="sheet">
+<div class="card">
+  <div class="tabrow">
+    <div class="tabs" role="tablist" aria-label="入力方法">
+      <button class="tab" id="tab-text" role="tab" aria-selected="true" aria-controls="pane-text">貼り付け</button>
+      <button class="tab" id="tab-file" role="tab" aria-selected="false" aria-controls="pane-file" tabindex="-1">ファイル</button>
+    </div>
+    <button type="button" id="clear" hidden></button>
+  </div>
+
+  <div id="pane-text" role="tabpanel" aria-labelledby="tab-text">
+    <textarea id="in" spellcheck="false" placeholder="例: ã“ã‚“ã«ã¡ã¯"></textarea>
+    <div class="actions">
+      <button class="go" id="go">復元する</button>
+      <span class="meta" id="meta"></span>
+    </div>
+  </div>
+
+  <div id="pane-file" role="tabpanel" aria-labelledby="tab-file" hidden>
+    <label class="drop" id="drop">
+      <input type="file" id="file" hidden>
+      <b>ファイルをドラッグするか、クリックして選んでください</b>
+      <span>txt · csv · srt · json · log · zip &nbsp;/&nbsp; 最大 20MB</span>
+    </label>
+    <div class="actions">
+      <label class="opt"><input type="checkbox" id="bom" checked> Excel で開くファイルなら BOM を付ける</label>
+      <span class="meta" id="fmeta"></span>
+    </div>
+    <p class="hint">貼り付けより、ファイルのほうが正確です。貼り付ける途中で目に見えない制御文字が消えてしまいますが、ファイルは元のバイトをそのまま読むためです。</p>
+  </div>
+
+  <div class="msg" id="msg"></div>
+</div>
+
+<div id="lines"></div>
+<div id="out"></div>
+<div id="part"></div>
+<div id="flines"></div>
+<div id="fout"></div>
+
+<h2>うまく直らないとき</h2>
+<p class="note">復元が失敗する理由はだいたい決まっています。そのうち半分は<b>このツールが受け取る前にすでに情報が失われている</b>場合で、どんな方法でも元に戻せません。いま画面に出ている症状を下から探してみてください。</p>
+
+<div class="cases">
+
+<div class="case">
+  <b><code>?</code> や <code>�</code> が混ざっている</b>
+  <p>その位置の文字は別の文字に変わったのではなく、<b>捨てられています。</b>情報が残っていないので、どんなツールでも復元できません。元のファイルか元の画面から取り直すしかありません。</p>
+</div>
+
+<div class="case">
+  <b>メッセンジャーやターミナルを経由して持ってきた</b>
+  <p>この種の化け方には<b>目に見えない文字</b>が混ざっていますが、途中のプログラムがそれを静かに消してしまいます。画面上は変わって見えなくても、貼り付けた時点ですでに別の文字になっています。元がある画面から直接コピーするか、<b>ファイルタブ</b>を使ってください — ファイルならこの損傷は起こりません。</p>
+</div>
+
+<div class="case">
+  <b>文字数が少ない</b>
+  <p>このツールは結果がどれだけ自然な文字の並びかで判断しますが、<b>10文字未満では判断する材料が足りません。</b>同じ出どころの文章をもっと貼り付けてみてください。長いほど正確になります。</p>
+</div>
+
+<div class="case">
+  <b>複数行をまとめて入れた</b>
+  <p>行ごとに化け方が違うと、まとめて戻すことはできません。復元は「どう読み違えられたか」を<b>ひとつだけ仮定して巻き戻す</b>仕組みなので、仮定が複数あると成り立ちません。ツールが自動で行単位に分けて処理しますが、それでも駄目なら1行ずつ試してください。</p>
+</div>
+
+<div class="case">
+  <b>第1候補が見当違いの言語になる</b>
+  <p>ロシア語・ギリシャ語・ヘブライ語のように<b>1文字が1バイトの文字コード同士</b>では、どちらが正しいかを見分ける手がかりが原理的にほとんどありません。第2・第3候補を確認してください — 候補ごとに、どの文字体系として読まれたかがラベルで出ます。</p>
+</div>
+
+<div class="case">
+  <b>PDF からコピーした文字だ</b>
+  <p>文字コードが食い違ったのではなく、<b>PDF の中に文字の情報が正しく入っていない</b>場合です。元の情報がファイルにないので、復元の対象外です。元の文書を手に入れるしかありません。</p>
+</div>
+
+<div class="case">
+  <b>復元結果に <code>?</code> が多い</b>
+  <p>保存する段階ですでに文字が死んでいます。西欧の文字コードには空き枠が5つあり、<b>ハングルの約16%</b>がそこに当たると、その瞬間に消えます。その部分は復元できず、残りだけを救えます。</p>
+</div>
+
+</div>
+
+<p class="note"><b>ですから、いちばん確実な方法はひとつです — 元から取り直すこと。</b>上のほとんどが「移す途中で情報が削られた」ケースだからです。元のファイルがあるなら貼り付けずに、<b>ファイルタブにそのままアップロードしてください。</b>ファイルは元のバイトをそのまま読むので、貼り付けで起きる損傷が最初から発生しません。</p>
+
+<h2>文字化けとは</h2>
+<p class="note">文字が <code>ã“ã‚“ã«ã¡ã¯</code> や <code>繧上◆縺</code> のように読めなくなる現象を<b>文字化け</b>と呼びます。英語圏でもそのまま <b>mojibake</b> として通じます。韓国では<b>뷁어（ブェゴ）</b>とも呼ばれ、化けた結果によく出てくる珍しい音節から名前が付きました。</p>
+<p class="note">原因はひとつです。<b>保存したときの方式と、読むときの方式が違うこと。</b>コンピュータは文字を数字に置き換えて保存しますが、その対応表が何種類もあります。昔から使われてきた地域ごとの表（Shift_JIS・EUC-JP・EUC-KR）で保存したファイルを今の表（UTF-8）で読んだり、その逆をしたりすると、同じ数字が別の文字として解釈されます。</p>
+<p class="note">つまり<b>情報が消えたのではなく、読み方を間違えただけ</b>なので、読み方を戻せば元の文字がそのまま出てきます。このツールがやっているのはそれです。古い掲示板の書き込み、昔のプログラムが作った CSV、zip の中のファイル名で特によく起こります。</p>
+
+<h2>貼り付けより、ファイルのほうが正確です</h2>
+<p class="note">貼り付けで受け取った文字は、すでに一度損失を受けている可能性があります。この種の化け方には目に見えない制御文字が混ざっていますが、メッセンジャーや Web の入力欄を通ると静かに消えてしまいます。そうなるとバイトが失われた状態なので、戻す方法がありません。</p>
+<p class="note"><b>ファイル</b>タブは元のバイトをそのまま読むので、この問題が最初から起こりません。逆算する手順も要らなくなります。ファイルがあるなら、常にファイルのほうが有利です。txt・csv・srt・json・log などのテキストファイルをアップロードすると、文字コードを判定して UTF-8 に変換して返します。</p>
+<p class="note"><b>Excel で CSV が化けるなら</b>、ファイルより Excel 側が原因のことが多いです。Excel は目印のない UTF-8 ファイルをローカルのコードページで読んでしまいます。そこでダウンロード時に BOM という3バイトの目印を先頭に付けます — これがあれば Excel は UTF-8 として認識します。</p>
+<p class="note"><b>zip の中のファイル名が化けているなら</b>、zip ファイルをそのままアップロードしてみてください。ZIP 形式にはファイル名をどの方式で書いたかを示す欄がありますが、古い圧縮ソフトはそこを空のまま保存します。すると別のコンピュータで名前を読み違えます。このツールは名前だけ直して詰め直します。<b>展開して再圧縮することはないので、ファイルの中身は損なわれません。</b></p>
+
+<h2>仕組み</h2>
+<p class="note">文字化けの原因はひとつ、A の方式で保存したデータを B の方式で読んだことです。ですから復元も同じ2段階を逆にたどります — 化けた文字を<em>読み違えた方式</em>で押し戻して元のバイトを復元し、<em>本当の方式</em>で読み直します。このツールは2つの方式の組み合わせをすべて試し、いちばん自然な結果を選びます。</p>
+<p class="note">正解を100%保証することはできないので、候補を最大3件まで表示します。第1候補が不自然なら、第2・第3候補を確認してください。</p>
+
+<h2>よくある質問</h2>
+<p class="note"><b>入力した文字はどこへ送られますか？</b><br>どこにも送られません。貼り付けたテキストもアップロードしたファイルも、すべてブラウザの中だけで処理されます。このサイトにはテキストを受け取るサーバーがありません。タブを閉じれば消え、端末にも残りません。</p>
+<p class="note"><b>精度はどれくらいですか？</b><br>12言語148件のテストで、第1候補が正解する割合は84.5%、候補3件の中に正解が含まれる割合は96.6%です。第1候補が不自然なら第2・第3候補を確認してください。</p>
+<p class="note"><b>Excel で CSV が化けます。</b><br>ファイルタブにアップロードし、「Excel で開くファイルなら BOM を付ける」を有効にしたままダウンロードしてください。Excel は目印のない UTF-8 ファイルをローカルのコードページで読んでしまいますが、その3バイトがそれを防ぎます。</p>
+<p class="note"><b>zip の中のファイル名が化けています。</b><br>zip ファイルをそのままファイルタブにアップロードすると、名前だけ直して詰め直します。展開して再圧縮することはないので、中身は損なわれません。</p>
+<p class="note"><b>PDF も直せますか？</b><br>直せません。PDF からコピーした文字が化けるのは、文字コードの不一致ではなく PDF の中に文字の情報が正しく入っていないためで、元の情報がファイルにないので、どんなツールでも復元できません。</p>
+
+</main>
+
+<footer>
+  <p>入力した内容はサーバーに送信されません。処理はすべてブラウザの中だけで行われ、タブを閉じれば消えます。</p>
+  <nav class="fnav">
+    <a href="content/about.html">このサイトについて</a>
+    <a href="content/privacy.html">プライバシーポリシー</a>
+    <a href="content/terms.html">利用規約</a>
+    <a href="content/contact.html">お問い合わせ</a>
+  </nav>
+  <p class="cr">© 2026 Prelaps</p>
+</footer>
+
+</div>
+
+<script src="../engine.js"></script>
+<script src="../i18n.ja.js"></script>
+<script src="../ui.js"></script>
+</body>
+</html>

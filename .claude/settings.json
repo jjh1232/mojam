@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm -f _smoke.js)",
+      "Bash(rm -f /tmp/idx.bak)",
+      "Bash(node -e ' *)",
+      "Bash(python -c ' *)",
+      "Bash(node \"C:/Users/dlwjd/AppData/Local/Temp/claude/d--SUBsite-breakkorean/4e3faae1-35e7-4a7b-b5f1-2bc6497e6df8/scratchpad/readme.js\" README.md)",
+      "Bash(echo \"exit=$?\")",
+      "Bash(node -e \"console.log\\(Object.entries\\(require\\('./package.json'\\).scripts\\).map\\(\\([k,v]\\)=>k+': '+v\\).join\\('\\\\n'\\)\\)\")",
+      "Bash(node \"C:/Users/dlwjd/AppData/Local/Temp/claude/d--SUBsite-breakkorean/4e3faae1-35e7-4a7b-b5f1-2bc6497e6df8/scratchpad/body.js\")",
+      "Bash(node \"C:/Users/dlwjd/AppData/Local/Temp/claude/d--SUBsite-breakkorean/4e3faae1-35e7-4a7b-b5f1-2bc6497e6df8/scratchpad/mob.js\")"
+    ]
+  }
+}

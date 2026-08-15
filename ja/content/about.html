@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>このサイトについて – Prelaps</title>
+<meta name="description" content="Prelaps がどんな場所なのか、なぜ作られたのかを説明します。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Prelaps">
+<meta property="og:title" content="このサイトについて">
+<meta property="og:description" content="Prelaps がどんな場所なのか、なぜ作られたのかを説明します。">
+<link rel="canonical" href="https://prelaps.com/ja/content/about">
+<link rel="alternate" hreflang="ko" href="https://prelaps.com/content/about">
+<link rel="alternate" hreflang="en" href="https://prelaps.com/en/content/about">
+<link rel="alternate" hreflang="ja" href="https://prelaps.com/ja/content/about">
+<link rel="alternate" hreflang="x-default" href="https://prelaps.com/en/content/about">
+<meta property="og:url" content="https://prelaps.com/ja/content/about">
+<meta property="og:image" content="https://prelaps.com/og-image.png">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="tag">PRELAPS</span>
+    <span class="bname">テキストツール集</span>
+  </a>
+  <nav class="langsw" aria-label="Language">
+    <a href="../../content/about.html" hreflang="ko">한국어</a>
+    <a href="../../en/content/about.html" hreflang="en">English</a>
+    <span aria-current="page">日本語</span>
+  </nav>
+</div>
+
+<main class="sheet">
+<h1>このサイトについて</h1>
+<p class="note"><b>Prelaps</b>（prelaps.com）は、文字を扱っていて詰まる場所を片づけるための小さな道具を集めたところです。どのツールもブラウザの中だけで動き、入力した内容をサーバーに送りません。以下は最初のツールである <a href="../mojibake.html">文字化け直し</a> についての説明です。</p>
+<h2>何をするツールか</h2>
+<p class="note"><code>¾È³çÇÏ¼¼¿ä</code> や <code>ã“ã‚“ã«ã¡ã¯</code> のように読めなくなった文字を、元どおりに戻します。日本語だけでなく、韓国語・中国語・ロシア語を含む12言語に対応しています。</p>
+<p class="note">文字化けの原因はひとつです。<b>A の方式で保存したデータを B の方式で読んだこと。</b>ですから復元も同じ2段階を逆にたどります — 化けた文字を読み違えた方式で押し戻して元のバイトを復元し、本当の方式で読み直します。どの組み合わせが正しいかは分からないので、220通りをすべて試して、いちばん自然な結果を選びます。</p>
+
+<h2>なぜ作ったか</h2>
+<p class="note">この種の修復には <a href="https://github.com/rspeer/python-ftfy" rel="nofollow noopener" target="_blank">ftfy</a> という定番のライブラリがあります。英語圏の Web でよく見る <code>â€™</code> 系を狙った道具で、その領域ではほぼ完璧です。</p>
+<p class="note"><b>しかし日本語・韓国語・中国語の文字コードが絡む化け方は対象外です。</b>同じベンチマークで測ると次のようになります。</p>
+<div class="ex">
+<table>
+<thead><tr><th>化け方</th><th>件数</th><th>ftfy 6.3.1</th><th>このツール</th></tr></thead>
+<tbody>
+<tr><td>CJK の文字コードとして誤読</td><td>20</td><td>0.0%</td><td>100%</td></tr>
+<tr><td>CJK の原文が化けた場合</td><td>51</td><td>0.0%</td><td>66.7%</td></tr>
+<tr><td>キリル文字の文字コードとして誤読</td><td>39</td><td>15.4%</td><td>97.4%</td></tr>
+<tr><td>UTF-8 → 西欧の誤読（ftfy の主戦場）</td><td>31</td><td>96.8%</td><td>100%</td></tr>
+</tbody>
+</table>
+</div>
+<p class="note">ftfy の得意分野で勝ったと主張するつもりはありません — 31件で100%対96.8%は事実上の同点で、その領域では ftfy のほうが精緻です。差が出るのは別のところ、<b>CJK の文字コードが絡む71件で ftfy が1件も復元できない</b>という点です。このツールが存在する理由はそこにあります。</p>
+
+<h2>どう作られているか</h2>
+<p class="note">すべてブラウザの中で動きます。テキストを受け取るサーバーはなく、会員登録もなく、何も保存しません。タブを閉じればすべて消えます。</p>
+<p class="note">精度は主張ではなく計測しています。12言語148件のベンチマークをエンジンの変更ごとに走らせています — <b>第1候補が正解する割合84.5%、候補3件以内に正解がある割合96.6%。</b>この数値はその標本に対するもので、あらゆる入力を保証するものではありません。<a href="terms.html">利用規約</a>もご確認ください。</p>
+
+</main>
+
+<footer>
+  <p>入力した内容はサーバーに送信されません。処理はすべてブラウザの中だけで行われ、タブを閉じれば消えます。</p>
+  <nav class="fnav">
+    <a href="../index.html">ツール</a>
+    <a href="about.html">このサイトについて</a>
+    <a href="privacy.html">プライバシーポリシー</a>
+    <a href="terms.html">利用規約</a>
+    <a href="contact.html">お問い合わせ</a>
+  </nav>
+  <p class="cr">© 2026 Prelaps</p>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="깨진 글자 복구기">
+  <!-- 도형만 쓴다. <text> 로 한글을 넣으면 보는 사람 컴퓨터의 글꼴에 좌우되고,
+       한글 글꼴이 없는 환경에서는 두부(□)로 보인다. mojibake 복구 도구가
+       두부를 아이콘으로 다는 건 곤란하다.
+
+       모양 — 위 두 줄은 어긋난 조각(깨진 글자), 아래 한 줄은 온전한 글줄(복구된 상태).
+       16px 로 줄여도 "글줄" 로 읽힌다. 색은 styles.css 의 --accent 와 같다. -->
+  <rect width="64" height="64" rx="14" fill="#3B3499"/>
+
+  <!-- 깨진 줄: 조각이 어긋나 있다 -->
+  <rect x="14" y="19" width="14" height="6" rx="3" fill="#FFFFFF" opacity=".55"/>
+  <rect x="32" y="19" width="10" height="6" rx="3" fill="#FFFFFF" opacity=".55"/>
+
+  <rect x="19" y="30" width="9"  height="6" rx="3" fill="#FFFFFF" opacity=".75"/>
+  <rect x="32" y="30" width="18" height="6" rx="3" fill="#FFFFFF" opacity=".75"/>
+
+  <!-- 복구된 줄: 하나로 이어진다 -->
+  <rect x="14" y="41" width="36" height="6" rx="3" fill="#FFFFFF"/>
+</svg>

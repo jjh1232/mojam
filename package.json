@@ -1,0 +1,17 @@
+{
+  "name": "prelaps",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Prelaps — 브라우저 안에서만 도는 텍스트 도구 모음",
+  "scripts": {
+    "test": "node test/links.js && node test/benchmark.js && node test/filebench.js && node test/browser.js",
+    "check:links": "node test/links.js",
+    "bench:node": "node test/benchmark.js",
+    "bench:file": "node test/filebench.js",
+    "bench:browser": "node test/browser.js",
+    "serve": "npx --yes serve ."
+  },
+  "devDependencies": {
+    "iconv-lite": "^0.6.3"
+  }
+}

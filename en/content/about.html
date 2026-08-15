@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About – Prelaps</title>
+<meta name="description" content="What Prelaps is and why it was built.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Prelaps">
+<meta property="og:title" content="About">
+<meta property="og:description" content="What Prelaps is and why it was built.">
+<link rel="canonical" href="https://prelaps.com/en/content/about">
+<link rel="alternate" hreflang="ko" href="https://prelaps.com/content/about">
+<link rel="alternate" hreflang="en" href="https://prelaps.com/en/content/about">
+<link rel="alternate" hreflang="ja" href="https://prelaps.com/ja/content/about">
+<link rel="alternate" hreflang="x-default" href="https://prelaps.com/en/content/about">
+<meta property="og:url" content="https://prelaps.com/en/content/about">
+<meta property="og:image" content="https://prelaps.com/og-image.png">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="tag">PRELAPS</span>
+    <span class="bname">Text tools</span>
+  </a>
+  <nav class="langsw" aria-label="Language">
+    <a href="../../content/about.html" hreflang="ko">한국어</a>
+    <span aria-current="page">English</span>
+    <a href="../../ja/content/about.html" hreflang="ja">日本語</a>
+  </nav>
+</div>
+
+<main class="sheet">
+<h1>About</h1>
+<p class="note"><b>Prelaps</b> (prelaps.com) is a small collection of tools for the places where text goes wrong. Every tool runs inside your browser, and none of them send what you enter to a server. What follows describes the first of them, <a href="../mojibake.html">Mojibake Recovery</a>.</p>
+<h2>What this tool does</h2>
+<p class="note">It turns unreadable text like <code>¾È³çÇÏ¼¼¿ä</code> or <code>ì•ˆë…•í•˜ì„¸ìš”</code> back into the characters it started as. It covers 12 languages, including Korean, Japanese, Chinese and Russian.</p>
+<p class="note">Garbling has a single cause: <b>data stored one way was read another way.</b> So recovery walks the same two steps backwards — the garbled characters are pushed back through the encoding that misread them to restore the original bytes, then read again with the real one. Since there is no way to know which combination is right, all 220 of them are tried and the most natural-looking result is chosen.</p>
+
+<h2>Why it was built</h2>
+<p class="note">The standard library for this kind of repair is <a href="https://github.com/rspeer/python-ftfy" rel="nofollow noopener" target="_blank">ftfy</a>. It targets the <code>â€™</code> family common on the English-language web, and in that area it is close to perfect.</p>
+<p class="note"><b>But garbling that involves Korean, Japanese or Chinese encodings is outside its scope.</b> Measured on the same benchmark:</p>
+<div class="ex">
+<table>
+<thead><tr><th>Case</th><th>n</th><th>ftfy 6.3.1</th><th>This tool</th></tr></thead>
+<tbody>
+<tr><td>Misread as a CJK encoding</td><td>20</td><td>0.0%</td><td>100%</td></tr>
+<tr><td>CJK source text garbled</td><td>51</td><td>0.0%</td><td>66.7%</td></tr>
+<tr><td>Misread as a Cyrillic encoding</td><td>39</td><td>15.4%</td><td>97.4%</td></tr>
+<tr><td>UTF-8 → Western misread (ftfy's focus)</td><td>31</td><td>96.8%</td><td>100%</td></tr>
+</tbody>
+</table>
+</div>
+<p class="note">There is no claim of beating ftfy on its home ground — 31 cases at 100% against 96.8% is effectively a tie, and ftfy is the more sophisticated tool there. The gap is elsewhere: <b>71 cases involving CJK encodings, where ftfy recovers none.</b> That is the reason this tool exists.</p>
+
+<h2>How it is built</h2>
+<p class="note">Everything runs in your browser. There is no server that receives text, no sign-up, and nothing is stored. Closing the tab discards it all.</p>
+<p class="note">Accuracy is measured, not asserted. A benchmark of 148 cases across 12 languages runs on every change to the engine: <b>84.5% correct on the first candidate, 96.6% within three.</b> These numbers come from that sample and are not a guarantee for every input — see the <a href="terms.html">Terms</a>.</p>
+
+</main>
+
+<footer>
+  <p>Nothing you enter is sent to a server. All processing happens inside your browser and disappears when you close the tab.</p>
+  <nav class="fnav">
+    <a href="../index.html">Tool</a>
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+  <p class="cr">© 2026 Prelaps</p>
+</footer>
+
+</div>
+</body>
+</html>

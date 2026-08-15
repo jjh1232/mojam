@@ -1,0 +1,250 @@
+/* 깨진 글자 복구기 — 공용 스타일
+   도구 페이지(index.html)와 법적 페이지 4개가 이 파일 하나를 공유한다.
+   예전에는 index.html 안에 <style> 로 있었고 build.js 가 그걸 떠서 각 페이지에 심었는데,
+   그러면 배포본마다 CSS 가 통째로 복사돼 파일이 커지고 브라우저가 매번 다시 받는다. */
+
+:root{
+  /* --page 는 본문 바깥(브라우저 창) 색, --bg 는 본문 *안쪽* 작은 부품이 쓰는 연회색이다
+     (.lang 언어 칩 · .track 확신도 막대 · .chip.dim).  둘을 한 변수로 합치지 말 것 —
+     합치면 바깥 색을 바꿀 때마다 안쪽 칩 색이 같이 끌려간다 */
+  --page:#E6E6F2; --bg:#E8EBEE; --card:#FFF; --ink:#16202B; --ink2:#5A6B7B; --ink3:#8B99A6;
+  --line:#D4DBE2; --accent:#3B3499; --accent-bg:#EEEDF9;
+  --ok:#0F6E56; --ok-bg:#E3F2EC; --warn:#8A5A0B; --warn-bg:#FBF3E0;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--page);color:var(--ink);
+  font-family:"IBM Plex Sans KR",-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:16px;line-height:1.7;-webkit-text-size-adjust:100%;
+}
+.wrap{max-width:900px;margin:0 auto;padding:0 clamp(18px,4vw,30px) 56px}
+
+/* 흰 종이는 **본문 내용만** 덮는다.  맨 위 줄(.topbar)·제목(header)·푸터는 바깥색
+   위에 남아서 "읽을 내용" 과 "그 바깥" 이 눈으로 갈린다.
+   .wrap 을 통째로 희게 칠하면 안 된다 — 그러면 갈라지는 자리가 없어진다.
+   경계는 선이 아니라 옅은 그림자로 낸다 (흰색과 --page 는 밝기 차가 작아
+   선을 그으면 되레 지저분하다) */
+.sheet{background:var(--card);border-radius:12px;
+       padding:26px clamp(16px,3vw,26px);
+       box-shadow:0 1px 3px rgba(22,32,43,.07)}
+.sheet > :first-child{margin-top:0}
+
+/* 아랫줄이 없는 이유 — 바로 밑에 흰 종이(.sheet)가 와서 그 경계가 이미 선 역할을 한다 */
+header{padding:38px 0 18px}
+/* 눈썹 글자.  이제 이 용도 하나뿐이다 — 예전엔 법적 페이지의 "도구로 돌아가기"
+   링크(.tag a)도 겸했는데, .brand 로 대체하면서 그 규칙을 걷어냈다 */
+.tag{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--accent);
+     margin:0 0 8px;display:block}
+/* 사이트 이름 블록.  15장 전부 이 자리를 눌러 자기 언어의 도구 페이지로 돌아간다.
+   검색으로 약관 페이지에 바로 들어온 사람이 푸터까지 안 내려가도 되게 하는 것.
+   두 줄짜리 블록이라 누를 수 있는 높이(44px)는 저절로 확보된다 */
+.brand{display:block;text-decoration:none;color:inherit;padding:0 0 8px}
+.brand h1,.brand .bname{margin:0}
+.brand:hover h1,.brand:hover .bname{color:var(--accent)}
+.brand:focus-visible{outline:3px solid rgba(59,52,153,.22);outline-offset:3px;border-radius:6px}
+/* 법적 페이지의 사이트 이름.  h1 은 그 페이지 제목(이용약관 등)이 써야 하므로
+   여기서는 h1 이 아니고, 크기도 h1(29px)보다 작게 둬 페이지 제목이 이긴다 */
+.bname{display:block;font-size:22px;font-weight:600;letter-spacing:-.02em;
+       color:var(--ink);line-height:1.3}
+/* 맨 위 한 줄 — 로고가 왼쪽, 언어 전환기가 오른쪽.  base64decode 계열 도구의 배치다.
+   좁은 화면에서는 전환기가 아래로 내려가되 margin-left:auto 로 오른쪽에 남는다 */
+.topbar{display:flex;flex-wrap:wrap;align-items:flex-start;gap:0 16px;padding-top:14px}
+
+/* 언어 전환. 언어 이름은 번역하지 않고 각 언어의 자기 이름을 쓴다 —
+   영어 페이지에서 한국어가 "Korean" 이면 한국어 사용자가 자기 언어를 못 찾는다.
+   글자는 12px 로 작게, 누를 수 있는 높이는 44px 로 확보한다 */
+/* 오른쪽 정렬은 .topbar 안의 margin-left:auto 가 한다 — 예전엔 자기가 한 줄을 통째로
+   차지해 justify-content:flex-end 로 밀었지만, 이제 로고와 같은 줄을 나눠 쓴다 */
+.langsw{display:flex;gap:14px;align-items:center;margin:0 0 0 auto;
+        font-family:var(--mono);font-size:12px;letter-spacing:.02em}
+/* 맨 위 줄이 여백 역할을 대신하므로 헤더 위쪽을 줄인다.  header 의 38px 은
+   .topbar 없는 페이지가 생길 때를 위한 기본값으로만 남아 있다 */
+.topbar + header{padding-top:6px}
+/* 법적 페이지에는 header 가 없다 — 페이지 제목이 흰 종이 맨 위로 들어갔기 때문.
+   그래서 .topbar 다음에 종이가 바로 오는 경우의 간격을 따로 준다 */
+.topbar + .sheet{margin-top:22px}
+/* 흰 종이 맨 위의 페이지 제목 */
+.sheet > h1{margin-bottom:16px}
+.langsw a,.langsw span{display:inline-flex;align-items:center;min-height:44px;text-decoration:none}
+.langsw a{color:var(--ink3)}
+.langsw a:hover{color:var(--accent);text-decoration:underline}
+.langsw [aria-current]{color:var(--accent);font-weight:500}
+.langsw a:focus-visible{outline:3px solid rgba(59,52,153,.22);outline-offset:2px;border-radius:4px}
+
+h1{font-size:29px;font-weight:600;letter-spacing:-.02em;margin:0 0 8px;line-height:1.3}
+header p{margin:0;color:var(--ink2);font-size:15px}
+
+/* 바탕이 흰 종이라 1px 선 하나로는 약하다.  색은 그대로 두고 그림자만 더한다 */
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin-top:22px;
+      box-shadow:0 1px 2px rgba(22,32,43,.05)}
+
+.bar{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:10px;flex-wrap:wrap}
+.bar h2{font-size:15px;font-weight:600;margin:0}
+
+/* 탭 줄 + 지우기. 지우기를 tablist 안에 넣으면 스크린리더가 탭 개수를 잘못 읽으므로
+   .tabs 의 형제로 두고, 밑줄·여백은 이 래퍼가 갖는다 */
+.tabrow{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;
+        margin:-4px 0 14px;border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:2px}
+
+/* 글자는 작게, 누를 수 있는 높이는 44px. 보이는 크기와 탭 타깃은 별개다 */
+#clear{
+  margin-left:auto;font-family:inherit;font-size:13px;color:var(--ink3);
+  background:transparent;border:0;cursor:pointer;padding:0 10px;
+  min-height:44px;display:inline-flex;align-items:center
+}
+#clear:hover{color:var(--accent)}
+#clear:focus-visible{outline:3px solid rgba(59,52,153,.22);outline-offset:-3px;border-radius:4px}
+.tab{
+  font-family:inherit;font-size:14.5px;font-weight:500;color:var(--ink3);
+  background:transparent;border:0;border-bottom:2px solid transparent;
+  padding:11px 16px;margin-bottom:-1px;cursor:pointer
+}
+.tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tab:hover{color:var(--ink2)}
+.tab:focus-visible{outline:3px solid rgba(59,52,153,.22);outline-offset:-3px;border-radius:4px}
+
+.drop{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;text-align:center;min-height:132px;padding:20px;
+  background:#FBFCFD;border:1.5px dashed var(--line);border-radius:6px;cursor:pointer
+}
+.drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-bg)}
+.drop b{font-size:15px;font-weight:500;color:var(--ink)}
+.drop span{font-family:var(--mono);font-size:12px;color:var(--ink3)}
+.opt{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--ink2);cursor:pointer}
+.hint{margin:12px 0 0;font-size:13px;line-height:1.55;color:var(--ink3)}
+
+.names{
+  font-family:var(--mono);font-size:13.5px;line-height:1.5;
+  background:#FBFCFD;border:1px solid var(--line);border-radius:6px;
+  padding:10px 12px;margin:0 0 12px;max-height:220px;overflow:auto
+}
+.res.best .names{background:var(--ok-bg);border-color:#BEDFD2}
+.nrow{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;padding:1px 0}
+.nrow i{font-style:normal;color:var(--ink3);word-break:break-all}
+.nrow b{font-weight:500;color:var(--ink);word-break:break-all}
+.res.best .nrow b{color:#0B4638}
+.nrow.kept b{color:var(--ink3);font-weight:400}
+
+textarea{
+  width:100%;min-height:120px;resize:vertical;
+  /* 16px 아래로 내리지 말 것 — iOS 사파리는 글자가 16px 미만인 입력창을 누르면
+     화면을 자동 확대하고, 확대된 채로 돌아오지 않아 사용자가 손으로 되돌려야 한다.
+     viewport 에 user-scalable=no 를 넣어 막는 방법은 접근성을 해쳐서 쓰지 않는다 */
+  font-family:var(--mono);font-size:16px;line-height:1.65;
+  color:var(--ink);background:#FBFCFD;
+  border:1.5px solid var(--line);border-radius:6px;padding:12px 13px;
+}
+textarea:focus{outline:3px solid rgba(59,52,153,.22);outline-offset:1px;border-color:var(--accent)}
+
+.actions{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.go{
+  font-family:inherit;font-size:15px;font-weight:500;color:#fff;
+  background:var(--accent);border:0;border-radius:6px;padding:12px 22px;cursor:pointer
+}
+.go:hover{background:#302A80}
+.go:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.meta{font-family:var(--mono);font-size:12px;color:var(--ink3)}
+
+.msg{display:none;border-radius:6px;padding:11px 13px;font-size:14.5px;margin-top:14px;line-height:1.6}
+.msg.show{display:block}
+.msg.warn{background:var(--warn-bg);color:var(--warn);border-left:3px solid var(--warn)}
+.msg.ok{background:var(--ok-bg);color:var(--ok);border-left:3px solid var(--ok)}
+
+#out{margin-top:22px}
+.res{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:12px;
+     box-shadow:0 1px 2px rgba(22,32,43,.05)}
+.res.best{border-color:var(--accent);border-width:1.5px}
+
+.rhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.rank{font-family:var(--mono);font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:8px}
+.rank b{color:var(--accent);font-weight:500}
+/* 결과가 어느 언어로 읽혔는지. 문자로 단정 가능한 것만 언어 이름을 쓴다 (langHint 참고) */
+.lang{
+  font-family:inherit;font-size:12px;color:var(--ink2);
+  background:var(--bg);border-radius:4px;padding:2px 8px;white-space:nowrap
+}
+.res.best .lang{background:var(--accent-bg);color:var(--accent)}
+.conf{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--ink2)}
+.track{width:74px;height:5px;background:var(--bg);border-radius:99px;overflow:hidden}
+.fill{height:100%;background:var(--accent);border-radius:99px}
+
+.text{
+  font-family:var(--mono);font-size:16px;line-height:1.7;
+  background:#FBFCFD;border:1px solid var(--line);border-radius:6px;
+  padding:12px 13px;white-space:pre-wrap;word-break:break-all;margin:0 0 12px;
+  max-height:220px;overflow:auto;
+}
+.res.best .text{background:var(--ok-bg);border-color:#BEDFD2;color:#0B4638}
+/* 구간 복구에서 실제로 되돌린 부분. 어디를 고쳤는지가 그 자체로 정보다. */
+.text mark{background:#FFF3BF;color:inherit;border-radius:3px;padding:0 2px}
+
+.chain{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--ink3);font-family:var(--mono)}
+.chip{background:var(--accent-bg);color:var(--accent);border-radius:4px;padding:2px 8px}
+.chip.dim{background:var(--bg);color:var(--ink2)}
+
+.rfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+.copy{
+  font-family:inherit;font-size:13px;color:var(--ink2);
+  background:transparent;border:1px solid var(--line);border-radius:5px;
+  padding:12px 14px;cursor:pointer
+}
+.copy:hover{border-color:var(--accent);color:var(--accent)}
+
+.part{border:1px dashed var(--line);border-radius:10px;padding:14px 16px;margin-bottom:12px;background:transparent}
+.part h3{font-size:13px;font-weight:600;margin:0 0 4px;color:var(--ink2)}
+.part p{margin:0 0 10px;font-size:13.5px;color:var(--ink3);line-height:1.55}
+.prow{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
+.prow .text{flex:1;min-width:200px;margin:0;font-size:15px}
+
+/* 본문 절 제목.  h1(페이지 제목) 다음 단계라 h2 다 — 단계를 건너뛰면
+   화면 낭독기가 목차를 잘못 읽는다 */
+h2{font-size:17px;font-weight:600;margin:34px 0 8px}
+.ex{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--card);margin:12px 0}
+.ex table{border-collapse:collapse;width:100%;font-size:13.5px}
+.ex th,.ex td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.ex tbody tr:last-child td{border-bottom:0}
+.ex th{font-size:12px;font-weight:600;color:var(--ink3);white-space:nowrap;background:#FBFCFD}
+.ex td:first-child{min-width:210px}
+.ex td:last-child{color:var(--ink3);font-size:13px;white-space:nowrap}
+/* 실패 원인 목록. 표를 쓰면 칸끼리 폭을 밀어내고 모바일에서 더 심해진다 */
+.cases{margin:12px 0}
+.case{border-left:2px solid var(--line);padding:2px 0 2px 14px;margin-bottom:14px}
+.case>b{display:block;font-size:14.5px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.case>b code{font-size:14px}
+.case p{margin:0;color:var(--ink2);font-size:14px;line-height:1.65}
+.ex code{background:transparent;border:0;padding:0;font-size:13.5px;color:var(--ink);word-break:break-all;-webkit-user-select:all;user-select:all}
+.note{color:var(--ink2);font-size:14.5px}
+footer{margin-top:26px;padding-top:4px;font-size:13.5px;color:var(--ink3)}
+footer p{margin:0 0 12px}
+/* 법적 페이지 링크. 애드센스는 이 네 개가 푸터에서 닿아야 한다 (기획서 7장) */
+.fnav{display:flex;flex-wrap:wrap;gap:4px 16px;margin-bottom:12px}
+.fnav a{color:var(--ink2);text-decoration:none;border-bottom:1px solid var(--line);
+        display:inline-block;padding:10px 0}
+.fnav a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+/* 푸터 저작권 줄. 예전엔 이것도 .copy 였는데 복사 버튼(.copy)과 이름이 겹쳐
+   뒤에 온 이쪽이 이기는 바람에 버튼이 12px 모노스페이스로 그려지고 있었다.
+   한 클래스명을 두 용도로 쓰지 말 것 — 화면에 아무 오류도 안 나서 오래 안 걸린다 */
+.cr{font-family:var(--mono);font-size:12px;color:var(--ink3)}
+/* 법적 페이지 본문에서만 쓰는 것들 */
+.note ul,ul.note{margin:8px 0;padding-left:20px}
+ul.note li{margin-top:5px}
+.mail{font-family:var(--mono);font-size:15px;color:var(--ink);background:var(--card);
+      border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin:0 0 12px;word-break:break-all}
+code{font-family:var(--mono);font-size:.92em;background:var(--card);padding:1px 5px;border-radius:3px;border:1px solid var(--line)}
+
+/* 허브(각 언어 루트)의 도구 목록.  .case 와 비슷해 보이지만 성격이 다르다 —
+   .case 는 "읽을 것", 이쪽은 "고를 것" 이라 블록 전체가 링크이고
+   탭 타깃이 44px 을 넉넉히 넘는다.  흰 종이 위에 놓이므로 색을 낮추지 않고
+   .card·.res 와 같은 1px 선 + 옅은 그림자로만 경계를 낸다 */
+.tools{display:grid;gap:12px;margin:14px 0 4px}
+.tool{display:block;text-decoration:none;color:inherit;
+      background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;
+      box-shadow:0 1px 2px rgba(22,32,43,.05)}
+.tool:hover{border-color:var(--accent)}
+.tool:focus-visible{outline:3px solid rgba(59,52,153,.22);outline-offset:3px}
+.tool b{display:block;font-size:16px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.tool:hover b{color:var(--accent)}
+.tool span{display:block;color:var(--ink2);font-size:14px;line-height:1.65}
