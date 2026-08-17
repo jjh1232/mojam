@@ -3,30 +3,30 @@
      내부 링크는 file:// 더블클릭 원칙 때문에 .html 을 유지하므로 여기와 형태가 다르다.
      hreflang 은 각 페이지 <head> 에 넣었으므로 사이트맵에는 중복해 적지 않는다. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://mojibake.prelaps.com/</loc><priority>1.0</priority></url>
-  <url><loc>https://mojibake.prelaps.com/excel-csv</loc><priority>0.7</priority></url>
-  <url><loc>https://mojibake.prelaps.com/encoding-basics</loc><priority>0.7</priority></url>
-  <url><loc>https://mojibake.prelaps.com/zip-filename</loc><priority>0.7</priority></url>
-  <url><loc>https://mojibake.prelaps.com/content/about</loc><priority>0.3</priority></url>
-  <url><loc>https://mojibake.prelaps.com/content/privacy</loc><priority>0.3</priority></url>
-  <url><loc>https://mojibake.prelaps.com/content/terms</loc><priority>0.3</priority></url>
-  <url><loc>https://mojibake.prelaps.com/content/contact</loc><priority>0.3</priority></url>
+  <url><loc>https://prelaps.com/mojibake/</loc><priority>1.0</priority></url>
+  <url><loc>https://prelaps.com/mojibake/excel-csv</loc><priority>0.7</priority></url>
+  <url><loc>https://prelaps.com/mojibake/encoding-basics</loc><priority>0.7</priority></url>
+  <url><loc>https://prelaps.com/mojibake/zip-filename</loc><priority>0.7</priority></url>
+  <url><loc>https://prelaps.com/mojibake/content/about</loc><priority>0.3</priority></url>
+  <url><loc>https://prelaps.com/mojibake/content/privacy</loc><priority>0.3</priority></url>
+  <url><loc>https://prelaps.com/mojibake/content/terms</loc><priority>0.3</priority></url>
+  <url><loc>https://prelaps.com/mojibake/content/contact</loc><priority>0.3</priority></url>
 
-  <url><loc>https://mojibake.prelaps.com/en/</loc><priority>1.0</priority></url>
-  <url><loc>https://mojibake.prelaps.com/en/excel-csv</loc><priority>0.7</priority></url>
-  <url><loc>https://mojibake.prelaps.com/en/encoding-basics</loc><priority>0.7</priority></url>
-  <url><loc>https://mojibake.prelaps.com/en/zip-filename</loc><priority>0.7</priority></url>
-  <url><loc>https://mojibake.prelaps.com/en/content/about</loc><priority>0.3</priority></url>
-  <url><loc>https://mojibake.prelaps.com/en/content/privacy</loc><priority>0.3</priority></url>
-  <url><loc>https://mojibake.prelaps.com/en/content/terms</loc><priority>0.3</priority></url>
-  <url><loc>https://mojibake.prelaps.com/en/content/contact</loc><priority>0.3</priority></url>
+  <url><loc>https://prelaps.com/mojibake/en/</loc><priority>1.0</priority></url>
+  <url><loc>https://prelaps.com/mojibake/en/excel-csv</loc><priority>0.7</priority></url>
+  <url><loc>https://prelaps.com/mojibake/en/encoding-basics</loc><priority>0.7</priority></url>
+  <url><loc>https://prelaps.com/mojibake/en/zip-filename</loc><priority>0.7</priority></url>
+  <url><loc>https://prelaps.com/mojibake/en/content/about</loc><priority>0.3</priority></url>
+  <url><loc>https://prelaps.com/mojibake/en/content/privacy</loc><priority>0.3</priority></url>
+  <url><loc>https://prelaps.com/mojibake/en/content/terms</loc><priority>0.3</priority></url>
+  <url><loc>https://prelaps.com/mojibake/en/content/contact</loc><priority>0.3</priority></url>
 
-  <url><loc>https://mojibake.prelaps.com/ja/</loc><priority>1.0</priority></url>
-  <url><loc>https://mojibake.prelaps.com/ja/excel-csv</loc><priority>0.7</priority></url>
-  <url><loc>https://mojibake.prelaps.com/ja/encoding-basics</loc><priority>0.7</priority></url>
-  <url><loc>https://mojibake.prelaps.com/ja/zip-filename</loc><priority>0.7</priority></url>
-  <url><loc>https://mojibake.prelaps.com/ja/content/about</loc><priority>0.3</priority></url>
-  <url><loc>https://mojibake.prelaps.com/ja/content/privacy</loc><priority>0.3</priority></url>
-  <url><loc>https://mojibake.prelaps.com/ja/content/terms</loc><priority>0.3</priority></url>
-  <url><loc>https://mojibake.prelaps.com/ja/content/contact</loc><priority>0.3</priority></url>
+  <url><loc>https://prelaps.com/mojibake/ja/</loc><priority>1.0</priority></url>
+  <url><loc>https://prelaps.com/mojibake/ja/excel-csv</loc><priority>0.7</priority></url>
+  <url><loc>https://prelaps.com/mojibake/ja/encoding-basics</loc><priority>0.7</priority></url>
+  <url><loc>https://prelaps.com/mojibake/ja/zip-filename</loc><priority>0.7</priority></url>
+  <url><loc>https://prelaps.com/mojibake/ja/content/about</loc><priority>0.3</priority></url>
+  <url><loc>https://prelaps.com/mojibake/ja/content/privacy</loc><priority>0.3</priority></url>
+  <url><loc>https://prelaps.com/mojibake/ja/content/terms</loc><priority>0.3</priority></url>
+  <url><loc>https://prelaps.com/mojibake/ja/content/contact</loc><priority>0.3</priority></url>
 </urlset>
