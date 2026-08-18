@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..', 'site');
-const ORIGIN = 'https://mojibake.prelaps.com';
+const ORIGIN = 'https://prelaps.com/mojibake';
 const LANGS = ['ko', 'en', 'ja'];
 const XDEFAULT = 'en';
 
@@ -25,12 +25,19 @@ const bad = (file, msg) => { fails++; console.log('  ✗ ' + file + ' — ' + ms
 // ROOT 가 site/ 라 test/·docs/ 는 애초에 안 걸린다. 이 목록은 site/ 안에
 // 실수로 들어올 수 있는 것들만 남겨둔 방어선이다.
 const SKIP = new Set(['node_modules', '.git']);
+// 404.html 은 15장짜리 언어 격자에 속하지 않는다 — 주소가 하나뿐이라
+// canonical·hreflang·sitemap·langsw 검사가 전부 의미가 없다.
+// 대신 아래 "404" 절에서 따로 본다.
+const NOINDEX = new Set(['404.html']);
 function pages(dir = ROOT, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     if (SKIP.has(e.name)) continue;
     const p = path.join(dir, e.name);
     if (e.isDirectory()) pages(p, out);
-    else if (e.name.endsWith('.html')) out.push(path.relative(ROOT, p).split(path.sep).join('/'));
+    else if (e.name.endsWith('.html')) {
+      const rel = path.relative(ROOT, p).split(path.sep).join('/');
+      if (!NOINDEX.has(rel)) out.push(rel);
+    }
   }
   return out;
 }
@@ -103,6 +110,27 @@ for (const rel of list) {
       .map(p => (lang === 'ko' ? '' : lang + '/') + 'content/' + p + '.html');
     const got = [...fn.matchAll(/href="([^"]+)"/g)].map(m => resolve(m[1]));
     for (const w of want) if (!got.includes(w)) bad(rel, '푸터에 ' + w + ' 링크가 없다 (언어 섞임?)');
+  }
+}
+
+// ── 404 ──────────────────────────────────────────────────────
+// Cloudflare Pages 는 404.html 이 없으면 index.html 을 status 200 으로 돌려준다.
+// 그러면 없는 주소가 전부 "정상 페이지" 로 색인되는 soft 404 가 되는데,
+// 화면상 아무 표시가 없어서 눈으로는 절대 못 잡는다. 그래서 존재를 강제한다.
+{
+  const rel = '404.html';
+  const abs = path.join(ROOT, rel);
+  if (!fs.existsSync(abs)) {
+    bad(rel, '404 페이지가 없다 — 없으면 index.html 이 200 으로 나가 soft 404 가 된다');
+  } else {
+    const src = fs.readFileSync(abs, 'utf8');
+    for (const m of src.matchAll(/(?:href|src)="([^"]+)"/g)) {
+      const href = m[1];
+      if (/^(https?:|mailto:|#|data:)/.test(href)) continue;
+      if (!fs.existsSync(path.join(ROOT, path.posix.normalize(href)))) bad(rel, '깨진 링크 ' + href);
+    }
+    if (!/<meta name="robots" content="noindex/.test(src)) bad(rel, 'noindex 가 없다');
+    if (/<link rel="canonical"/.test(src)) bad(rel, 'canonical 이 있다 — 실재하지 않는 주소를 선언하면 안 된다');
   }
 }
 

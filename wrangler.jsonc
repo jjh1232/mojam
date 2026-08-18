@@ -2,21 +2,46 @@
   // Cloudflare Workers (Static Assets) 배포 설정.
   //
   // 이 프로젝트에는 빌드 단계가 없다 — site/ 안의 파일이 그대로 사이트다.
-  // Worker 스크립트도 없다. 정적 파일만 서빙하므로 main 항목이 없는 것이 정상이다.
   //
   // ⚠ directory 를 "./site" 가 아닌 "." 으로 바꾸지 말 것.
   //    저장소 루트를 올리면 docs/기획서.md 와 CLAUDE.md 가 같이 공개되어 색인된다.
   "name": "mojibake",
   "compatibility_date": "2026-08-15",
 
-  // prelaps.com 은 우산 브랜드다 — 게임·유틸이 각자 서브도메인을 갖고 이 도구는 mojibake 다.
-  // 루트(prelaps.com)는 나중에 만들 랜딩이 따로 가져가므로 여기서 건드리지 않는다.
+  // 자산 앞단에서 URL 의 /mojibake 접두사를 떼는 스크립트.
+  // 이것 때문에 site/ 를 mojibake/ 폴더로 내리지 않아도 된다. 자세한 건 그 파일 주석.
+  // (변환·번들링이 없으므로 "빌드 금지" 원칙은 그대로다)
+  "main": "./src/index.js",
+
+  // prelaps.com 은 우산 브랜드다 — 도구·게임·블로그가 하위 경로로 붙고 이 도구는 /mojibake 다.
+  // 루트(prelaps.com)와 나머지 경로는 prelaps-router Worker 가 가져간다.
+  //
+  // prelaps-router 의 prelaps.com/* 와 겹치지만, Cloudflare 는 더 구체적인 라우트를
+  // 먼저 쓰므로 이쪽이 이긴다.
+  //
+  // 끝 슬래시 없는 /mojibake 는 이 패턴에 안 걸린다 — 그건 prelaps-router 가
+  // 받아서 /mojibake/ 로 301 한다.
+  //
+  // 구 주소(mojibake.prelaps.com)도 계속 받는다. 떼어내면 DNS 레코드까지
+  // 사라져 301 을 걸 자리가 없어지기 때문이다. 리다이렉트는 src/index.js 가
+  // 처리한다 — Redirect Rules 를 대시보드에 따로 만들 필요가 없다.
+  // 색인이 새 주소로 넘어간 것을 확인하면 이 줄을 지운다.
   "routes": [
+    { "pattern": "prelaps.com/mojibake/*", "zone_name": "prelaps.com" },
     { "pattern": "mojibake.prelaps.com", "custom_domain": true }
   ],
 
   "assets": {
     "directory": "./site",
+
+    // main 이 있으므로 env.ASSETS 로 자산을 부를 수 있게 이름을 준다.
+    // (main 이 없는 프로젝트에서는 이 항목이 오히려 오류다)
+    "binding": "ASSETS",
+
+    // 기본값은 "자산 먼저 찾고, 없으면 Worker" 다.
+    // 그러면 접두사를 떼기도 전에 자산 조회가 빗나가므로 순서를 뒤집는다.
+    // 이걸 빠뜨리면 /mojibake/styles.css 가 404 로 나온다.
+    "run_worker_first": true,
 
     // 배포 URL 에 확장자가 없다 — /content/terms.html 을 /content/terms 로 서빙한다.
     // canonical·og:url·sitemap.xml 이 확장자 없는 주소를 쓰므로 이 값이 중요하다.
@@ -24,6 +49,7 @@
     "html_handling": "auto-trailing-slash",
 
     // 404.html 을 두지 않았다. Cloudflare 기본 화면을 쓴다.
+    // ("none" 이어도 상태 코드는 제대로 404 다 — Pages 의 soft 404 문제와는 다르다)
     "not_found_handling": "none"
   }
 }
