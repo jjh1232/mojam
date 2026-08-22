@@ -1,6 +1,6 @@
-# 깨진 글자 복구기 (`mojibake.prelaps.com`)
+# 깨진 글자 복구기 (`prelaps.com/mojibake`)
 
-「깨진 글자 복구기」 한 도구가 **루트에 있는** 사이트. 3언어(ko·en·ja) × 5장 = **15장**이다. 상세 기획은 @docs/기획서.md 참고.
+「깨진 글자 복구기」 한 도구짜리 사이트. `prelaps.com/mojibake/` 아래에 산다. 3언어(ko·en·ja) × 5장 = **15장**이다. 상세 기획은 @docs/기획서.md 참고.
 
 **`prelaps.com` 은 우산 브랜드다.** 게임·유틸리티처럼 성격이 전혀 다른 것들이 각자 서브도메인을 갖고, 이 저장소는 그중 `mojibake` 하나다. 루트(`prelaps.com`)는 나중에 만들 랜딩이 따로 가져가므로 **여기서 건드리지 않는다.**
 
@@ -117,32 +117,45 @@
 - **`자주 묻는 것` 의 문항을 고치면 `<head>` 의 `FAQPage` 구조화 데이터도 같이 고칠 것.** 화면과 구조화 데이터가 어긋나면 구글이 무시한다. **`npm run check:links` 가 질문·답변을 글자 단위로 대조하므로 눈으로 확인하지 말 것** — 규칙으로만 적어뒀던 시절 3언어 15문항 중 13문항이 어긋난 채로 있었다(19차에 발견).
 - 본문 분량은 **1,500자 이상**을 유지한다 (기획서 4장). 현재 2,224자.
 
-## 도메인과 URL (`mojibake.prelaps.com`)
+## 도메인과 URL (`prelaps.com/mojibake`)
 
-**루트가 도구다.** 이 서브도메인에는 도구 하나뿐이라 중간 계층이 없다.
+**하위 경로가 도구다.** 2026-08-18 에 서브도메인(`mojibake.prelaps.com`)에서 옮겨왔다.
 
 ```
-mojibake.prelaps.com/                 깨진 글자 복구기   index.html
-mojibake.prelaps.com/content/terms    법적 4장
-mojibake.prelaps.com/en/ · /ja/       위 구조를 언어별로 그대로
+prelaps.com/mojibake/                 깨진 글자 복구기   index.html
+prelaps.com/mojibake/content/terms    법적 4장
+prelaps.com/mojibake/en/ · /ja/       위 구조를 언어별로 그대로
 ```
 
-- **언어가 첫 칸이다.** `/en/` · `/ja/` 아래에 같은 구조가 그대로 반복된다.
-- **도구를 `/mojibake` 로 내리지 말 것.** 18차에 허브 + `/mojibake` 구조로 갔다가 19차에 되돌렸다 — 도구가 하나인데 목차를 거치게 하는 값을 치를 이유가 없었다. 색인이 없던 시점이라 되돌리는 비용이 0 이었지만, **배포 후에는 URL 을 바꾸면 색인을 다시 쌓아야 한다.**
-- **여기에 두 번째 도구를 붙이지 말 것.** 새 도구는 새 서브도메인 + 새 저장소다. 이 프로젝트의 절대 규칙(프레임워크·빌드 금지)이 다른 성격의 물건과 한 저장소에 있으면 첫날에 깨진다.
-- **하위 경로(`prelaps.com/mojibake`)로 옮기지 말 것.** 저장소가 갈려 있어 Worker 라우팅·법적 페이지 이사·테스트 수정이 줄줄이 딸려온다. 신뢰도가 한 도메인에 모이는 이득은 **주제가 이어질 때** 얘기인데, 게임과 텍스트 도구 사이에는 그 이득이 거의 없다.
-- **법적 페이지는 이 서브도메인만 덮는다.** 적용 범위가 `Prelaps(mojibake.prelaps.com)` 로 쓰여 있다. **다른 서브도메인의 약관을 여기서 겸하려 하지 말 것** — 게임은 점수를 저장할 수도 있고 이 도구는 아무것도 안 받으므로 개인정보처리방침이 원래 달라야 한다. 복제가 아니라 각자 맞는 문서다.
+- **언어가 도구 다음 칸이다.** `/mojibake/en/` · `/mojibake/ja/` 아래에 같은 구조가 그대로 반복된다.
+- **`site/` 안의 파일 경로에는 `mojibake` 가 없다.** URL 의 접두사는 `src/index.js` 가 떼어낸다 — 파일을 한 칸 내리지 않으려고 그렇게 했다. 그래서 `file://` 더블클릭도 `npm run serve` 주소도 예전 그대로다. 자세한 건 @docs/배포.md
+- **구 주소는 `src/index.js` 가 301 로 넘긴다.** 색인이 완전히 옮겨가면 `wrangler.jsonc` 의 `custom_domain` 줄을 지운다.
+- **URL 을 또 바꾸지 말 것.** 이번 이전은 색인이 사흘치라 비용이 거의 없었다. 지금부터는 바꾸면 색인을 다시 쌓아야 한다.
+- **여기에 두 번째 도구를 붙이지 말 것.** 새 도구는 새 저장소 + 새 하위 경로(`prelaps.com/게임`)다. 이 프로젝트의 절대 규칙(프레임워크·빌드 금지)이 다른 성격의 물건과 한 저장소에 있으면 첫날에 깨진다.
+- **법적 페이지의 적용 범위는 `Prelaps(prelaps.com)` 로 쓰여 있다** — 도메인 전체를 덮는 문구다. 허브(`prelaps-home`)에 아직 정책 페이지가 없어서 지금은 이 4장이 도메인의 정책 페이지 노릇을 한다. 허브에 `/{lang}/privacy` 가 생기면 그쪽으로 통합할 것 — 같은 도메인에 정책이 두 벌 있으면 관리 지점이 갈리고 중복 콘텐츠가 된다. (`prelaps-home/docs/prelaps-architecture.md` §8)
+
+### 이전 판 규칙이 왜 뒤집혔나
+
+19차까지는 "도구를 `/mojibake` 로 내리지 말 것", "하위 경로로 옮기지 말 것" 이었다.
+도구가 하나뿐이고 루트에 아무것도 없던 시점의 판단이다.
+
+바뀐 이유는 두 가지다. **애드센스가 2023년부터 도메인 단위 인증**이라 서브도메인은
+따로 등록이 안 된다. 그리고 도구가 늘어날수록 SEO 신호가 `prelaps.com` 한 곳에
+쌓이는 편이 유리하다 — 뒤에 오는 도구가 앞선 도구의 신뢰도를 물려받는다.
+
+당시 걱정했던 비용(Worker 라우팅·테스트 수정)은 실제로 치러 보니 작았다.
 
 
 ### 배포 URL 은 확장자가 없다
 
-Cloudflare Pages·Netlify 는 기본으로 `.html` 을 떼고 301 한다 (`index.html` → `/`, `content/terms.html` → `/content/terms`).
+호스팅이 `.html` 을 떼고 리다이렉트한다 (`index.html` → `/`, `content/terms.html` → `/content/terms`).
 
 - **내부 링크는 `.html` 을 유지한다** — `file://` 더블클릭 원칙 때문이다.
 - **`canonical`·`og:url`·`sitemap.xml` 은 확장자 없는 최종 URL** 을 쓴다. `.html` 을 적으면 리다이렉트를 가리키게 된다.
 - 둘의 형태가 다른 것은 실수가 아니다. `test/links.js` 가 이 매핑(`index.html` → `/`, `그밖에.html` → `/그밖에`)을 그대로 검사한다.
 - **배포 직후 실제 응답을 눈으로 확인할 것.** `.html` 을 안 떼는 호스팅으로 옮기면 위 규칙이 통째로 뒤집힌다. `_headers` 확인할 때 같이 본다.
-- **Cloudflare Pages 설정은 세 칸뿐이다** — 프레임워크 프리셋 `None` · 빌드 명령 **비움** · 빌드 출력 디렉터리 **`site`**. 빌드 명령에 뭔가를 적으면 그 순간 "원본과 산출물 두 벌" 이 생긴다. 비워두는 것이 이 프로젝트의 전제다.
+- **떼는 동작이 `wrangler.jsonc` 에 명시돼 있다** — `html_handling: "auto-trailing-slash"`. 호스팅의 암묵 동작에 기대지 않는다는 뜻이라, 여기를 바꾸면 15장의 canonical 이 전부 리다이렉트를 가리키게 된다.
+- **Pages 로 옮기면 이 설정이 사라진다.** Pages 에는 `html_handling` 도 `not_found_handling` 도 없다. 게다가 Pages 는 `404.html` 이 없으면 `index.html` 을 status 200 으로 돌려줘서 없는 주소가 전부 정상 페이지로 색인된다. 옮길 일이 생기면 @docs/배포.md 를 먼저 읽을 것.
 
 ### `hreflang` · `canonical`
 
@@ -151,7 +164,7 @@ Cloudflare Pages·Netlify 는 기본으로 `.html` 을 떼고 301 한다 (`index
 - **`x-default` 는 `/en/` 계열이다.** 언어가 안 맞는 방문자를 보낼 곳이라 영어가 맞다. 한국어가 루트인 것과는 별개 문제다.
 - **`hreflang` 은 "같은 페이지의 다른 언어" 여야 한다.** 도구가 늘면 여기가 가장 먼저 어긋나는 자리다 — 도구 A 의 영어판은 도구 A 여야 하는데 습관적으로 `en/index.html` 을 적기 쉽다. `npm run check:links` 가 이걸 잡는다.
 - `og:image` 는 절대 URL 이어야 한다. 상대 경로는 대부분의 미리보기 생성기가 무시한다.
-- **www 는 쓰지 않는다.** `https://mojibake.prelaps.com` 하나로 통일한다. 서브도메인이라 `www` 변형이 애초에 없다.
+- **www 는 쓰지 않는다.** `https://prelaps.com` 으로 통일한다. `www.prelaps.com` 은 `prelaps-router` 가 301 로 넘기므로 이 저장소에서 할 일은 없다.
 
 ## 사이트 구조 (빌드 없음)
 
@@ -199,7 +212,7 @@ og-image.png        1200×630. 링크 미리보기용
 
 - **favicon 에 `<text>` 로 글자를 넣지 말 것.** 보는 사람 컴퓨터의 글꼴에 좌우되고 **한글 글꼴이 없는 환경에서는 두부(□)로 보인다.** mojibake 복구 도구가 두부를 아이콘으로 다는 건 곤란하다. 도형(`rect`)만 쓴다.
 - **`og-image` 는 PNG 여야 한다.** 카톡·페이스북 미리보기 생성기는 SVG 를 대체로 렌더링하지 않는다. 다시 만들 일이 생기면 HTML 카드를 headless Chrome 으로 1200×630 스크린샷 찍는 방식을 쓴다(테스트에서 쓰는 것과 같은 방법이라 새 도구가 필요 없다).
-- **`og:image` 는 절대 URL 이다** (`https://mojibake.prelaps.com/og-image.png`). 상대 경로를 넣으면 대부분의 미리보기 생성기가 무시한다. `canonical`·`og:url`·`sitemap` 과 함께 15장 전부에 들어가 있다 — 「도메인과 URL」 절 참고.
+- **`og:image` 는 절대 URL 이다** (`https://prelaps.com/mojibake/og-image.png`). 상대 경로를 넣으면 대부분의 미리보기 생성기가 무시한다. `canonical`·`og:url`·`sitemap` 과 함께 15장 전부에 들어가 있다 — 「도메인과 URL」 절 참고.
 
 - **`_headers` 를 빠뜨리지 말 것.** 안 올리면 헤더가 통째로 안 붙는데 **화면상 아무 표시가 없다.** 배포 후 개발자도구 Network 탭에서 응답 헤더를 눈으로 확인하는 수밖에 없다.
 - **`Content-Security-Policy` 를 지금 넣지 말 것.** 제대로 하려면 Google Fonts 와 애드센스 스크립트를 전부 허용 목록에 올려야 하는데, 하나 빠뜨리면 **광고가 조용히 안 뜬다.** 광고를 붙이는 시점에 실제로 어떤 도메인을 부르는지 보고 추가한다.
@@ -255,7 +268,8 @@ og-image.png        1200×630. 링크 미리보기용
 - **엔진을 여러 조각으로 쪼개지 말 것.** 기획서 6.1 의 `src/engine/*.js` 분리안 얘기다. 다만 **한 파일(`engine.js`)로 빼는 것은 이미 했다** — 아래 사유 참고. 조각내는 것과 통째로 옮기는 것은 다르다.
   - 원래 규칙은 "쪼개면 `test/sync.js` 가 깨져 벤치마크 4개가 멈추고, **사용자 이득이 0**" 이었다. 다국어에서는 언어별 페이지가 엔진을 공유해야 하므로 이득이 0이 아니고, 통째로 옮기면 `sync.js` 가 **필요 없어져서** 오히려 단순해진다. 규칙이 걱정한 손해가 이 모양에서는 안 생긴다.
   - 옮길 때 엔진·UI 코드를 **바이트 단위로 대조**해 한 글자도 안 바뀐 것을 확인했고, `npm test` 10개 숫자가 전부 그대로였다. 다시 손댈 때도 같은 방법으로 확인할 것.
-- `sitemap.xml` 과 canonical 은 절대 URL 이라 **도메인(`mojibake.prelaps.com`)이 박혀 있다.** 도메인을 바꾸면 15장의 `<head>` + `sitemap.xml` + `robots.txt` 를 전부 고쳐야 한다 — `test/links.js` 의 `ORIGIN` 상수도 같이 고칠 것.
+- `sitemap.xml` 과 canonical 은 절대 URL 이라 **주소(`https://prelaps.com/mojibake`)가 박혀 있다.** 주소를 바꾸면 15장의 `<head>` + `sitemap.xml` 을 전부 고쳐야 한다 — `test/links.js` 의 `ORIGIN` 상수와 `src/index.js` 의 `PREFIX` 도 같이 고칠 것.
+- **`site/robots.txt` 는 이제 아무도 읽지 않는다.** `robots.txt` 는 도메인 루트에서만 읽히는데 이 파일은 `/mojibake/robots.txt` 에 있다. 실제로 적용되는 것은 허브의 `prelaps-home/public/robots.txt` 이고, 거기에 이 사이트맵이 등록돼 있다. **`sitemap.xml` 은 반드시 남길 것** — 그 robots.txt 가 이 주소를 가리킨다.
 
 ## 광고 관련 (사이트화 이후)
 

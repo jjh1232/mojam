@@ -1,8 +1,8 @@
 # Prelaps
 
-**깨진 글자 복구기** (`mojibake.prelaps.com`). 브라우저 안에서만 도는 도구다.
+**깨진 글자 복구기** (`prelaps.com/mojibake`). 브라우저 안에서만 도는 도구다.
 
-`prelaps.com` 은 우산 브랜드다 — 게임·유틸리티가 각자 서브도메인을 갖고, 이 저장소는 그중 `mojibake` 하나다.
+`prelaps.com` 은 우산 브랜드다 — 도구들이 각자 하위 경로를 갖고, 이 저장소는 그중 `/mojibake` 하나다. 루트(`prelaps.com`)의 허브는 별도 저장소(`prelaps-home`)다.
 
 인코딩 불일치로 깨진 텍스트를 복구한다. 입력은 두 가지 — **붙여넣기**와 **파일**. 파일은 txt·csv·srt·json 같은 텍스트 파일의 인코딩을 판별해 UTF-8 로 바꿔 내려주고, ZIP 은 안쪽 한글 파일명을 고쳐 다시 묶어준다. 원본 바이트를 그대로 읽기 때문에 **파일 쪽이 붙여넣기보다 정확하다.**
 
@@ -125,20 +125,27 @@ npm run bench:browser  # 두 모드 다 (Chrome/Edge headless) ← 실사용 기
 **`site/` 폴더가 그대로 배포된다.** 설정은 `wrangler.jsonc` 한 파일에 있다 (Cloudflare Workers + Static Assets).
 
 ```jsonc
-"assets": { "directory": "./site", "html_handling": "auto-trailing-slash" }
-"routes":  [{ "pattern": "mojibake.prelaps.com", "custom_domain": true }]
+"main":    "./src/index.js"
+"assets":  { "directory": "./site", "binding": "ASSETS", "run_worker_first": true,
+             "html_handling": "auto-trailing-slash", "not_found_handling": "none" }
+"routes":  [{ "pattern": "prelaps.com/mojibake/*", "zone_name": "prelaps.com" },
+            { "pattern": "mojibake.prelaps.com", "custom_domain": true }]
 ```
+
+`src/index.js` 는 URL 의 `/mojibake` 접두사를 떼어 `site/` 루트에 맞추고, 구 주소로 온 요청을 301 로 넘긴다. **`site/` 를 한 칸 내리지 않으려고 둔 20줄짜리 층이다** — 변환도 번들링도 없으므로 빌드 단계가 생긴 것은 아니다. 자세한 건 [docs/배포.md](docs/배포.md).
 
 **빌드 명령이 없는 것이 정상이다** — 변환 단계가 없으므로 뭔가를 적으면 그 순간 "원본과 산출물 두 벌" 이 생긴다.
 
 로컬에서 `npx wrangler deploy` 를 쓰려면 **Node 22 이상**이 필요하다. GitHub 연동(Workers Builds)으로 배포하면 로컬 Node 버전과 무관하다.
+
+**push 만으로 배포됐다고 믿지 말 것.** 허브(`prelaps-home`)는 Git 연동이 걸려 있는데도 세 커밋이 자동 빌드를 만들지 못했고 프로덕션이 12시간 전에 멈춰 있었다. 올라간 버전은 `npx wrangler deployments list` 로 확인한다.
 
 `test/` · `docs/` · `CLAUDE.md` 는 `site/` 밖에 있어 자동으로 빠진다 — `assets.directory` 를 `"."` 로 바꾸면 기획서가 색인된다.
 
 **수정 흐름**
 
 ```
-site/ 안의 파일을 고친다  →  npm run check:links  →  commit  →  push  →  자동 배포
+site/ 안의 파일을 고친다  →  npm run check:links  →  commit  →  push  →  npx wrangler deploy
 ```
 
 엔진(`site/engine.js`)을 건드렸으면 `check:links` 대신 `npm test` 를 돌린다.

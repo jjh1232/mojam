@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fix Mojibake – Recover Garbled Text and Filenames</title>
-<meta name="description" content="Turn garbled text like ì•ˆë…• back into the original characters. Works on pasted text, files and zip filenames. Runs in your browser; nothing is uploaded.">
+<title>Fix Garbled Text Online – Mojibake Fixer | Prelaps</title>
+<meta name="description" content="Turn garbled text like cafÃ©, â€™ or ì•ˆë…• back into the original characters. Fixes broken text, files and zip filenames — free, in your browser.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Prelaps">
-<meta property="og:title" content="Fix Mojibake – Recover Garbled Text and Filenames">
+<meta property="og:title" content="Fix Garbled Text Online – Mojibake Fixer">
 <meta property="og:description" content="Turn garbled text back into the original characters. Runs entirely in your browser; nothing is uploaded.">
 <link rel="canonical" href="https://prelaps.com/mojibake/en/">
 <link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/">
@@ -85,6 +85,30 @@
    "acceptedAnswer": {
     "@type": "Answer",
     "text": "Upload the zip file itself on the File tab and it will be repackaged with corrected names. It is never decompressed and recompressed, so the contents are not touched."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Why do I see Ã© or â€™ instead of é and ’?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Because a UTF-8 file was read as Windows-1252, the old Western European table. Accented letters and curly quotes are stored as two or three bytes in UTF-8, and that table shows each byte as its own character. Nothing was lost — paste the text above and it comes straight back."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "My subtitle file (.srt) shows weird characters.",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Subtitles are often saved in an older regional encoding, so the player reads them wrongly. Upload the .srt on the File tab and download it as UTF-8; every player understands that."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "The text shows ��� or empty boxes.",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "That one is different, and no tool can fix it. � means the bytes were already thrown away when the text was saved, so the original is not in the file any more. Boxes usually mean the characters are intact but your font has no glyph for them — try a different font."
    }
   },
   {
@@ -203,7 +227,8 @@
 <p class="note"><b>So the one reliable fix is to fetch the text again from the original.</b> Almost every case above is "information was shaved off while the text was moved". If you still have the original file, do not paste it — <b>upload it on the File tab.</b> Files are read byte for byte, so the damage that happens during pasting never occurs.</p>
 
 <h2>What mojibake is</h2>
-<p class="note">When text turns into something unreadable like <code>¾È³çÇÏ¼¼¿ä</code> or <code>Ã¬â€¢Ë†</code>, English speakers call it <b>mojibake</b>, borrowed from Japanese 文字化け. Korean speakers have their own name for it — <b>뷁어</b> or <b>뷁체</b>, after the odd syllables that keep showing up in the wreckage.</p>
+<p class="note">When text turns into something unreadable like <code>cafÃ©</code>, <code>â€™</code> or <code>¾È³çÇÏ¼¼¿ä</code>, the usual name for it is <b>mojibake</b>, borrowed from Japanese 文字化け. Most people never meet the word, though, and describe what they see instead — <b>garbled text</b>, <b>broken characters</b>, <b>weird symbols instead of letters</b>, <b>gibberish</b>. Korean speakers have their own name for it, <b>뷁어</b> or <b>뷁체</b>, after the odd syllables that keep showing up in the wreckage. They are all the same problem, and the fix is the same.</p>
+<p class="note">In English and other Western European languages it usually turns up on accents and punctuation: <code>café</code> becomes <code>cafÃ©</code>, <code>naïve</code> becomes <code>naÃ¯ve</code>, and a curly apostrophe becomes <code>â€™</code>. If it has been through the wringer twice you get <code>ÃƒÂ©</code> and <code>Ã¢â‚¬â„¢</code>. Paste any of it above and the original comes back.</p>
 <p class="note">There is only one cause: <b>the text was stored one way and read another.</b> Computers store characters as numbers, and there are many different tables mapping between the two. Read a file written with an older regional table (EUC-KR, Shift_JIS, GBK) using today's table (UTF-8), or the other way round, and the same numbers come out as different characters. What those tables actually are is explained in <a href="encoding-basics.html">UTF-8 vs the old encodings</a>.</p>
 <p class="note">Which means <b>nothing was lost — it was just read wrong</b>, and reversing the reading brings the original characters straight back. That is what this tool does. It shows up most often in old forum posts, CSV files written by legacy programs, and filenames inside zip archives.</p>
 
@@ -222,6 +247,9 @@
 <p class="note"><b>How accurate is it?</b><br>Across 148 cases in 12 languages, the top candidate is correct 84.5% of the time, and the correct answer is among the three candidates 96.6% of the time. If the top one looks off, check the second and third.</p>
 <p class="note"><b>My CSV is garbled in Excel.</b><br>Upload it on the File tab and download it with "Add a BOM if you will open this in Excel" left on. Excel reads an unmarked UTF-8 file using the local code page, and those three bytes are what stop it.</p>
 <p class="note"><b>The filenames inside my zip are garbled.</b><br>Upload the zip file itself on the File tab and it will be repackaged with corrected names. It is never decompressed and recompressed, so the contents are not touched.</p>
+<p class="note"><b>Why do I see Ã© or â€™ instead of é and ’?</b><br>Because a UTF-8 file was read as Windows-1252, the old Western European table. Accented letters and curly quotes are stored as two or three bytes in UTF-8, and that table shows each byte as its own character. Nothing was lost — paste the text above and it comes straight back.</p>
+<p class="note"><b>My subtitle file (.srt) shows weird characters.</b><br>Subtitles are often saved in an older regional encoding, so the player reads them wrongly. Upload the .srt on the File tab and download it as UTF-8; every player understands that.</p>
+<p class="note"><b>The text shows ��� or empty boxes.</b><br>That one is different, and no tool can fix it. � means the bytes were already thrown away when the text was saved, so the original is not in the file any more. Boxes usually mean the characters are intact but your font has no glyph for them — try a different font.</p>
 <p class="note"><b>Does it work on PDFs?</b><br>No. Text copied from a PDF is usually garbled because the character information inside the PDF is incomplete, not because of an encoding mismatch — the original is not in the file, so no tool can bring it back.</p>
 
 </main>
@@ -230,9 +258,9 @@
   <p>Nothing you enter is sent to a server. All processing happens inside your browser and disappears when you close the tab.</p>
   <nav class="fnav">
     <a href="content/about.html">About</a>
-    <a href="content/privacy.html">Privacy Policy</a>
-    <a href="content/terms.html">Terms</a>
-    <a href="content/contact.html">Contact</a>
+    <a href="https://prelaps.com/en/privacy#mojibake">Privacy Policy</a>
+    <a href="https://prelaps.com/en/terms">Terms</a>
+    <a href="https://prelaps.com/en/contact">Contact</a>
   </nav>
   <p class="cr">© 2026 Prelaps</p>
 </footer>

@@ -8,25 +8,15 @@
   <url><loc>https://prelaps.com/mojibake/encoding-basics</loc><priority>0.7</priority></url>
   <url><loc>https://prelaps.com/mojibake/zip-filename</loc><priority>0.7</priority></url>
   <url><loc>https://prelaps.com/mojibake/content/about</loc><priority>0.3</priority></url>
-  <url><loc>https://prelaps.com/mojibake/content/privacy</loc><priority>0.3</priority></url>
-  <url><loc>https://prelaps.com/mojibake/content/terms</loc><priority>0.3</priority></url>
-  <url><loc>https://prelaps.com/mojibake/content/contact</loc><priority>0.3</priority></url>
-
   <url><loc>https://prelaps.com/mojibake/en/</loc><priority>1.0</priority></url>
   <url><loc>https://prelaps.com/mojibake/en/excel-csv</loc><priority>0.7</priority></url>
   <url><loc>https://prelaps.com/mojibake/en/encoding-basics</loc><priority>0.7</priority></url>
   <url><loc>https://prelaps.com/mojibake/en/zip-filename</loc><priority>0.7</priority></url>
   <url><loc>https://prelaps.com/mojibake/en/content/about</loc><priority>0.3</priority></url>
-  <url><loc>https://prelaps.com/mojibake/en/content/privacy</loc><priority>0.3</priority></url>
-  <url><loc>https://prelaps.com/mojibake/en/content/terms</loc><priority>0.3</priority></url>
-  <url><loc>https://prelaps.com/mojibake/en/content/contact</loc><priority>0.3</priority></url>
-
   <url><loc>https://prelaps.com/mojibake/ja/</loc><priority>1.0</priority></url>
   <url><loc>https://prelaps.com/mojibake/ja/excel-csv</loc><priority>0.7</priority></url>
   <url><loc>https://prelaps.com/mojibake/ja/encoding-basics</loc><priority>0.7</priority></url>
   <url><loc>https://prelaps.com/mojibake/ja/zip-filename</loc><priority>0.7</priority></url>
   <url><loc>https://prelaps.com/mojibake/ja/content/about</loc><priority>0.3</priority></url>
-  <url><loc>https://prelaps.com/mojibake/ja/content/privacy</loc><priority>0.3</priority></url>
-  <url><loc>https://prelaps.com/mojibake/ja/content/terms</loc><priority>0.3</priority></url>
-  <url><loc>https://prelaps.com/mojibake/ja/content/contact</loc><priority>0.3</priority></url>
+  
 </urlset>

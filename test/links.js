@@ -102,14 +102,65 @@ for (const rel of list) {
     if (!/<span aria-current="page">/.test(sw)) bad(rel, '.langsw 에 현재 언어 표시가 없다');
   }
 
-  // 5. 푸터 법적 링크 4개 — 애드센스가 요구하는 자리이고, 자기 언어를 가리켜야 한다
+  // 5. 푸터 법적 링크 — 애드센스가 요구하는 자리이고, 자기 언어를 가리켜야 한다.
+  //
+  // 개인정보처리방침·이용약관·문의는 **허브에 하나씩** 있다 (헌법 §8).
+  // 이 도구는 헌법보다 먼저 만들어져서 자기 복사본을 갖고 있었는데, 2026-08-22 에
+  // 허브로 넘기고 파일을 지웠다. 옛 주소는 src/index.js 의 MOVED 가 301 로 넘긴다.
+  // 소개(about)는 도구 소개 내용이 섞여 있어 아직 도구에 남아 있다.
   const fn = (src.match(/<nav class="fnav"[\s\S]*?<\/nav>/) || [])[0];
   if (!fn) bad(rel, '.fnav 가 없다');
   else {
-    const want = ['about', 'privacy', 'terms', 'contact']
-      .map(p => (lang === 'ko' ? '' : lang + '/') + 'content/' + p + '.html');
-    const got = [...fn.matchAll(/href="([^"]+)"/g)].map(m => resolve(m[1]));
-    for (const w of want) if (!got.includes(w)) bad(rel, '푸터에 ' + w + ' 링크가 없다 (언어 섞임?)');
+    const raw = [...fn.matchAll(/href="([^"]+)"/g)].map(m => m[1]);
+    const got = raw.map(h => (/^https?:/.test(h) ? h : resolve(h)));
+
+    // 도구에 남아 있는 것
+    const own = (lang === 'ko' ? '' : lang + '/') + 'content/about.html';
+    if (!got.includes(own)) bad(rel, '푸터에 ' + own + ' 링크가 없다 (언어 섞임?)');
+
+    // 허브로 넘긴 것 — 반드시 자기 언어여야 한다
+    const hub = {
+      privacy: 'https://prelaps.com/' + lang + '/privacy#mojibake',
+      terms: 'https://prelaps.com/' + lang + '/terms',
+      contact: 'https://prelaps.com/' + lang + '/contact',
+    };
+    for (const [name, url] of Object.entries(hub)) {
+      if (!got.includes(url)) bad(rel, '푸터의 ' + name + ' 가 허브(' + url + ')를 안 가리킨다');
+    }
+    // 도구 안에 정책 파일이 되살아나는 것을 막는다
+    for (const h of raw) {
+      if (/content\/(privacy|terms|contact)\.html/.test(h)) {
+        bad(rel, '정책 링크가 도구 안(' + h + ')을 가리킨다 — 허브로 가야 한다');
+      }
+    }
+  }
+}
+
+// ── 사이트맵 ─────────────────────────────────────────────────
+// 2026-08-22 에 정책 페이지를 허브로 넘기면서 이 파일에서 URL 블록을 지웠는데,
+// 마지막 블록에 </urlset> 이 붙어 있어서 **닫는 태그가 같이 사라졌다.**
+// 화면에는 아무 표시가 없었고, 구글 서치콘솔이 「오류 1개 · 발견된 페이지 0」 으로
+// 알려줄 때까지 몰랐다. 그래서 여기서 형태를 직접 본다.
+{
+  const rel = 'sitemap.xml';
+  const abs = path.join(ROOT, rel);
+  if (!fs.existsSync(abs)) {
+    bad(rel, '사이트맵이 없다');
+  } else {
+    const src = fs.readFileSync(abs, 'utf8');
+    if (!/<urlset[\s>]/.test(src)) bad(rel, '<urlset> 이 없다');
+    if (!/<\/urlset>/.test(src)) bad(rel, '</urlset> 이 닫히지 않았다 — 구글이 통째로 못 읽는다');
+    const opens = (src.match(/<url>/g) || []).length;
+    const closes = (src.match(/<\/url>/g) || []).length;
+    if (opens !== closes) bad(rel, `<url> ${opens}개 / </url> ${closes}개 — 짝이 안 맞는다`);
+    if (opens === 0) bad(rel, '<url> 이 하나도 없다');
+
+    // 사이트맵에 적힌 주소가 실제로 있는 파일인지. 확장자 없는 주소로 쓰므로 .html 을 붙여 본다.
+    for (const m of src.matchAll(/<loc>([^<]+)<\/loc>/g)) {
+      const p = m[1].replace(ORIGIN, '');
+      const file = p.endsWith('/') ? p + 'index.html' : p + '.html';
+      if (!fs.existsSync(path.join(ROOT, file))) bad(rel, `없는 페이지를 가리킨다 ${m[1]}`);
+    }
   }
 }
 

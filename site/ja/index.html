@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>文字化け直し – 化けた文字とファイル名を元に戻す</title>
+<title>文字化けの直し方 – 変換・復元ツール | Prelaps</title>
 <meta name="description" content="ã‚ãªãŸ や 繧上◆縺 のように化けた文字を元の文字に戻します。貼り付けとファイルの両方に対応 — csv・txt・srt の文字コード変換、zip の中の化けたファイル名の修復。すべてブラウザ内で処理し、入力はサーバーに送信されません。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Prelaps">
-<meta property="og:title" content="文字化け直し – 化けた文字とファイル名を元に戻す">
+<meta property="og:title" content="文字化けの直し方 – 変換・復元ツール">
 <meta property="og:description" content="化けた文字を元の文字に戻します。すべてブラウザ内で処理し、入力はサーバーに送信されません。">
 <link rel="canonical" href="https://prelaps.com/mojibake/ja/">
 <link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/">
@@ -85,6 +85,30 @@
    "acceptedAnswer": {
     "@type": "Answer",
     "text": "zip ファイルをそのままファイルタブにアップロードすると、名前だけ直して詰め直します。展開して再圧縮することはないので、中身は損なわれません。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "化けた文字を解読したいだけなのですが。",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "それにも使えます。直すのと解読するのは同じ作業です — 元のバイト列に戻して正しい文字コードで読み直すと、何と書いてあったかがそのまま出ます。上の入力欄に貼り付けてください。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "メールの文字が化けています。",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "本文をコピーして貼り付けてください。古い環境から送られたメールは ISO-2022-JP や Shift_JIS で書かれていることがあり、受け取った側が UTF-8 として読むと化けます。件名だけが化ける場合も同じ手順で戻せます。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "字幕ファイル（.srt）が文字化けします。",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "字幕は古い文字コードで保存されていることが多く、プレーヤーが読み違えます。ファイルタブから .srt をアップロードし、UTF-8 で保存し直してください。どのプレーヤーでも読めるようになります。"
    }
   },
   {
@@ -222,6 +246,9 @@
 <p class="note"><b>精度はどれくらいですか？</b><br>12言語148件のテストで、第1候補が正解する割合は84.5%、候補3件の中に正解が含まれる割合は96.6%です。第1候補が不自然なら第2・第3候補を確認してください。</p>
 <p class="note"><b>Excel で CSV が化けます。</b><br>ファイルタブにアップロードし、「Excel で開くファイルなら BOM を付ける」を有効にしたままダウンロードしてください。Excel は目印のない UTF-8 ファイルをローカルのコードページで読んでしまいますが、その3バイトがそれを防ぎます。</p>
 <p class="note"><b>zip の中のファイル名が化けています。</b><br>zip ファイルをそのままファイルタブにアップロードすると、名前だけ直して詰め直します。展開して再圧縮することはないので、中身は損なわれません。</p>
+<p class="note"><b>化けた文字を解読したいだけなのですが。</b><br>それにも使えます。直すのと解読するのは同じ作業です — 元のバイト列に戻して正しい文字コードで読み直すと、何と書いてあったかがそのまま出ます。上の入力欄に貼り付けてください。</p>
+<p class="note"><b>メールの文字が化けています。</b><br>本文をコピーして貼り付けてください。古い環境から送られたメールは ISO-2022-JP や Shift_JIS で書かれていることがあり、受け取った側が UTF-8 として読むと化けます。件名だけが化ける場合も同じ手順で戻せます。</p>
+<p class="note"><b>字幕ファイル（.srt）が文字化けします。</b><br>字幕は古い文字コードで保存されていることが多く、プレーヤーが読み違えます。ファイルタブから .srt をアップロードし、UTF-8 で保存し直してください。どのプレーヤーでも読めるようになります。</p>
 <p class="note"><b>PDF も直せますか？</b><br>直せません。PDF からコピーした文字が化けるのは、文字コードの不一致ではなく PDF の中に文字の情報が正しく入っていないためで、元の情報がファイルにないので、どんなツールでも復元できません。</p>
 
 </main>
@@ -230,9 +257,9 @@
   <p>入力した内容はサーバーに送信されません。処理はすべてブラウザの中だけで行われ、タブを閉じれば消えます。</p>
   <nav class="fnav">
     <a href="content/about.html">このサイトについて</a>
-    <a href="content/privacy.html">プライバシーポリシー</a>
-    <a href="content/terms.html">利用規約</a>
-    <a href="content/contact.html">お問い合わせ</a>
+    <a href="https://prelaps.com/ja/privacy#mojibake">プライバシーポリシー</a>
+    <a href="https://prelaps.com/ja/terms">利用規約</a>
+    <a href="https://prelaps.com/ja/contact">お問い合わせ</a>
   </nav>
   <p class="cr">© 2026 Prelaps</p>
 </footer>
