@@ -26,13 +26,13 @@
 <div class="wrap">
 
 <div class="topbar">
-  <a class="brand" href="index.html">
-    <span class="tag">PRELAPS</span>
-    <span class="bname">文字化け直し</span>
-  </a>
+  <div class="brand">
+    <a class="tag" href="https://prelaps.com/ja">PRELAPS</a>
+    <a class="bhome" href="./"><span class="bname">文字化け直し</span></a>
+  </div>
   <nav class="langsw" aria-label="Language">
-    <a href="../excel-csv.html" hreflang="ko">한국어</a>
-    <a href="../en/excel-csv.html" hreflang="en">English</a>
+    <a href="../excel-csv" hreflang="ko">한국어</a>
+    <a href="../en/excel-csv" hreflang="en">English</a>
     <span aria-current="page">日本語</span>
   </nav>
 </div>
@@ -51,7 +51,7 @@
 <p class="note">つまり化けた CSV を直す作業は、多くの場合 <b>文字を書き換えることではなく目印を付けること</b>です。中身は最初から正常だったわけです。</p>
 
 <h2>このツールで直す</h2>
-<p class="note"><a href="index.html">文字化け直し</a>を開き、<b>ファイル</b>タブを選んで CSV をアップロードしてください。文字コードを判定して候補を表示します。文字が正しく読める候補を選び、<b>UTF-8 でダウンロード</b>を押します。</p>
+<p class="note"><a href="./">文字化け直し</a>を開き、<b>ファイル</b>タブを選んで CSV をアップロードしてください。文字コードを判定して候補を表示します。文字が正しく読める候補を選び、<b>UTF-8 でダウンロード</b>を押します。</p>
 <p class="note"><b>「Excel で開くファイルなら BOM を付ける」にチェックが入っているか確認してください。</b><code>.csv</code>・<code>.tsv</code>・<code>.txt</code> は既定でオンです。これを付けて受け取ったファイルは、Excel でそのまま開いても化けません。</p>
 <p class="note">ファイルはサーバーに送信されません。ブラウザの中だけで処理されるので、社内資料や個人情報を含むファイルでもそのままお使いいただけます。</p>
 
@@ -65,13 +65,13 @@
 
 <h2>それでも直らないとき</h2>
 <p class="note">Excel で開いたときに <b>文字は正常なのに1列に全部入ってしまう</b>場合は、文字コードではなく区切り文字の問題です。データタブの「区切り位置」でコンマを区切り文字に指定してください。</p>
-<p class="note">どの候補にも正しい文字が出てこない場合は、ファイルが作られた時点ですでに文字が化けていた可能性があります。その場合は <a href="index.html">ツール本文の「直らないときは」</a>をご覧ください — 症状ごとの原因と対処をまとめています。</p>
+<p class="note">どの候補にも正しい文字が出てこない場合は、ファイルが作られた時点ですでに文字が化けていた可能性があります。その場合は <a href="./">ツール本文の「直らないときは」</a>をご覧ください — 症状ごとの原因と対処をまとめています。</p>
 </main>
 
 <footer>
   <p>入力した内容はサーバーに送信されません。処理はすべてブラウザの中だけで行われ、タブを閉じれば消えます。</p>
   <nav class="fnav">
-    <a href="content/about.html">このサイトについて</a>
+    <a href="content/about">このサイトについて</a>
     <a href="https://prelaps.com/ja/privacy#mojibake">プライバシーポリシー</a>
     <a href="https://prelaps.com/ja/terms">利用規約</a>
     <a href="https://prelaps.com/ja/contact">お問い合わせ</a>

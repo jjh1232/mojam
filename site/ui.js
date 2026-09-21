@@ -15,6 +15,29 @@ const $=id=>document.getElementById(id);
 const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const label=n=>n==='latin1-raw'?T.latin1Raw:n;
 
+/* ─────────── 계측 ─────────── */
+/*
+ * GA 스니펫은 src/index.js(Worker)가 </head> 에 끼워 넣는다. 여기서는 부르기만 한다.
+ * 로컬(npm run serve)에는 스니펫이 없으므로 개발 중 클릭이 실제 수치에
+ * 섞이지 않는다 — 그래서 gtag 가 없을 때 조용히 넘어가는 것이 맞다.
+ *
+ * 이름은 `tool_use` 로 도구 셋(mojibake·race·imagesquish)이 통일한다.
+ * 도구마다 이름이 다르면 「방문 대비 실제 사용률」을 한 보고서에서 못 비교한다.
+ *
+ * ⚠ 입력한 글자는 절대 보내지 않는다. 이 도구의 약속이 "입력이 서버로 안 간다" 인데
+ *   계측이 그걸 깨면 도구 전체가 거짓말이 된다. 길이 구간과 결과 종류만 보낸다.
+ */
+function track(params){
+  if(typeof window.gtag==='function') window.gtag('event','tool_use',Object.assign({tool:'mojibake'},params));
+}
+/* 길이를 그대로 보내면 값이 흩어져 보고서가 안 읽힌다. 구간으로 뭉친다. */
+function sizeBucket(n){
+  if(n<100) return '<100';
+  if(n<1000) return '100-1k';
+  if(n<10000) return '1k-10k';
+  return '10k+';
+}
+
 function show(kind,html){
   const m=$('msg');
   m.className='msg show '+kind;
@@ -228,6 +251,14 @@ function run(){
     }
     renderPartial(partial);
     $('meta').textContent=ms+'ms';
+    // 통짜로는 못 풀었다. 줄·구간으로 건졌는지, 애초에 안 깨진 글이었는지, 아예 실패인지를
+    // 나눠 보내야 "왜 사람들이 그냥 나가는가" 를 읽을 수 있다.
+    track({
+      input:'text',
+      result: (lr||sg) ? 'partial' : (base>60 ? 'already_normal' : 'failed'),
+      mode: lr ? 'lines' : (sg ? 'segments' : 'none'),
+      size: sizeBucket(s.length),
+    });
     return;
   }
 
@@ -253,6 +284,14 @@ function run(){
   render(list,confidences(list),ms,d.short,weak);
   renderPartial(partial);
   syncClear();
+  // 후보가 나왔다. weak 은 "1순위를 믿기 어렵다" 는 뜻이라 성공과 나눠 봐야 한다 —
+  // 여기 비율이 높으면 엔진이 아니라 안내 문구를 고칠 일이다.
+  track({
+    input:'text',
+    result: weak ? 'weak' : 'recovered',
+    mode: lr ? 'lines' : (sg ? 'segments' : 'whole'),
+    size: sizeBucket(s.length),
+  });
 }
 
 /* ─────────── 지우기 ─────────── */
@@ -551,9 +590,14 @@ function handleFile(f){
   rd.onload=()=>{
     const bytes=new Uint8Array(rd.result);
     const t0=performance.now();
-    if(isZip(bytes)) renderZip(f.name,bytes,zipInspect(bytes));
+    const zip=isZip(bytes);
+    if(zip) renderZip(f.name,bytes,zipInspect(bytes));
     else renderTextFile(f.name,recoverBytes(bytes));
     $('fmeta').textContent=fmtSize(f.size)+' · '+Math.round(performance.now()-t0)+'ms';
+    // 파일은 붙여넣기와 쓰임새가 아주 다르다(zip 안 파일명 깨짐 vs 본문 깨짐).
+    // 어느 쪽이 실제로 쓰이는지 나눠 봐야 다음에 무엇을 손볼지 정할 수 있다.
+    // ⚠ 파일 이름은 보내지 않는다 — 개인정보처리방침에 "전송하지 않는다" 고 적어 둔 값이다.
+    track({ input: zip?'zip':'file', result:'done', mode:'file', size: sizeBucket(f.size) });
   };
   rd.readAsArrayBuffer(f);
 }

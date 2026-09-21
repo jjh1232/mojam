@@ -26,13 +26,13 @@
 <div class="wrap">
 
 <div class="topbar">
-  <a class="brand" href="index.html">
-    <span class="tag">PRELAPS</span>
-    <span class="bname">文字化け直し</span>
-  </a>
+  <div class="brand">
+    <a class="tag" href="https://prelaps.com/ja">PRELAPS</a>
+    <a class="bhome" href="./"><span class="bname">文字化け直し</span></a>
+  </div>
   <nav class="langsw" aria-label="Language">
-    <a href="../encoding-basics.html" hreflang="ko">한국어</a>
-    <a href="../en/encoding-basics.html" hreflang="en">English</a>
+    <a href="../encoding-basics" hreflang="ko">한국어</a>
+    <a href="../en/encoding-basics" hreflang="en">English</a>
     <span aria-current="page">日本語</span>
   </nav>
 </div>
@@ -59,18 +59,18 @@
 <p class="note">日本語はそうはいきません。Shift_JIS での <code>あ</code> の番号と UTF-8 での番号は違い、バイト数（2 対 3）まで違います。だから表を間違えた瞬間に <b>文字数までずれて</b>読めなくなります。</p>
 <p class="note">典型的な二つの形があります。</p>
 <p class="note"><code>ã“ã‚“ã«ã¡ã¯</code> — UTF-8 で保存したものを西欧の表で読んだ場合。3バイトなので文字数が大きく増えます。<br><code>ï½ºï¾ï¾†ï½¿ï½º</code> — Shift_JIS の半角カナが別の表で読まれた場合。</p>
-<p class="note">どちらでも <b>元の番号はファイルにそのまま残っています。</b>表を選び直せば原文が戻ります — <a href="index.html">文字化け直し</a>がやっているのはそれです。</p>
+<p class="note">どちらでも <b>元の番号はファイルにそのまま残っています。</b>表を選び直せば原文が戻ります — <a href="./">文字化け直し</a>がやっているのはそれです。</p>
 
 <h2>今は何を使えばいいか</h2>
 <p class="note"><b>迷わず UTF-8 です。</b>新しく作るファイル・Web ページ・データベースはすべて UTF-8 にしてください。Shift_JIS が要るのは古いファイルを読むときだけです。</p>
-<p class="note">古いファイルが残っているなら UTF-8 に変換しておくほうが安全です。今のツールはたいてい UTF-8 を前提にするので、開くたびに化ける危険があります。<a href="index.html">ファイルタブ</a>にアップロードすれば判定して UTF-8 に変換します。</p>
-<p class="note">ひとつ厄介な例外が <b>Excel</b> です。目印のない UTF-8 ファイルを今もローカルのコードページで読んでしまいます。その話は <a href="excel-csv.html">Excel で CSV が文字化けするとき</a> に別途まとめました。</p>
+<p class="note">古いファイルが残っているなら UTF-8 に変換しておくほうが安全です。今のツールはたいてい UTF-8 を前提にするので、開くたびに化ける危険があります。<a href="./">ファイルタブ</a>にアップロードすれば判定して UTF-8 に変換します。</p>
+<p class="note">ひとつ厄介な例外が <b>Excel</b> です。目印のない UTF-8 ファイルを今もローカルのコードページで読んでしまいます。その話は <a href="excel-csv">Excel で CSV が文字化けするとき</a> に別途まとめました。</p>
 </main>
 
 <footer>
   <p>入力した内容はサーバーに送信されません。処理はすべてブラウザの中だけで行われ、タブを閉じれば消えます。</p>
   <nav class="fnav">
-    <a href="content/about.html">このサイトについて</a>
+    <a href="content/about">このサイトについて</a>
     <a href="https://prelaps.com/ja/privacy#mojibake">プライバシーポリシー</a>
     <a href="https://prelaps.com/ja/terms">利用規約</a>
     <a href="https://prelaps.com/ja/contact">お問い合わせ</a>

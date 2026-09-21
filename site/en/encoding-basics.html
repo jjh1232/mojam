@@ -26,14 +26,14 @@
 <div class="wrap">
 
 <div class="topbar">
-  <a class="brand" href="index.html">
-    <span class="tag">PRELAPS</span>
-    <span class="bname">Mojibake Recovery</span>
-  </a>
+  <div class="brand">
+    <a class="tag" href="https://prelaps.com/en">PRELAPS</a>
+    <a class="bhome" href="./"><span class="bname">Mojibake Recovery</span></a>
+  </div>
   <nav class="langsw" aria-label="Language">
-    <a href="../encoding-basics.html" hreflang="ko">한국어</a>
+    <a href="../encoding-basics" hreflang="ko">한국어</a>
     <span aria-current="page">English</span>
-    <a href="../ja/encoding-basics.html" hreflang="ja">日本語</a>
+    <a href="../ja/encoding-basics" hreflang="ja">日本語</a>
   </nav>
 </div>
 
@@ -59,18 +59,18 @@
 <p class="note">Everything else breaks. <code>é</code> has one number in Latin-1 and a different two-byte sequence in UTF-8, so the moment the tables disagree the text falls apart — and because the byte counts differ, the character count changes too.</p>
 <p class="note">The two classic shapes look like this.</p>
 <p class="note"><code>Ã©tÃ©</code> — French written as UTF-8, read as CP1252. Each two-byte character split into two Western letters.<br><code>ì•ˆë…•í•˜ì„¸ìš”</code> — Korean written as UTF-8, read as CP1252. Three bytes each, so the text swells further.</p>
-<p class="note">In both cases <b>the original numbers are still sitting in the file.</b> Choose the right table and the text comes straight back — which is exactly what <a href="index.html">Mojibake Recovery</a> does.</p>
+<p class="note">In both cases <b>the original numbers are still sitting in the file.</b> Choose the right table and the text comes straight back — which is exactly what <a href="./">Mojibake Recovery</a> does.</p>
 
 <h2>What to use now</h2>
 <p class="note"><b>UTF-8, without thinking about it.</b> New files, web pages, databases, APIs — all UTF-8. The old encodings are only needed for reading files that already exist.</p>
-<p class="note">If you still have legacy files around, converting them is worth doing. Modern tools assume UTF-8 by default, so those files are one careless open away from being garbled. Upload them on the <a href="index.html">File tab</a> and the encoding is identified and converted for you.</p>
-<p class="note">One stubborn exception is <b>Excel</b>, which still reads unmarked UTF-8 files using the local Windows code page. That case has its own page: <a href="excel-csv.html">CSV garbled in Excel</a>.</p>
+<p class="note">If you still have legacy files around, converting them is worth doing. Modern tools assume UTF-8 by default, so those files are one careless open away from being garbled. Upload them on the <a href="./">File tab</a> and the encoding is identified and converted for you.</p>
+<p class="note">One stubborn exception is <b>Excel</b>, which still reads unmarked UTF-8 files using the local Windows code page. That case has its own page: <a href="excel-csv">CSV garbled in Excel</a>.</p>
 </main>
 
 <footer>
   <p>Nothing you enter is sent to a server. All processing happens inside your browser and disappears when you close the tab.</p>
   <nav class="fnav">
-    <a href="content/about.html">About</a>
+    <a href="content/about">About</a>
     <a href="https://prelaps.com/en/privacy#mojibake">Privacy Policy</a>
     <a href="https://prelaps.com/en/terms">Terms</a>
     <a href="https://prelaps.com/en/contact">Contact</a>

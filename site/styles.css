@@ -32,17 +32,27 @@ body{
 
 /* 아랫줄이 없는 이유 — 바로 밑에 흰 종이(.sheet)가 와서 그 경계가 이미 선 역할을 한다 */
 header{padding:38px 0 18px}
-/* 눈썹 글자.  이제 이 용도 하나뿐이다 — 예전엔 법적 페이지의 "도구로 돌아가기"
-   링크(.tag a)도 겸했는데, .brand 로 대체하면서 그 규칙을 걷어냈다 */
+/* 눈썹 글자 PRELAPS — 이제 **허브(prelaps.com)로 나가는 링크**다.
+   예전에는 도구 이름과 한 링크에 묶여 있어서, 여기를 눌러도 도구 안에서 맴돌았다.
+   즉 mojibake 에서 prelaps.com 으로 나갈 방법이 아예 없었다.
+   race·imagesquish 는 처음부터 이 자리에 허브 링크를 두고 있어 그쪽에 맞춘 것이다.
+   주소를 상대 경로가 아니라 전체 URL 로 적는다. 원래 이유는 file:// 더블클릭 원칙이었고
+   (`/ko` 가 로컬에서 디스크 루트로 풀린다), 그건 2026-09-21 에 내려놓았다. 그래도 전체 URL
+   을 유지하는 편이 안전하다 — 도구가 하위 경로에 있어 루트 기준 경로는 늘 헷갈린다.
+   푸터의 정책 링크도 같은 형태다 */
 .tag{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--accent);
-     margin:0 0 8px;display:block}
-/* 사이트 이름 블록.  15장 전부 이 자리를 눌러 자기 언어의 도구 페이지로 돌아간다.
-   검색으로 약관 페이지에 바로 들어온 사람이 푸터까지 안 내려가도 되게 하는 것.
-   두 줄짜리 블록이라 누를 수 있는 높이(44px)는 저절로 확보된다 */
-.brand{display:block;text-decoration:none;color:inherit;padding:0 0 8px}
+     margin:0 0 8px;display:block;text-decoration:none}
+.tag:hover{text-decoration:underline}
+.tag:focus-visible{outline:3px solid rgba(59,52,153,.22);outline-offset:2px;border-radius:4px}
+/* 이름 두 줄을 담는 자리. 이제 링크가 아니라 그릇이다 — 안에 링크 둘이 따로 산다 */
+.brand{display:block;padding:0 0 8px}
 .brand h1,.brand .bname{margin:0}
-.brand:hover h1,.brand:hover .bname{color:var(--accent)}
-.brand:focus-visible{outline:3px solid rgba(59,52,153,.22);outline-offset:3px;border-radius:6px}
+/* 도구 이름 — 자기 언어의 도구 첫 페이지로 돌아간다.
+   검색으로 하위 문서(EUC-KR 설명 등)에 바로 들어온 사람이 푸터까지 안 내려가도 되게 하는 것.
+   두 줄짜리가 아니라 한 줄이 됐으므로 누를 수 있는 높이를 따로 확보한다 */
+.bhome{display:block;text-decoration:none;color:inherit;min-height:32px}
+.bhome:hover h1,.bhome:hover .bname{color:var(--accent)}
+.bhome:focus-visible{outline:3px solid rgba(59,52,153,.22);outline-offset:3px;border-radius:6px}
 /* 법적 페이지의 사이트 이름.  h1 은 그 페이지 제목(이용약관 등)이 써야 하므로
    여기서는 h1 이 아니고, 크기도 h1(29px)보다 작게 둬 페이지 제목이 이긴다 */
 .bname{display:block;font-size:22px;font-weight:600;letter-spacing:-.02em;

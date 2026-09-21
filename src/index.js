@@ -6,7 +6,8 @@
  * prelaps.com/mojibake/styles.css 가 site/mojibake/styles.css 를 찾는다.
  *
  * site/ 를 한 칸 내리는 대신 접두사를 여기서 떼어낸다.
- * site/ 안이 그대로 사이트라는 원칙도, file:// 더블클릭 원칙도 그대로 산다.
+ * site/ 안이 그대로 사이트라는 원칙이 그대로 산다.
+ * (file:// 더블클릭은 2026-09-21 에 내려놓았다 — CLAUDE.md 「내부 링크에서 .html 을 뗀 이유」)
  *
  * 변환도 번들링도 없다 — 이 파일이 생겼다고 빌드 단계가 생긴 것은 아니다.
  */
@@ -47,7 +48,7 @@ const GA_ID = 'G-NQ5XY9JPJ4';
  * site/ 안의 페이지마다 붙여두면 언어판이나 문서를 하나 늘릴 때 조용히 빠뜨리고,
  * 빠진 건 화면에 아무 표시가 없어 눈으로는 못 잡는다.
  *
- * file:// 더블클릭 원칙도 그대로다 — 로컬로 열면 스니펫이 없으니
+ * 로컬(`npm run serve`)에는 이 Worker 가 안 끼므로 스니펫이 없다 —
  * 개발 중 클릭이 실제 방문자 수치에 섞이지 않는다.
  */
 const GA_SNIPPET = `<!-- Google tag (gtag.js) -->
@@ -62,14 +63,33 @@ const GA_SNIPPET = `<!-- Google tag (gtag.js) -->
 `;
 
 /**
- * HTML 응답의 </head> 직전에 GA 스니펫을 끼운다.
+ * 애드센스 퍼블리셔 ID (`ca-pub-…`). **발급 전에는 빈 문자열로 둔다.**
+ *
+ * 비어 있으면 아래에서 스니펫을 아예 만들지 않는다. 플레이스홀더를 그대로 올리면
+ * 남의 client 로 광고 요청이 나가고, 하필 그 상태가 심사에 걸린다.
+ *
+ * ⚠ 이 값을 채울 곳이 다섯 군데다 — 허브 `Base.astro` 와 도구 Worker 넷.
+ *   저장소가 갈려 있어 한곳에 모을 수가 없다. 하나만 채우고 나머지를 빠뜨리면
+ *   그 도구의 페이지에만 광고가 안 나오는데, 화면상 아무 표시가 없어 눈으로는 못 잡는다.
+ *   허브에만 넣으면 심사 대상 페이지의 과반(도구 24장)이 통째로 빠진다.
+ */
+const ADSENSE_ID = 'ca-pub-3724742785414572';
+
+/** ID 가 없으면 빈 문자열 — 아무것도 끼우지 않는다. */
+const ADSENSE_SNIPPET = ADSENSE_ID
+  ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}" crossorigin="anonymous"></script>
+`
+  : '';
+
+/**
+ * HTML 응답의 </head> 직전에 GA·애드센스 스니펫을 끼운다.
  * HTML 이 아니면 손대지 않는다 — CSS·JS·폰트까지 HTMLRewriter 에 태우면 낭비다.
  */
-function withAnalytics(response) {
+function withHeadScripts(response) {
   if (!(response.headers.get('content-type') || '').includes('text/html')) return response;
 
   return new HTMLRewriter()
-    .on('head', { element: (el) => el.append(GA_SNIPPET, { html: true }) })
+    .on('head', { element: (el) => el.append(GA_SNIPPET + ADSENSE_SNIPPET, { html: true }) })
     .transform(response);
 }
 
@@ -96,7 +116,7 @@ export default {
     // 라우트가 prelaps.com/mojibake/* 라서 원래 여기 올 수 없지만,
     // 라우트 설정이 바뀌었을 때 조용히 경로를 망가뜨리지 않도록 막아둔다.
     if (!url.pathname.startsWith(PREFIX)) {
-      return withAnalytics(await env.ASSETS.fetch(request));
+      return withHeadScripts(await env.ASSETS.fetch(request));
     }
 
     // /mojibake/en/ -> /en/   자산은 site/ 루트 기준이다.
@@ -115,9 +135,12 @@ export default {
     // 접두사가 빠져 있다. 그대로 흘려보내면 도구 밖으로 튕긴다.
     //   /mojibake/index.html -> Location: /      -> 허브 홈으로 이탈
     //   /mojibake/en         -> Location: /en/   -> 허브의 영어 페이지로 이탈
-    // 내부 링크가 href="index.html" 이므로 홈 버튼 한 번에 터진다.
+    //
+    // 내부 링크에서는 2026-09-21 에 .html 을 뗐지만 이 층은 계속 필요하다 —
+    // 구 주소(.html)가 아직 구글 색인과 외부 링크에 남아 있고, 끝 슬래시
+    // 정규화(/mojibake/en -> /mojibake/en/)도 같은 경로를 탄다.
     const location = response.headers.get('location');
-    if (!location) return withAnalytics(response);
+    if (!location) return withHeadScripts(response);
 
     const to = new URL(location, url);
     const headers = new Headers(response.headers);

@@ -26,14 +26,14 @@
 <div class="wrap">
 
 <div class="topbar">
-  <a class="brand" href="index.html">
-    <span class="tag">PRELAPS</span>
-    <span class="bname">Mojibake Recovery</span>
-  </a>
+  <div class="brand">
+    <a class="tag" href="https://prelaps.com/en">PRELAPS</a>
+    <a class="bhome" href="./"><span class="bname">Mojibake Recovery</span></a>
+  </div>
   <nav class="langsw" aria-label="Language">
-    <a href="../zip-filename.html" hreflang="ko">한국어</a>
+    <a href="../zip-filename" hreflang="ko">한국어</a>
     <span aria-current="page">English</span>
-    <a href="../ja/zip-filename.html" hreflang="ja">日本語</a>
+    <a href="../ja/zip-filename" hreflang="ja">日本語</a>
   </nav>
 </div>
 
@@ -51,7 +51,7 @@
 <p class="note">You could rename everything by hand, but that stops being realistic past a few dozen files — and you have no way of knowing what the original names actually were.</p>
 
 <h2>Fixing it with this tool</h2>
-<p class="note">Upload the zip itself on the <b>File</b> tab of <a href="index.html">Mojibake Recovery</a>. There is no need to extract it first.</p>
+<p class="note">Upload the zip itself on the <b>File</b> tab of <a href="./">Mojibake Recovery</a>. There is no need to extract it first.</p>
 <p class="note">The names inside are identified and shown as an <b>old name → new name</b> list. If it looks right, download the rebuilt archive. Entries that were already proper UTF-8 are dimmed so you can tell them apart.</p>
 <p class="note"><b>The compressed data is never touched.</b> The tool copies each data block verbatim and only rewrites the name in the header. Nothing is decompressed and recompressed, so <b>there is no way for file contents to be damaged</b>, and the whole thing finishes instantly.</p>
 <p class="note">Your archive is never uploaded anywhere. Everything runs inside your browser, so internal documents are safe to use here.</p>
@@ -66,13 +66,13 @@
 
 <h2>Creating archives that will not break</h2>
 <p class="note">Most compression tools have a <b>"store filenames as UTF-8"</b> option. Turn it on for anything you are sending to other people. Modern Windows Explorer and macOS both write UTF-8 by default now, but older tools and older versions do not.</p>
-<p class="note">The safest option of all is to <b>keep filenames to plain letters and digits</b>. A–Z carry the same numbers in every encoding table, so they cannot break in the first place. Why that is true is explained in <a href="encoding-basics.html">UTF-8 vs the old encodings</a>.</p>
+<p class="note">The safest option of all is to <b>keep filenames to plain letters and digits</b>. A–Z carry the same numbers in every encoding table, so they cannot break in the first place. Why that is true is explained in <a href="encoding-basics">UTF-8 vs the old encodings</a>.</p>
 </main>
 
 <footer>
   <p>Nothing you enter is sent to a server. All processing happens inside your browser and disappears when you close the tab.</p>
   <nav class="fnav">
-    <a href="content/about.html">About</a>
+    <a href="content/about">About</a>
     <a href="https://prelaps.com/en/privacy#mojibake">Privacy Policy</a>
     <a href="https://prelaps.com/en/terms">Terms</a>
     <a href="https://prelaps.com/en/contact">Contact</a>

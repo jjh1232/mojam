@@ -12,6 +12,7 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 const ROOT = path.join(__dirname, '..', 'site');
 const ORIGIN = 'https://prelaps.com/mojibake';
@@ -50,6 +51,20 @@ const sibling = (rel, lang) => (lang === 'ko' ? '' : lang + '/') + neutral(rel);
 // 배포 URL 은 확장자가 없다 — Cloudflare Pages·Netlify 가 .html 을 떼고 301 한다.
 const urlOf = rel => ORIGIN + '/' + rel.replace(/index\.html$/, '').replace(/\.html$/, '');
 
+// 내부 링크도 확장자가 없다(2026-09-21). 링크가 가리키는 주소를 다시 파일
+// 이름으로 되돌려야 존재 검사를 할 수 있다.
+//   './' -> index.html      'en/' -> en/index.html
+//   'content/about' -> content/about.html
+// styles.css·favicon.svg 처럼 이미 확장자가 있는 것은 그대로 둔다
+// (이 함수는 href 와 src 를 같이 받는다).
+const toFile = t => {
+  const p = t.startsWith('./') ? t.slice(2) : t;
+  if (p === '' || p.endsWith('/')) return p + 'index.html';
+  const base = p.slice(p.lastIndexOf('/') + 1);
+  if (base.includes('.')) return p;
+  return p + '.html';
+};
+
 const list = pages().sort();
 const exists = new Set(list);
 
@@ -65,8 +80,22 @@ for (const rel of list) {
   for (const m of src.matchAll(/(?:href|src)="([^"]+)"/g)) {
     const href = m[1];
     if (/^(https?:|mailto:|#|data:)/.test(href)) continue;
-    const target = resolve(href);
+    const target = toFile(resolve(href));
     if (!fs.existsSync(path.join(ROOT, target))) bad(rel, '깨진 링크 ' + href);
+  }
+
+  // 1-2. 내부 링크에 .html 이 남아 있으면 안 된다.
+  //
+  // 2026-09-21 이전에는 링크가 excel-csv.html 이었다. 자산 층이 .html 을 떼고
+  // 서빙하므로 그 링크는 전부 307 을 한 번 타고 최종 주소에 닿았다 — 화면에는
+  // 아무 표시가 없다. 그런데 구글은 내부 링크가 가리키는 주소(.html)와
+  // canonical(확장자 없음)이 다른 것으로 보아, 내부 링크 907개 중 129개를
+  // 「리디렉션이 포함된 페이지」쪽으로 셌다. content/about 3장은 정식 주소로
+  // 들어오는 링크가 0 이라 사실상 고아였다.
+  for (const m of src.matchAll(/href="([^"]+)"/g)) {
+    const href = m[1];
+    if (/^(https?:|mailto:|#|data:)/.test(href)) continue;
+    if (href.endsWith('.html')) bad(rel, '내부 링크에 .html 이 있다 — ' + href + ' (canonical 은 확장자가 없다)');
   }
 
   // 2. <html lang> 이 폴더와 맞는가
@@ -97,7 +126,7 @@ for (const rel of list) {
       const href = (sw.match(new RegExp('href="([^"]+)" hreflang="' + L + '"')) || [])[1];
       if (!href) { bad(rel, '.langsw 에 ' + L + ' 링크가 없다'); continue; }
       const want = sibling(rel, L);
-      if (resolve(href) !== want) bad(rel, '.langsw ' + L + ' 이 ' + resolve(href) + ' — ' + want + ' 이어야 한다');
+      if (toFile(resolve(href)) !== want) bad(rel, '.langsw ' + L + ' 이 ' + toFile(resolve(href)) + ' — ' + want + ' 이어야 한다');
     }
     if (!/<span aria-current="page">/.test(sw)) bad(rel, '.langsw 에 현재 언어 표시가 없다');
   }
@@ -112,7 +141,7 @@ for (const rel of list) {
   if (!fn) bad(rel, '.fnav 가 없다');
   else {
     const raw = [...fn.matchAll(/href="([^"]+)"/g)].map(m => m[1]);
-    const got = raw.map(h => (/^https?:/.test(h) ? h : resolve(h)));
+    const got = raw.map(h => (/^https?:/.test(h) ? h : toFile(resolve(h))));
 
     // 도구에 남아 있는 것
     const own = (lang === 'ko' ? '' : lang + '/') + 'content/about.html';
@@ -129,7 +158,8 @@ for (const rel of list) {
     }
     // 도구 안에 정책 파일이 되살아나는 것을 막는다
     for (const h of raw) {
-      if (/content\/(privacy|terms|contact)\.html/.test(h)) {
+      const t = h.endsWith('.html') ? h.slice(0, -5) : h;
+      if (['privacy', 'terms', 'contact'].some(name => t.endsWith('content/' + name))) {
         bad(rel, '정책 링크가 도구 안(' + h + ')을 가리킨다 — 허브로 가야 한다');
       }
     }
@@ -156,10 +186,42 @@ for (const rel of list) {
     if (opens === 0) bad(rel, '<url> 이 하나도 없다');
 
     // 사이트맵에 적힌 주소가 실제로 있는 파일인지. 확장자 없는 주소로 쓰므로 .html 을 붙여 본다.
+    const fileOfLoc = loc => {
+      const p = loc.replace(ORIGIN, '');
+      return (p.endsWith('/') ? p + 'index.html' : p + '.html').replace(/^\//, '');
+    };
     for (const m of src.matchAll(/<loc>([^<]+)<\/loc>/g)) {
-      const p = m[1].replace(ORIGIN, '');
-      const file = p.endsWith('/') ? p + 'index.html' : p + '.html';
-      if (!fs.existsSync(path.join(ROOT, file))) bad(rel, `없는 페이지를 가리킨다 ${m[1]}`);
+      if (!fs.existsSync(path.join(ROOT, fileOfLoc(m[1])))) bad(rel, `없는 페이지를 가리킨다 ${m[1]}`);
+    }
+
+    // lastmod 가 그 페이지의 실제 변경일과 맞는지.
+    //
+    // 손으로 적는 값이라, 페이지를 고치고 여기를 안 고치면 조용히 낡는다.
+    // 반대로 배포할 때마다 오늘로 찍는 것도 안 된다 — 구글이 다시 긁어보고
+    // 바뀐 게 없다는 것을 알아채면 **이 사이트의 lastmod 를 통째로 무시한다.**
+    // 그래서 git 이 아는 실제 날짜와 대조한다.
+    //   커밋된 파일   -> 마지막 커밋 날짜
+    //   수정 중인 파일 -> 파일 수정 시각
+    // git 을 못 쓰는 환경이면 이 검사만 조용히 건너뛴다 (null).
+    const changedOn = file => {
+      try {
+        const opt = { cwd: path.join(__dirname, '..'), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] };
+        const dirty = execSync(`git status --porcelain -- "site/${file}"`, opt).trim();
+        if (dirty) return fs.statSync(path.join(ROOT, file)).mtime.toISOString().slice(0, 10);
+        return execSync(`git log -1 --format=%cs -- "site/${file}"`, opt).trim() || null;
+      } catch {
+        return null;
+      }
+    };
+    for (const m of src.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
+      const loc = (m[1].match(/<loc>([^<]+)<\/loc>/) || [])[1];
+      const lastmod = (m[1].match(/<lastmod>([^<]+)<\/lastmod>/) || [])[1];
+      if (!loc) continue;
+      if (!lastmod) { bad(rel, `lastmod 가 없다 ${loc}`); continue; }
+      const real = changedOn(fileOfLoc(loc));
+      if (real && lastmod < real) {
+        bad(rel, `lastmod 가 낡았다 ${loc} — ${lastmod} 로 적혀 있는데 파일은 ${real} 에 바뀌었다`);
+      }
     }
   }
 }
@@ -178,7 +240,7 @@ for (const rel of list) {
     for (const m of src.matchAll(/(?:href|src)="([^"]+)"/g)) {
       const href = m[1];
       if (/^(https?:|mailto:|#|data:)/.test(href)) continue;
-      if (!fs.existsSync(path.join(ROOT, path.posix.normalize(href)))) bad(rel, '깨진 링크 ' + href);
+      if (!fs.existsSync(path.join(ROOT, toFile(path.posix.normalize(href))))) bad(rel, '깨진 링크 ' + href);
     }
     if (!/<meta name="robots" content="noindex/.test(src)) bad(rel, 'noindex 가 없다');
     if (/<link rel="canonical"/.test(src)) bad(rel, 'canonical 이 있다 — 실재하지 않는 주소를 선언하면 안 된다');
@@ -206,11 +268,18 @@ for (const rel of list) {
   }
   if (!faq.length) continue;
 
-  // 화면의 FAQ 는 <h2> 뒤에 오는 <p class="note"><b>질문</b><br>답변</p> 들이다.
+  // 화면의 FAQ 는 <p class="note"><b>질문</b><br>답변</p> 라는 모양이다.
+  //
+  // 예전에는 「마지막 <h2> 뒤」만 훑었는데, FAQ 절 다음에 h2 가 하나라도 더 붙으면
+  // 훑는 범위가 통째로 빗나가 0문항으로 잡힌다. 실제로 읽을 거리 절을 뒤에 붙였다가
+  // 그렇게 터졌다.
+  //
+  // 그래서 문서 전체를 훑되, **문단 경계를 넘지 않게** 가둔다. 그냥 [\s\S]*? 로 두면
+  // FAQ 가 아닌 <p class="note"><b>…</b> 에서 시작해 한참 뒤의 </b><br> 까지 한 덩어리로
+  // 삼켜, 문항 수는 맞는데 내용이 본문 전체가 되는 일이 생긴다 (실제로 그렇게 나왔다).
   const strip = t => t.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-  const h2s = [...src.matchAll(/<h2[^>]*>[\s\S]*?<\/h2>/g)];
-  const last = h2s.length ? src.slice(h2s[h2s.length - 1].index) : src;
-  const seen = [...last.matchAll(/<p class="note"><b>([\s\S]*?)<\/b><br>([\s\S]*?)<\/p>/g)]
+  const FAQ_RE = /<p class="note"><b>((?:(?!<\/p>)[\s\S])*?)<\/b><br>((?:(?!<\/p>)[\s\S])*?)<\/p>/g;
+  const seen = [...src.matchAll(FAQ_RE)]
     .map(m => ({ q: strip(m[1]), a: strip(m[2]) }));
 
   if (faq.length !== seen.length)

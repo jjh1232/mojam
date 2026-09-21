@@ -6,6 +6,7 @@
   "scripts": {
     "test": "node test/links.js && node test/benchmark.js && node test/filebench.js && node test/browser.js",
     "check:links": "node test/links.js",
+    "deploy": "npm run check:links && npx wrangler deploy",
     "bench:node": "node test/benchmark.js",
     "bench:file": "node test/filebench.js",
     "bench:browser": "node test/browser.js",

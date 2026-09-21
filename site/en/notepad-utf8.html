@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saved as UTF-8 in Notepad and it still came out garbled</title>
+<meta name="description" content="You picked UTF-8 in Notepad, yet the file is garbled elsewhere. What ANSI actually means, when the default changed, and when a BOM helps versus breaks things.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Prelaps">
+<meta property="og:title" content="Saved as UTF-8 in Notepad and it still came out garbled">
+<meta property="og:description" content="You picked UTF-8 in Notepad, yet the file is garbled elsewhere. What ANSI actually means, when the default changed, and when a BOM helps versus breaks things.">
+<link rel="canonical" href="https://prelaps.com/mojibake/en/notepad-utf8">
+<link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/notepad-utf8">
+<link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/notepad-utf8">
+<link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/notepad-utf8">
+<link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/notepad-utf8">
+<meta property="og:url" content="https://prelaps.com/mojibake/en/notepad-utf8">
+<meta property="og:image" content="https://prelaps.com/mojibake/og-image.png">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar">
+  <div class="brand">
+    <a class="tag" href="https://prelaps.com/en">PRELAPS</a>
+    <a class="bhome" href="./"><span class="bname">Mojibake Recovery</span></a>
+  </div>
+  <nav class="langsw" aria-label="Language">
+    <a href="../notepad-utf8" hreflang="ko">한국어</a>
+    <span aria-current="page">English</span>
+    <a href="../ja/notepad-utf8" hreflang="ja">日本語</a>
+  </nav>
+</div>
+
+<main class="sheet">
+<h1>Saved as UTF-8 in Notepad and it still came out garbled</h1>
+<p class="note">You <b>explicitly chose UTF-8</b> when saving, and yet opening the file in Excel or another program gives you <code>Ã©tÃ©</code> or <code>ë³´ê³ ì„œ</code>. Why picking the right option was not enough is what this article is about.</p>
+
+<h2>Notepad's save options are confusing</h2>
+<p class="note">The Save As dialog has an encoding dropdown at the bottom. The entries vary a little by Windows version, but broadly:</p>
+<ul class="note">
+<li><b>ANSI</b> — sounds like a standard, and is not. More on this below.</li>
+<li><b>UTF-16 LE</b> — labelled simply "Unicode" in older Notepad. It is Unicode, but it is <b>not UTF-8.</b> Plenty of people pick this and remember it as having saved UTF-8.</li>
+<li><b>UTF-16 BE</b> — almost never what you want.</li>
+<li><b>UTF-8</b></li>
+<li><b>UTF-8 with BOM</b> — present in some versions, absent in others.</li>
+</ul>
+<p class="note">Picking <b>"Unicode" and remembering it as UTF-8</b> is the single most common version of this mistake. A UTF-16 file opened by something expecting UTF-8 comes out unreadable throughout, or refuses to open at all.</p>
+
+<h2>ANSI is not a standard</h2>
+<p class="note">ANSI is the name of an American standards body, so the entry reads like a specification. In Windows the word actually means <b>"this computer's local code page."</b> That is CP949 on Korean Windows, Shift_JIS on Japanese Windows, Windows-1252 across much of Western Europe.</p>
+<p class="note">Which means <b>a file saved as ANSI means different things on different machines.</b> An ANSI file written in Korea garbles on Japanese Windows and vice versa. It happens inside a single company whenever colleagues run different Windows languages.</p>
+<p class="note">This is usually why old documents garble now. Back then everyone shared one code page, so nothing looked wrong.</p>
+
+<h2>The default changed partway through</h2>
+<p class="note">Starting with the 2019 update to Windows 10 (version 1903), <b>Notepad's default encoding changed from ANSI to UTF-8.</b> Which means files written before and after that point can sit in the same folder.</p>
+<p class="note">So you get the situation where some notes in a folder open fine and others garble. The files genuinely have different encodings, and <b>nothing in the filename or icon distinguishes them.</b></p>
+
+<h2>A BOM is wanted in some places and rejected in others</h2>
+<p class="note">A BOM is a <b>three-byte marker</b> at the very start of a file. It announces "this is UTF-8" and is invisible on screen. The complication is that some software wants it and some cannot tolerate it.</p>
+<ul class="note">
+<li><b>Wants it</b> — Excel. Without a BOM it reads a CSV using the local code page. There is more on this in <a href="excel-csv">when a CSV comes out garbled in Excel</a>.</li>
+<li><b>Cannot have it</b> — shell scripts, some config files, older compilers. They read those first three bytes as content, fail to recognise <code>#!/bin/bash</code>, or throw an error on line one.</li>
+</ul>
+<p class="note">So <b>"it is UTF-8" does not settle it.</b> Whether to attach a BOM depends on who receives the file. If your Notepad lists both entries separately, choose according to the destination.</p>
+
+<h2>When the file really is UTF-8 and the reader still fails</h2>
+<p class="note">Sometimes the save was correct and the program opening it simply guesses wrong. Plain text files have nowhere to record their encoding, so without a BOM the reader has to infer it from the content.</p>
+<p class="note">The shorter the file, the worse the guess. A note containing a handful of non-Latin characters <b>does not give the detector enough to work with.</b> If the same text opens correctly in a long file but garbles in a short one, this is why.</p>
+
+<h2>How to check what encoding a file is in</h2>
+<p class="note">Open the file in Notepad and the current encoding appears <b>at the right of the status bar</b> along the bottom. If you cannot see it, enable View then Status Bar. Seeing ANSI there rather than UTF-8 means you have found the cause.</p>
+<p class="note">That indicator relies on guessing too, though. If the file already looks garbled inside Notepad, treat the reported encoding as suspect as well.</p>
+
+<h2>Fixing it with this tool</h2>
+<p class="note">Drop the file onto the <b>File</b> tab of the <a href="./">Mojibake Recovery</a> tool. It works out how the file was actually saved, shows you the candidates, and you pick the one that reads correctly and download it as UTF-8.</p>
+<p class="note">Set the <b>"add a BOM for Excel"</b> checkbox to match your destination when downloading. It is on by default for <code>.csv</code>, <code>.tsv</code> and <code>.txt</code>. Turn it off for shell scripts and config files.</p>
+<p class="note">Files are never uploaded. Everything happens inside the browser, so work documents are fine to use as they are.</p>
+
+<h2>Avoiding it next time</h2>
+<ul class="note">
+<li><b>Save anything you are sending to someone else as UTF-8.</b> ANSI changes meaning with the recipient's system language.</li>
+<li><b>Be wary of an entry labelled "Unicode."</b> It usually means UTF-16, not UTF-8.</li>
+<li><b>Add a BOM for CSVs headed to Excel</b>, and for most other purposes leave it off.</li>
+<li><b>If you want to understand why any of this happens</b>, see <a href="encoding-basics">UTF-8 and legacy encodings, explained</a>. Knowing the cause lets you reason about the next situation too.</li>
+</ul>
+</main>
+
+<footer>
+  <p>Nothing you enter is sent to a server. All processing happens inside your browser and disappears when you close the tab.</p>
+  <nav class="fnav">
+    <a href="content/about">About</a>
+    <a href="https://prelaps.com/en/privacy#mojibake">Privacy Policy</a>
+    <a href="https://prelaps.com/en/terms">Terms</a>
+    <a href="https://prelaps.com/en/contact">Contact</a>
+  </nav>
+  <p class="cr">&copy; 2026 Prelaps</p>
+</footer>
+
+</div>
+</body>
+</html>

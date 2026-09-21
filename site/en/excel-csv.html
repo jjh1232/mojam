@@ -26,14 +26,14 @@
 <div class="wrap">
 
 <div class="topbar">
-  <a class="brand" href="index.html">
-    <span class="tag">PRELAPS</span>
-    <span class="bname">Mojibake Recovery</span>
-  </a>
+  <div class="brand">
+    <a class="tag" href="https://prelaps.com/en">PRELAPS</a>
+    <a class="bhome" href="./"><span class="bname">Mojibake Recovery</span></a>
+  </div>
   <nav class="langsw" aria-label="Language">
-    <a href="../excel-csv.html" hreflang="ko">한국어</a>
+    <a href="../excel-csv" hreflang="ko">한국어</a>
     <span aria-current="page">English</span>
-    <a href="../ja/excel-csv.html" hreflang="ja">日本語</a>
+    <a href="../ja/excel-csv" hreflang="ja">日本語</a>
   </nav>
 </div>
 
@@ -51,7 +51,7 @@
 <p class="note">Which means fixing a garbled CSV is usually <b>not about changing the text at all — it is about adding the marker.</b> The content was intact the whole time.</p>
 
 <h2>Fixing it with this tool</h2>
-<p class="note">Open <a href="index.html">Mojibake Recovery</a>, switch to the <b>File</b> tab, and upload the CSV. It identifies the encoding and shows you candidates. Pick the one where the text reads correctly and press <b>Download as UTF-8</b>.</p>
+<p class="note">Open <a href="./">Mojibake Recovery</a>, switch to the <b>File</b> tab, and upload the CSV. It identifies the encoding and shows you candidates. Pick the one where the text reads correctly and press <b>Download as UTF-8</b>.</p>
 <p class="note"><b>Check that "Add a BOM if you will open this in Excel" is ticked.</b> It is on by default for <code>.csv</code>, <code>.tsv</code>, and <code>.txt</code>. A file downloaded with that option on opens cleanly in Excel with no further steps.</p>
 <p class="note">Your file is never uploaded anywhere. Everything runs inside your browser, so internal reports and files with personal data are safe to use here.</p>
 
@@ -65,13 +65,13 @@
 
 <h2>If none of this helps</h2>
 <p class="note">If the <b>characters look right but every row lands in a single column</b>, that is a delimiter problem, not an encoding one. Use Data → Text to Columns and set the comma as the separator.</p>
-<p class="note">If none of the candidates show readable text, the file may have been written after the text was already garbled. In that case see the <a href="index.html">"When recovery fails" section</a> on the tool page, which lists the symptoms and what each one means.</p>
+<p class="note">If none of the candidates show readable text, the file may have been written after the text was already garbled. In that case see the <a href="./">"When recovery fails" section</a> on the tool page, which lists the symptoms and what each one means.</p>
 </main>
 
 <footer>
   <p>Nothing you enter is sent to a server. All processing happens inside your browser and disappears when you close the tab.</p>
   <nav class="fnav">
-    <a href="content/about.html">About</a>
+    <a href="content/about">About</a>
     <a href="https://prelaps.com/en/privacy#mojibake">Privacy Policy</a>
     <a href="https://prelaps.com/en/terms">Terms</a>
     <a href="https://prelaps.com/en/contact">Contact</a>

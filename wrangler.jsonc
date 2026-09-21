@@ -43,9 +43,13 @@
     // 이걸 빠뜨리면 /mojibake/styles.css 가 404 로 나온다.
     "run_worker_first": true,
 
-    // 배포 URL 에 확장자가 없다 — /content/terms.html 을 /content/terms 로 서빙한다.
-    // canonical·og:url·sitemap.xml 이 확장자 없는 주소를 쓰므로 이 값이 중요하다.
-    // 내부 링크는 file:// 더블클릭 원칙 때문에 .html 을 유지한다 (형태가 다른 것은 의도).
+    // 배포 URL 에 확장자가 없다 — /content/about.html 을 /content/about 으로 서빙한다.
+    // canonical·og:url·sitemap.xml·내부 링크가 전부 확장자 없는 주소다.
+    //
+    // ⚠ 2026-09-21 이전에는 내부 링크만 .html 이었다. 그러면 링크가 전부 307 을
+    //   한 번 타고 최종 주소에 닿는데, 방문자에게는 아무 표시가 없고 링크 검사도
+    //   통과한다. 구글만 그 차이를 보고 「리디렉션이 포함된 페이지」로 센다.
+    //   링크·canonical·사이트맵 세 형태는 같이 움직여야 한다.
     "html_handling": "auto-trailing-slash",
 
     // 404.html 을 두지 않았다. Cloudflare 기본 화면을 쓴다.

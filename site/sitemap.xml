@@ -1,22 +1,176 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 배포 URL 은 확장자가 없다 — Cloudflare Pages·Netlify 가 .html 을 떼고 301 한다.
-     내부 링크는 file:// 더블클릭 원칙 때문에 .html 을 유지하므로 여기와 형태가 다르다.
-     hreflang 은 각 페이지 <head> 에 넣었으므로 사이트맵에는 중복해 적지 않는다. -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://prelaps.com/mojibake/</loc><priority>1.0</priority></url>
-  <url><loc>https://prelaps.com/mojibake/excel-csv</loc><priority>0.7</priority></url>
-  <url><loc>https://prelaps.com/mojibake/encoding-basics</loc><priority>0.7</priority></url>
-  <url><loc>https://prelaps.com/mojibake/zip-filename</loc><priority>0.7</priority></url>
-  <url><loc>https://prelaps.com/mojibake/content/about</loc><priority>0.3</priority></url>
-  <url><loc>https://prelaps.com/mojibake/en/</loc><priority>1.0</priority></url>
-  <url><loc>https://prelaps.com/mojibake/en/excel-csv</loc><priority>0.7</priority></url>
-  <url><loc>https://prelaps.com/mojibake/en/encoding-basics</loc><priority>0.7</priority></url>
-  <url><loc>https://prelaps.com/mojibake/en/zip-filename</loc><priority>0.7</priority></url>
-  <url><loc>https://prelaps.com/mojibake/en/content/about</loc><priority>0.3</priority></url>
-  <url><loc>https://prelaps.com/mojibake/ja/</loc><priority>1.0</priority></url>
-  <url><loc>https://prelaps.com/mojibake/ja/excel-csv</loc><priority>0.7</priority></url>
-  <url><loc>https://prelaps.com/mojibake/ja/encoding-basics</loc><priority>0.7</priority></url>
-  <url><loc>https://prelaps.com/mojibake/ja/zip-filename</loc><priority>0.7</priority></url>
-  <url><loc>https://prelaps.com/mojibake/ja/content/about</loc><priority>0.3</priority></url>
-  
+<!-- 배포 URL 에는 확장자가 없다. 내부 링크도 2026-09-21 부터 같은 형태다 —
+     링크·canonical·사이트맵 셋이 어긋나면 내부 링크가 전부 리다이렉트를 가리키게 되고,
+     구글이 그것을 「리디렉션이 포함된 페이지」로 센다. (CLAUDE.md 참고)
+
+     hreflang 은 각 페이지 <head> 에도 있다. 여기 한 벌 더 두는 것은 중복이 아니라
+     다른 도구(race·imagesquish·vfile)와 형태를 맞춘 것이고, 구글에 신호를 두 번 준다.
+
+     lastmod 는 손으로 적지 말 것 — test/links.js 가 실제 파일의 변경일과 대조해서
+     틀리면 실패시킨다. 페이지를 고쳤으면 그 줄의 날짜도 같이 고친다.
+     빌드할 때마다 오늘로 찍으면 구글이 이 사이트의 lastmod 를 통째로 무시한다. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://prelaps.com/mojibake/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/excel-csv</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/excel-csv"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/excel-csv"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/excel-csv"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/excel-csv"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/encoding-basics</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/encoding-basics"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/encoding-basics"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/encoding-basics"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/encoding-basics"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/zip-filename</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/zip-filename"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/zip-filename"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/zip-filename"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/zip-filename"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/notepad-utf8</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/notepad-utf8"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/notepad-utf8"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/notepad-utf8"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/notepad-utf8"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/content/about</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/content/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/content/about"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/content/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/content/about"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/en/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/en/excel-csv</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/excel-csv"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/excel-csv"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/excel-csv"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/excel-csv"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/en/encoding-basics</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/encoding-basics"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/encoding-basics"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/encoding-basics"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/encoding-basics"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/en/zip-filename</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/zip-filename"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/zip-filename"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/zip-filename"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/zip-filename"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/en/notepad-utf8</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/notepad-utf8"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/notepad-utf8"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/notepad-utf8"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/notepad-utf8"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/en/content/about</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/content/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/content/about"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/content/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/content/about"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/ja/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/ja/excel-csv</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/excel-csv"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/excel-csv"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/excel-csv"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/excel-csv"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/ja/encoding-basics</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/encoding-basics"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/encoding-basics"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/encoding-basics"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/encoding-basics"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/ja/zip-filename</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/zip-filename"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/zip-filename"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/zip-filename"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/zip-filename"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/ja/notepad-utf8</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/notepad-utf8"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/notepad-utf8"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/notepad-utf8"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/notepad-utf8"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prelaps.com/mojibake/ja/content/about</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/content/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/content/about"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/content/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/content/about"/>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.3</priority>
+  </url>
 </urlset>
