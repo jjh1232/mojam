@@ -108,7 +108,23 @@ export default {
     //    /en/ 은 한국어 루트를 서빙한다 (실제로 그렇게 깨졌었다).
     if (url.hostname !== CANONICAL_HOST) {
       url.hostname = CANONICAL_HOST;
-      url.pathname = PREFIX + url.pathname;
+
+      // 구 주소의 .html 은 여기서 같이 뗀다. 안 떼면 두 단이 된다 —
+      //   mojibake.prelaps.com/en/encoding-basics.html
+      //     -> 301 prelaps.com/mojibake/en/encoding-basics.html
+      //     -> 307 prelaps.com/mojibake/en/encoding-basics
+      // 구글은 체인을 따라가긴 하지만 느리고, 그동안 「리디렉션이 포함된
+      // 페이지」에 남아 있는다. 색인에 아직 구 주소가 7개 넘게 있다(2026-09-21).
+      const path = url.pathname
+        .replace(/\/index\.html$/, '/')
+        .replace(/\.html$/, '');
+
+      // 허브로 옮긴 문서는 여기서 곧장 허브로 보낸다. 아래 MOVED 분기까지
+      // 흘려보내면 여기서 한 번, 새 주소에서 또 한 번 — 역시 두 단이 된다.
+      const moved = MOVED[path.replace(/\/$/, '')];
+      if (moved) return Response.redirect(new URL(moved, url).toString(), 301);
+
+      url.pathname = PREFIX + path;
       return Response.redirect(url.toString(), 301);
     }
 
