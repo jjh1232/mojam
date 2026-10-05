@@ -1,5 +1,7 @@
 # Prelaps
 
+**사이트:** https://prelaps.com/mojibake/
+
 **깨진 글자 복구기** (`prelaps.com/mojibake`). 브라우저 안에서만 도는 도구다.
 
 `prelaps.com` 은 우산 브랜드다 — 도구들이 각자 하위 경로를 갖고, 이 저장소는 그중 `/mojibake` 하나다. 루트(`prelaps.com`)의 허브는 별도 저장소(`prelaps-home`)다.
