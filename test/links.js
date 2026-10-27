@@ -293,7 +293,13 @@ for (const rel of list) {
 // ── 사이트맵이 페이지 목록과 일치하는가 ────────────────────────
 const sm = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
 const inMap = new Set([...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]));
-for (const rel of list) if (!inMap.has(urlOf(rel))) bad('sitemap.xml', urlOf(rel) + ' 누락');
+// noindex 페이지는 반대로 **빠져 있어야** 한다 — 「색인하지 마」 와 「이걸 색인해」 를 동시에 말하게 된다.
+// (2026-10-27 content/about 한국어·일본어판을 허브 소개와 겹친다고 noindex 로 돌렸다)
+const isNoindex = rel => /<meta name="robots" content="noindex/.test(fs.readFileSync(path.join(ROOT, rel), 'utf8'));
+for (const rel of list) {
+  if (isNoindex(rel)) { if (inMap.has(urlOf(rel))) bad('sitemap.xml', urlOf(rel) + ' 는 noindex 인데 사이트맵에 있다'); }
+  else if (!inMap.has(urlOf(rel))) bad('sitemap.xml', urlOf(rel) + ' 누락');
+}
 for (const u of inMap) if (!list.some(rel => urlOf(rel) === u)) bad('sitemap.xml', u + ' 는 실제 파일이 없다');
 
 console.log(fails === 0 ? '\n링크 검사 통과 — 0건' : '\n실패 ' + fails + '건');

@@ -57,15 +57,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://prelaps.com/mojibake/content/about</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/content/about"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/content/about"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/content/about"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/content/about"/>
-    <lastmod>2026-09-21</lastmod>
-    <priority>0.3</priority>
-  </url>
-  <url>
     <loc>https://prelaps.com/mojibake/en/</loc>
     <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/"/>
@@ -163,14 +154,5 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/notepad-utf8"/>
     <lastmod>2026-09-21</lastmod>
     <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://prelaps.com/mojibake/ja/content/about</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://prelaps.com/mojibake/content/about"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://prelaps.com/mojibake/en/content/about"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://prelaps.com/mojibake/ja/content/about"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://prelaps.com/mojibake/en/content/about"/>
-    <lastmod>2026-09-21</lastmod>
-    <priority>0.3</priority>
   </url>
 </urlset>
