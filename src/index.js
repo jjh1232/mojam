@@ -84,12 +84,15 @@ const ADSENSE_SNIPPET = ADSENSE_ID
 /**
  * HTML 응답의 </head> 직전에 GA·애드센스 스니펫을 끼운다.
  * HTML 이 아니면 손대지 않는다 — CSS·JS·폰트까지 HTMLRewriter 에 태우면 낭비다.
+ *
+ * 404 응답에는 애드센스를 싣지 않는다 — 게시자 정책 「인벤토리 가치」가 콘텐츠 없는 화면의
+ * 광고를 금지하고, 「가치가 별로 없는 콘텐츠」 거절(2026-11) 뒤 점검에서 걸렸다. GA 는 싣는다.
  */
 function withHeadScripts(response) {
   if (!(response.headers.get('content-type') || '').includes('text/html')) return response;
 
   return new HTMLRewriter()
-    .on('head', { element: (el) => el.append(GA_SNIPPET + ADSENSE_SNIPPET, { html: true }) })
+    .on('head', { element: (el) => el.append(GA_SNIPPET + (response.status === 404 ? '' : ADSENSE_SNIPPET), { html: true }) })
     .transform(response);
 }
 
