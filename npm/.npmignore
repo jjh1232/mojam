@@ -1,0 +1,2 @@
+# .gitignore 를 쓰지 않게 하려고 둔 파일 (engine.js 는 복사본이라 git 에선 빼고 npm 에는 넣는다)
+test.js

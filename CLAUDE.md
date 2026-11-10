@@ -10,6 +10,7 @@
 
 - **엔진 원본은 `engine.js` 이다.** 예전엔 `index.html` 안에 있었고 `test/sync.js` 가 사본을 떠서 테스트에 썼는데, 다국어로 가면서 언어별 페이지가 엔진을 공유해야 해 밖으로 뺐다. 사본이 없어졌으므로 `test/sync.js` 도 삭제했다 — 테스트가 `engine.js` 를 직접 `require` 한다.
 - **`engine.js` 를 `<script type="module">` 로 부르지 말 것.** `file://` 에서 CORS 로 막힌다(실측 확인). 일반 `<script src>` 는 하위 폴더의 `../engine.js` 까지 정상 로드된다. 이 프로젝트는 더블클릭으로 열리는 것이 원칙이라(기획서 3.1) 이 구분이 중요하다.
+- **`npm/` 은 같은 엔진을 npm 패키지 `mojibake-fix` 로 내는 폴더다 (2026-11-10).** 목적은 GitHub·npm 페이지에서 오는 링크(신규 도메인 크롤 유도). `npm/engine.js` 는 `prepack` 이 `site/engine.js` 를 복사한 것이라 git 에서 빠져 있다 — **거기서 엔진을 고치지 말 것.** `npm/index.js` 의 판단 순서(통짜 → 줄 → 구간)는 `site/ui.js` 의 `run()`·`renderTextFile()` 을 옮긴 것이라 그쪽이 바뀌면 같이 고친다. 엔진을 고쳐 사이트에 배포했으면 `cd npm && npm test && npm version patch && npm publish`. `npm/` 은 `site/` 밖이라 사이트 배포에 섞이지 않는다.
 - **엔진에 언어별 분기를 넣지 말 것.** `langHint()` 는 `'ko'`·`'cyrillic'` 같은 **키**만 돌려주고, 사람이 읽는 글자는 화면 코드의 `I18N.lang` 이 만든다. 벤치마크도 **키로 검사**하므로 번역을 고쳐도 안 깨진다.
 - **엔진 수정 후 반드시 `npm test` 실행.** 링크 전수 검사 → 붙여넣기·파일 두 모드를 Node·브라우저에서 각각 돈다. 하한 미달이면 커밋 금지. **페이지만 고쳤을 때는 `npm run check:links` 만 돌려도 된다**(2초).
   - 붙여넣기: Node 80% / 브라우저 82% (현재 82.4% / 84.5%)

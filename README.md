@@ -1,6 +1,9 @@
 # Prelaps
 
-**사이트:** https://prelaps.com/mojibake/
+**사이트:** https://prelaps.com/mojibake/ ([English](https://prelaps.com/mojibake/en/) · [日本語](https://prelaps.com/mojibake/ja/))
+
+**npm 라이브러리:** [`mojibake-fix`](npm/) — 같은 엔진을 Node·브라우저에서 코드로 쓰기. `npm install mojibake-fix`
+Repair mojibake (garbled text from encoding mix-ups) in Node or the browser. See [npm/README.md](npm/README.md).
 
 **깨진 글자 복구기** (`prelaps.com/mojibake`). 브라우저 안에서만 도는 도구다.
 

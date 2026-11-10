@@ -1,0 +1,20 @@
+{
+  "name": "mojibake-fix",
+  "version": "0.1.0",
+  "description": "Repair mojibake (garbled text from encoding mix-ups): UTF-8 read as Latin-1/CP1252, EUC-KR, Shift_JIS, GBK, Big5, double-encoding, mixed lines, broken CSV files and ZIP filenames. Zero dependencies, runs in Node and the browser.",
+  "keywords": ["mojibake", "encoding", "charset", "utf-8", "euc-kr", "cp949", "shift_jis", "gbk", "big5", "latin1", "windows-1252", "garbled", "broken text", "korean", "hangul", "japanese", "csv", "zip", "filename", "ftfy", "문자깨짐", "한글깨짐", "文字化け"],
+  "homepage": "https://prelaps.com/mojibake/en/",
+  "repository": { "type": "git", "url": "git+https://github.com/jjh1232/mojam.git", "directory": "npm" },
+  "bugs": { "url": "https://github.com/jjh1232/mojam/issues" },
+  "license": "MIT",
+  "author": "prelaps (https://prelaps.com)",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "bin": { "mojibake-fix": "bin/cli.js" },
+  "files": ["index.js", "index.d.ts", "engine.js", "bin/", "README.md", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "prepack": "node -e \"require('fs').copyFileSync('../site/engine.js','engine.js')\"",
+    "test": "npm run prepack && node test.js"
+  }
+}
